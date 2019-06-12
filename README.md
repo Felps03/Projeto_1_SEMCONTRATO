@@ -4,3 +4,5 @@
 [FEAT] node structure
 
 [FEAT] UserSchema
+
+[FEAT] Create token function
