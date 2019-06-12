@@ -7,7 +7,7 @@ class UserDao {
             UserSchema.create(User);
 
         } catch(err){
-            console.log(err);
+            res.status(400).send({err: 'Registro falhou'});
         }
     }
     updatePassword(id, password){
