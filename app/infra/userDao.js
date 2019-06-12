@@ -19,8 +19,7 @@ class UserDao {
         const user = UserSchema.find(email, password);
         return user;
     }
-    
+
 
 }
 module.exports = UserDao;
-
