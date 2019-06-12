@@ -1,18 +1,24 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const multer = require('multer');
+const uploadConfig = require('../config/upload');
+
+const upload = multer(uploadConfig);
 
 module.exports = app => {
-    app.post('/usuarios', (req, res) => {
+    app.post('/usuarios', upload.single('photo'),(req, res) => {
 
         const {
             name,
             lastName,
             email,
             password,
-            photo,
             dateOfBirth
         } = req.body;
-
+        
+        const {
+            filename: photo
+        } = req.file;
         // TODO: validação
 
         const hash = bcrypt.hashSync(password, 5);
