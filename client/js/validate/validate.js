@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function validate(form, inputMap) {
-    let errs = [];
-    Array.from(form.children).forEach((realInput) => {
-        if (inputMap.has(realInput.id)) {
-            const err = inputMap.get(realInput.id)(realInput);
-            if (err)
-                errs.push(err);
+function validate(el, fn, ...opts) {
+    return function (event) {
+        const err = fn(el, ...opts);
+        if (err) {
+            el.setMsg(err);
+            event.preventDefault();
+            return false;
         }
-    });
-    return errs || null;
+        return true;
+    };
 }
 exports.validate = validate;
 //# sourceMappingURL=validate.js.map
