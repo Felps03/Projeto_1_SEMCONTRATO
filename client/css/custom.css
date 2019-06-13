@@ -1,24 +1,12 @@
-/* Spacements */
-
-.spc-btm-sm { margin-bottom: 2% }
-
-.spc-top-ext-sm { margin-top: 1% }
-
-.spc-top-sm { margin-top: 2% }
-
-.spc-top-md { margin-top: 4% }
-
-.spc-lf-sm { margin-left: 1% }
-
 /* Colors */
 
-.bg-primary { background-color: #f8fdff }
+.bg-primary { background-color: #f8fdff } 
 
-.bg-second { background-color: #283772 }
+.bg-second { background-color: #283772 } 
 
 .bg-thrid { background-color: #f1be1d }
 
-.txt-primary { color: #283772 }
+.txt-primary { color: #283772 } 
 
 /* Lines */
 
@@ -26,4 +14,31 @@
     border-left: 8px solid #f1be1d;
     text-indent: 8px;
     color: #283772;
+}
+
+/* Inputs */
+
+.form-control::-webkit-input-placeholder { color: #dddddd }
+
+.ext-placeholder { color: #dddddd }
+
+.btn-danger { border: 1px solid #d9534f }
+
+.btn-success { border: 1px solid #5cb85c }
+
+.btn-danger:hover {
+    background: #ffffff;
+    color: #d9534f;
+    border: 1px solid #d9534f;
+}
+
+.btn-success:hover {
+    background: #ffffff;
+    color: #5cb85c;
+    border: 1px solid #5cb85c;
+}
+
+.input-circle {
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
 }
