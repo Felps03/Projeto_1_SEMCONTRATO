@@ -1,3 +1,5 @@
+import { rejects } from 'assert';
+
 const UserSchema = require('../models');
 class UserDao {
 
@@ -7,9 +9,14 @@ class UserDao {
             UserSchema.create(User);
 
         } catch(err){
-            console.log(err);
+            res.status(400).send({err: 'Registro falhou'});
         }
     }
+    findById(id){
+        const user = UserSchema.findById(id).select(password);
+        return user;
+    }
+
     updatePassword(id, password){
         UserSchema.findByIdAndUpdate(id, password)
         ,{ new: true };
@@ -19,7 +26,14 @@ class UserDao {
         const user = UserSchema.find(email, password);
         return user;
     }
+    validPassword(userPassword, password){
 
-
-}
+        if(userPassword == password){
+             return true;
+        } else{
+            return false;
+        }
+    }
+            
+ }
 module.exports = UserDao;
