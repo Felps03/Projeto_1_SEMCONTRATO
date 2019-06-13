@@ -8,34 +8,39 @@
     <link rel="icon" href="img/logo_compasso.ico">
     <link rel="stylesheet" type="text/css"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/custom.css">
     <title>Área de Cadastro do Usuário</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <nav class="navbar navbar-expand-sm bg-light navbar-light shadow">
         <div class="container">
             <img src="img/logo_compasso.png">
-            <h4>Área de Cadastro do Usuário</h4>
+            <h4 class="txt-primary">Área de Cadastro do Usuário</h4>
         </div>
     </nav><br |>
 
     <div class="container">
-        <div class="alert alert-danger alert-dismissible" id="message">
+        <div class="alert alert-danger alert-dismissible spc-top-bg" id="message">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             Mensagem de teste de validação!
         </div>
 
-        <form action="#" autocomplete="off" id="user-register">
+        <form method="post" action="#" id="user-register" autocomplete="off">
 
-            <h3>Dados pessoais</h3>
-
+            <div class="vt-line spc-top-sm spc-btm-sm">
+                <h3>
+                    <strong>Dados pessoais</strong>
+                </h3>
+            </div>
+            
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="name">Nome:</label>
-                        <input type="text" name="txt_name" class="form-control " id="name"
-                            placeholder="Informe seu nome">
+                        <input type="text" name="txt_name" class="form-control" id="name"
+                            placeholder="Informe seu nome" autofocus>
                     </div>
                 </div>
 
@@ -59,7 +64,11 @@
                 <input type="email" name="email_email" class="form-control" id="email" placeholder="Informe seu e-mail">
             </div>
 
-            <h3>Dados de usuário</h3>
+            <div class="vt-line spc-top-md spc-btm-sm">
+                <h3>
+                    <strong>Dados de usuário</strong>
+                </h3>
+            </div>
 
             <div class="form-group">
                 <label for="username">Nome de usuário:</label>
@@ -67,29 +76,44 @@
                     placeholder="Informe um nome de usuário">
             </div>
 
-            <div class="form-group">
-                <label for="password">Senha:</label>
-                <input type="password" name="pass_password" class="form-control" id="password"
-                    placeholder="Informe uma senha" minlength="6" maxlength="8">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" name="pass_password" class="form-control" id="password"
+                            placeholder="Informe uma senha" minlength="6" maxlength="8">
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="password">Confirmação:</label>
+                        <input type="password" name="pass_passwordConfirm" class="form-control" id="passwordConfirm"
+                            placeholder="Informe a senha novamente" minlength="6" maxlength="8">
+                    </div>
+                </div>
+            </div>
+            
+            <span class="spc-btm-sm">Foto de perfil:</span>
+            <div class="custom-file spc-btm-sm spc-top-ext-sm">
+                <input type="file" name="file_photo" class="custom-file-input" id="photo">
+                <label class="custom-file-label" for="photo">Selecione uma imagem</label>
             </div>
 
-            <div class="form-group">
-                <input type="password" name="pass_passwordConfirm" class="form-control" id="passwordConfirm"
-                    placeholder="Informe a senha novamente" minlength="6" maxlength="8">
-            </div>
-
-            <div class="form-group">
-                <label for="photo">Foto de perfil:</label>
-                <input type="file" name="file_photo" class="form-control-file" id="photo">
-            </div>
-
-            <button type="submit" name="send" class="btn btn-md btn-primary float-right">Cadastrar</button>
+            <button type="submit" name="send" class="btn btn-success float-right spc-btm-sm spc-top-ext-sm spc-lf-sm">Cadastrar</button>
+            <button type="reset" name="reset" class="btn btn-danger float-right spc-btm-sm spc-top-ext-sm">Resetar</button>
         </form>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
 </body>
 
 </html>
