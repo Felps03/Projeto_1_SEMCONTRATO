@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "js",
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "node_modules/*",
+            ]
+        }
+    },
+    "include": [
+        "ts/*",
+        "ts/validate/validate.ts"
+    ]
+}
