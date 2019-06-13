@@ -7,8 +7,14 @@ export class InputWrapper {
         this.msgDiv = <HTMLElement>el.nextElementSibling
     }
 
-    public setMsg(msg: string, type: string = 'happy'): void {
-        this.msgDiv.className = type === 'happy' ? 'valid-feedback' : 'invalid-feedback'
+    public setValid(valid: boolean, msg?: string): void {
+
+        this.el.classList.remove('is-valid')
+        this.el.classList.remove('is-invalid')
+
+        this.el.classList.add(valid ? 'is-valid' : 'is-invalid')
+
+        this.msgDiv.className = valid ? 'valid-feedback' : 'invalid-feedback'
         this.msgDiv.textContent = msg
     }
 

@@ -3,15 +3,16 @@ import { InputWrapper } from "./InputWrapper";
 export function validate(el: InputWrapper, fn: (el: InputWrapper, ...opts: any) => string, ...opts: any): (event: Event) => boolean {
 
     return function (event: Event) {
-        const err = fn(el, ...opts)
+        const msg = fn(el, ...opts)
 
-        if (err) {
-            el.setMsg(err)
+        if (msg) {
+            el.setValid(false, msg)
             event.preventDefault()
 
             return false
         }
 
+        el.setValid(true)
         return true
     }
 }
