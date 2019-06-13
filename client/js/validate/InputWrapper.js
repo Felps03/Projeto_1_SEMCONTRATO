@@ -5,8 +5,11 @@ class InputWrapper {
         this.el = el;
         this.msgDiv = el.nextElementSibling;
     }
-    setMsg(msg, type = 'happy') {
-        this.msgDiv.className = type === 'happy' ? 'valid-feedback' : 'invalid-feedback';
+    setValid(valid, msg) {
+        this.el.classList.remove('is-valid');
+        this.el.classList.remove('is-invalid');
+        this.el.classList.add(valid ? 'is-valid' : 'is-invalid');
+        this.msgDiv.className = valid ? 'valid-feedback' : 'invalid-feedback';
         this.msgDiv.textContent = msg;
     }
     get value() {
