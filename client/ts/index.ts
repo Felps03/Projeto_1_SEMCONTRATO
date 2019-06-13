@@ -1,5 +1,5 @@
-import { validate, valDate, valPasswordConfirm, valPasswordLength } from './validate/index'
-import { InputWrapper } from './validate/InputWrapper'
+import { validate, InputWrapper } from './validate/index'
+import { valDate, valPasswordConfirm, valPasswordLength } from './validate/valFuncs'
 
 const dateInput = InputWrapper.fromId('birthdate')
 const passwordInput = InputWrapper.fromId('password')

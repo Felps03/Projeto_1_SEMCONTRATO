@@ -1,4 +1,4 @@
-import { InputWrapper } from './InputWrapper'
+import { InputWrapper } from '../InputWrapper'
 
 export function valDate(date: InputWrapper): string {
     const today = new Date()

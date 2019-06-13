@@ -1,4 +1,4 @@
-import { InputWrapper } from './InputWrapper'
+import { InputWrapper } from '../InputWrapper'
 
 export function valPasswordLength(pw: InputWrapper): string {
     return (pw.value.length < 6 || pw.value.length > 8) ?
