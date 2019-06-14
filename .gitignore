@@ -49,7 +49,7 @@ typings/
 *.tsbuildinfo
 
 # TypeScript output directory
-client/js/
+client/js/dist/
 
 # Optional npm cache directory
 .npm

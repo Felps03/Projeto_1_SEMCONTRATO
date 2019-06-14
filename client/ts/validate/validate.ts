@@ -12,7 +12,7 @@ export function validate(input: InputWrapper, fn: (input: InputWrapper, ...opts:
             return false
         }
 
-        input.setValid(true)
+        input.setValid(true, '')
         return true
     })
 }
