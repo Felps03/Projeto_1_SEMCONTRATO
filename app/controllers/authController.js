@@ -19,16 +19,16 @@ class authController {
         }
     }
 
-    lista() {
+    list() {
         return (req, resp) => {
             const userDao = new UserDao;
-            userDao.lista((error, result) => {
+            userDao.list((error, result) => {
                 resp.send(result);
             });
         }
     }
 
-    cadastro() {
+    add() {
         return (req, resp) => {
 
             const { name, lastName, email, password, dateOfBirth } = req.body;
@@ -55,7 +55,7 @@ class authController {
         }
     }
 
-    edita() {
+    updatePassword() {
         return (req, resp) => {
             const { id, password, newPassword, confirmNewPassword } = req.body;
 
@@ -81,10 +81,10 @@ class authController {
         }
     }
 
-    buscaPessoa() {
+    findById() {
         return (req, resp) => {
             const userDao = new UserDao;
-            userDao.buscaPessoaId(req.params.id, (error, result) => {
+            userDao.findById(req.params.id, (error, result) => {
                 resp.send(result)
             });
         }
