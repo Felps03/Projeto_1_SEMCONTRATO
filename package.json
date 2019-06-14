@@ -1,37 +1,37 @@
 {
-    "name": "Projeto_1_SemContrato",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon index.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Felps03/Projeto_1_SEMCONTRATO.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Felps03/Projeto_1_SEMCONTRATO/issues"
-    },
-    "homepage": "https://github.com/Felps03/Projeto_1_SEMCONTRATO#readme",
-    "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "body-parser": "^1.18.2",
-        "express": "^4.16.2",
-        "express-validator": "^5.3.1",
-        "fs": "^0.0.1-security",
-        "jsonwebtoken": "^8.1.0",
-        "mongoose": "^4.13.4",
-        "multer": "^1.4.1",
-        "nodemailer": "^4.4.1",
-        "nodemailer-express-handlebars": "^2.0.0",
-        "path": "^0.12.7"
-    },
-    "devDependencies": {
-        "nodemon": "1.18.4"
-    }
+  "name": "projeto_1_semcontrato",
+  "version": "1.0.0",
+  "description": "[FEAT] node structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Felps03/Projeto_1_SEMCONTRATO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Felps03/Projeto_1_SEMCONTRATO/issues"
+  },
+  "homepage": "https://github.com/Felps03/Projeto_1_SEMCONTRATO#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-validator": "^5.3.1",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.13.4",
+    "multer": "^1.4.1",
+    "nodemailer": "^4.4.1",
+    "nodemailer-express-handlebars": "^2.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.4"
+  }
 }

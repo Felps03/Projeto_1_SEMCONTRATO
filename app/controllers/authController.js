@@ -1,13 +1,9 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
-
-function generateToken(params = {}) {
-    return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400,
-    });
-}
-
+const authConfig = require('../../config/auth.json');
+const UserDao = require('../infra/userDao');
 
 class authController {
     static rotas() {
@@ -19,39 +15,29 @@ class authController {
         }
     }
 
+    generateToken(params = {}) {
+        return jwt.sign(params, authConfig.secret, {
+            expiresIn: 86400,
+        });
+    }
+
     list() {
         return (req, resp) => {
-            const userDao = new UserDao;
+            const userDao = new UserDao();
             userDao.list((error, result) => {
                 resp.send(result);
+                // TODO: controle de erros
             });
         }
     }
 
     add() {
         return (req, resp) => {
-
-            const { name, lastName, email, password, dateOfBirth } = req.body;
-
-            const { filename: photo } = req.file;
-            // TODO: validação
-
-            const hash = bcrypt.hashSync(password, 5);
-            // string -> Date
-            const dateOfBirthDate = new Date(dateOfBirth);
-
-            const newUser = new User({
-                name,
-                lastName,
-                email,
-                password: hash,
-                photo,
-                dateOfBirth: dateOfBirthDate
+            const userDao = new UserDao();
+            userDao.add(req.body, (error, result) => {
+                resp.send(result);
+                // TODO: controle de erros
             });
-
-            newUser.save();
-
-            console.log('Usuário cadastrado.', email);
         }
     }
 
