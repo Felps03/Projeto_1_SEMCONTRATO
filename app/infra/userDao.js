@@ -12,6 +12,7 @@ class UserDao {
             res.status(400).send({err: 'Registro falhou'});
         }
     }
+    
     findById(id){
         const user = UserSchema.findById(id).select(password);
         return user;

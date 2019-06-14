@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
-const UserDao = require('../infra/userDao');
+//const UserDao = require('../infra/userDao');
 
 class authController {
     static rotas() {
@@ -33,7 +33,9 @@ class authController {
 
     add() {
         return (req, resp) => {
-            const userDao = new UserDao();
+            //const userDao = new UserDao();
+            console.log(req.body);
+
             userDao.add(req.body, (error, result) => {
                 resp.send(result);
                 // TODO: controle de erros
