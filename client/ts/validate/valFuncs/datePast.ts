@@ -1,6 +1,6 @@
 import { InputWrapper } from '../InputWrapper'
 
-export function valDate(date: InputWrapper): string {
+export function valDatePast(date: InputWrapper): string {
     const today = new Date()
     const inputDay = new Date(date.value)
 

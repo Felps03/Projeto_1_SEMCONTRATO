@@ -1,8 +1,8 @@
 import { InputWrapper } from "./InputWrapper";
 
-export function validate(input: InputWrapper, fn: (input: InputWrapper, ...opts: any) => string, ...opts: any): (event: Event) => boolean {
+export function validate(input: InputWrapper, fn: (input: InputWrapper, ...opts: any) => string, ...opts: any): any {
 
-    return function (event: Event) {
+    input.el.addEventListener('input', function (event: Event) {
         const msg = fn(input, ...opts)
 
         if (msg) {
@@ -14,5 +14,5 @@ export function validate(input: InputWrapper, fn: (input: InputWrapper, ...opts:
 
         input.setValid(true)
         return true
-    }
+    })
 }

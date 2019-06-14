@@ -20,8 +20,13 @@ export class InputWrapper {
             this.el.classList.add(valid ? 'is-valid' : 'is-invalid')
 
             this.msgDiv.className = valid ? 'valid-feedback' : 'invalid-feedback'
-            this.msgDiv.textContent = msg
         }
+
+        if (msg) this.setMsg(msg)
+    }
+
+    public setMsg(msg: string): void {
+        this.msgDiv.textContent = msg
     }
 
     get value() {
