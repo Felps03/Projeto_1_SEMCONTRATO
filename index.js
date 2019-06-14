@@ -8,6 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 const port = process.env.PORT || 3000;
 
-require('./app/controllers/authController');
+const routes = require('./app/routes/routes');
+routes(app);
 
 app.listen(port);

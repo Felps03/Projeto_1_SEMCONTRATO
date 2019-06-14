@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
-//const UserDao = require('../infra/userDao');
+const UserDao = require('../infra/userDao');
 
-class authController {
+class AuthController {
     static rotas() {
         return {
             lista: '/users',
@@ -33,10 +33,11 @@ class authController {
 
     add() {
         return (req, resp) => {
-            //const userDao = new UserDao();
-            console.log(req.body);
-
+            const userDao = new UserDao();
+          
+           
             userDao.add(req.body, (error, result) => {
+                console.log('result: ,', result);
                 resp.send(result);
                 // TODO: controle de erros
             });
@@ -80,4 +81,4 @@ class authController {
     
 }
 
-module.exports = authController;
+module.exports = AuthController;

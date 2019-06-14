@@ -1,4 +1,5 @@
-const UserSchema = require('../models');
+const UserSchema = require('../models/user');
+
 class UserDao {
 
     list(callback) {
@@ -8,11 +9,11 @@ class UserDao {
         });
     }
 
-    add(user, callback) {
-        const { name, lastName, email, password, dateOfBirth } = user;
-     
-        UserSchema.create({ name, lastName, email, password, dateOfBirth }, (err, docs) => {
+    add(user, callback) {      
+        const { name, lastName, userName, email, password, dateOfBirth } = user;   
+        UserSchema.create({name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if(err) return callback(err, null)
+           
             callback(null, docs);
         });
     }
