@@ -1,39 +1,37 @@
-import { rejects } from 'assert';
-
 const UserSchema = require('../models');
 class UserDao {
 
-    add(User){
-        try{
-            console.log(User);
-            UserSchema.create(User);
-
-        } catch(err){
-            res.status(400).send({err: 'Registro falhou'});
-        }
-    }
-    findById(id){
-        const user = UserSchema.findById(id).select(password);
-        return user;
+    list(callback) {
+        UserSchema.find({}).exec((err, docs) => {
+            if(err) return callback(err, null)
+            callback(null, docs);
+        });
     }
 
-    updatePassword(id, password){
-        UserSchema.findByIdAndUpdate(id, password)
-        ,{ new: true };
+    add(user, callback) {
+        const { name, lastName, email, password, dateOfBirth } = user;
+     
+        UserSchema.create({ name, lastName, email, password, dateOfBirth }, (err, docs) => {
+            if(err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
 
+    update(user, id, callback) {
+        const { name, lastName, email, password, dateOfBirth } = user;
+        UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
+            if(err) return callback(err, null)
+            callback(null, docs);
+        });
     }
-    login(email, password){
-        const user = UserSchema.find(email, password);
-        return user;
-    }
-    validPassword(userPassword, password){
 
-        if(userPassword == password){
-             return true;
-        } else{
-            return false;
-        }
+    remove(id, callback) {
+        UserSchema.findByIdAndRemove(id, (err, docs) => {
+            if(err) return callback(err, null)
+            callback(null, docs);
+        });
     }
-            
- }
+    
+} 
+
 module.exports = UserDao;
