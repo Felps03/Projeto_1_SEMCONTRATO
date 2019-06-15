@@ -1,21 +1,16 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "amd",
         "esModuleInterop": true,
-        "target": "es6",
+        "target": "es5",
         "noImplicitAny": true,
         "removeComments": true,
         "sourceMap": true,
         "outDir": "js/dist",
         "baseUrl": ".",
         "paths": {
-            "*": [
-                "node_modules/*",
-            ]
+            "*": ["node_modules/*"]
         }
     },
-    "include": [
-        "ts/*",
-        "ts/validate/validate.ts"
-    ]
+    "include": ["ts/*", "ts/validate/validate.ts"]
 }
