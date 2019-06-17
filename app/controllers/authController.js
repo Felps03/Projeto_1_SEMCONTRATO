@@ -37,6 +37,7 @@ class AuthController {
 
     add() {
         return (req, resp) => {
+            console.log(req.body);
             const error = validationResult(req);
             let errorList = [];
 
