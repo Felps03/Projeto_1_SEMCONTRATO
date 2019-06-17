@@ -1,49 +1,51 @@
-const mongoose = require('../../database');
+const mongoose = require('../../database/index');
 
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     lastName: {
         type: String,
-        required: true,
+        required: true
     },
     userName: {
         type: String,
-        required: true,
+        required: true
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        lowercase: true,
+        lowercase: true
     },
     password: {
         type: String,
         required: true,
-        select: false,
+        select: false
     },
     passwordResetToken: {
         type: String,
-        select: false,
+        select: false
     },
     passwordResetExpires: {
         type: Date,
-        select: false,
+        select: false
     },
     photo: {
-        type: String,
+        type: String
     },
     dateOfBirth: {
         type: Date,
-        required: true,
+        required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-    },
+        default: Date.now
+    }
 });
+
+
 
 const User = mongoose.model('User', UserSchema);
 

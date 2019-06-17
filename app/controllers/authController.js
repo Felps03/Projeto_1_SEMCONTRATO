@@ -1,11 +1,12 @@
+const { validationResult } = require('express-validator/check');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
-//const UserDao = require('../infra/userDao');
+const UserDao = require('../infra/userDao');
 
-class authController {
+class AuthController {
     static rotas() {
         return {
             lista: '/users',
@@ -25,38 +26,55 @@ class authController {
         return (req, resp) => {
             const userDao = new UserDao();
             userDao.list((error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                }
                 resp.send(result);
-                // TODO: controle de erros
             });
         }
     }
 
     add() {
         return (req, resp) => {
-            //const userDao = new UserDao();
-            console.log(req.body);
+            const error = validationResult(req);
+            let errorList = [];
 
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
+
+            const userDao = new UserDao();
             userDao.add(req.body, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                }
                 resp.send(result);
-                // TODO: controle de erros
             });
         }
     }
 
-    updatePassword() {
+    update() {
         return (req, resp) => {
-            const { id, password, newPassword, confirmNewPassword } = req.body;
 
-            // TODO: validação
+            const error = validationResult(req);
+            let errorList = [];
 
-            const hash = bcrypt.hashSync(password, 5);
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
 
-            var user = userDao.findById(id);
-
-            if (!user.validPassword(user.password, password))
-                throw new UserException("Senha incorreta");
-
-            userDao.updatePassword(id, password);
+            const userDao = new UserDao();
+            userDao.update(req.body, req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                }
+                resp.send(result);
+            });
         }
     }
 
@@ -64,6 +82,10 @@ class authController {
         return (req, resp) => {
             const userDao = new UserDao;
             userDao.remove(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de remover o usuario favor olhar o log');
+                }
                 resp.status(200).end();
             });
         }
@@ -73,11 +95,15 @@ class authController {
         return (req, resp) => {
             const userDao = new UserDao;
             userDao.findById(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                }
                 resp.send(result)
             });
         }
     }
-    
+
 }
 
-module.exports = authController;
+module.exports = AuthController;

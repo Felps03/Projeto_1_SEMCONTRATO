@@ -9,10 +9,10 @@ class UserDao {
     }
 
     add(user, callback) {
-        const { name, lastName, email, password, dateOfBirth } = user;
-
-        UserSchema.create({ name, lastName, email, password, dateOfBirth }, (err, docs) => {
+        const { name, lastName, userName, email, password, dateOfBirth } = user;
+        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if (err) return callback(err, null)
+
             callback(null, docs);
         });
     }
