@@ -6,6 +6,8 @@ const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
 
+const UserSchema = require('../models/user');
+
 class AuthController {
     static rotas() {
         return {
@@ -45,16 +47,27 @@ class AuthController {
                 return resp.status(400).send(errorList);
             }
 
+            const { email } = req.body;
+
             const userDao = new UserDao();
+
+            //TODO: Refatorar: Tirar o findeOnde e colocar no DAO
+            if (UserSchema.findOne({ email }))
+                return resp.status(400).send({ error: 'Usuário já existe' });
+
             userDao.add(req.body, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
                 }
                 resp.send(result);
-            });
-        }
+            })
+
+        };
     }
+
+
+
 
     update() {
         return (req, resp) => {
