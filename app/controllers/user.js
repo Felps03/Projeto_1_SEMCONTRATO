@@ -1,4 +1,6 @@
-const bcrypt = require('bcryptjs');
+//const bcrypt = require('bcryptjs');
+const sha256 = require('js-sha256').sha256;
+const salt = require('../config/salt');
 const User = require('../models/user');
 const multer = require('multer');
 const uploadConfig = require('../config/upload');
@@ -23,7 +25,8 @@ module.exports = app => {
 
         // TODO: validação
 
-        const hash = bcrypt.hashSync(password, 5);
+        //const hash = bcrypt.hashSync(password, 5);
+        const hash = sha256(password + salt);
 
         // string -> Date
         const dateOfBirthDate = new Date(dateOfBirth);
@@ -56,7 +59,8 @@ module.exports = app => {
 
         // TODO: validação
 
-        const hash = bcrypt.hashSync(password, 5);
+        //const hash = bcrypt.hashSync(password, 5);
+        const hash = sha256(password + salt);
 
         var user = userDao.findById(id);
 
