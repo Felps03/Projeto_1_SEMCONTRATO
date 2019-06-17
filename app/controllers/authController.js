@@ -34,8 +34,6 @@ class AuthController {
     add() {
         return (req, resp) => {
             const userDao = new UserDao();
-          
-           
             userDao.add(req.body, (error, result) => {
                 console.log('result: ,', result);
                 resp.send(result);
@@ -44,20 +42,12 @@ class AuthController {
         }
     }
 
-    updatePassword() {
+    update() {
         return (req, resp) => {
-            const { id, password, newPassword, confirmNewPassword } = req.body;
+            const userDao = new UserDao();
+            userDao.update(req.body, req.params.id, (error, result) => {
 
-            // TODO: validação
-
-            const hash = bcrypt.hashSync(password, 5);
-
-            var user = userDao.findById(id);
-
-            if (!user.validPassword(user.password, password))
-                throw new UserException("Senha incorreta");
-
-            userDao.updatePassword(id, password);
+            })
         }
     }
 
@@ -78,7 +68,7 @@ class AuthController {
             });
         }
     }
-    
+
 }
 
 module.exports = AuthController;
