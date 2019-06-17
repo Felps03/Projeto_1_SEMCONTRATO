@@ -8,16 +8,40 @@
     <link rel="icon" href="img/logo_compasso.ico">
     <link rel="stylesheet" type="text/css"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Muli|Roboto|Source+Sans+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/custom.css">
     <title>Área de Cadastro do Usuário</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top shadow header-position">
+    <nav class="navbar navbar-inverse bg-light navbar-light fixed-top shadow header-position">
         <div class="container">
-            <img src="img/logo_compasso.png">
-            <h4 class="txt-primary ml-2">Área de Cadastro do Usuário</h4>
+            <div class="navbar-header">
+                <i class="navbar-toggle material-icons menu-icon align-middle" data-toggle="collapse" data-target="#myNavbar">menu</i>
+                <img src="img/logo_compasso.png" href="">
+            </div>
+            <h5 class="txt-primary">Área de Cadastro do Usuário</h5>
+        
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <div class="list-inline">
+                    <ul class="justify-center">
+                        <li class="list-inline-item">
+                            <a href="user-login.html" class="menu-item">
+                                <i class="material-icons custom-icon mr-1">account_circle</i>
+                                <strong>Área de Acesso</strong>
+                            </a>
+                        </li> 
+                        
+                        <li class="list-inline-item ml-3">
+                            <a href="user-register.html" class="menu-item">
+                                <i class="material-icons custom-icon mr-1">add_circle</i>
+                                <strong>Área de Cadastro</strong>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -40,7 +64,7 @@
                     <div class="form-group">
                         <label for="name">Nome:</label>
                         <input type="text" name="txt_name" class="form-control input-circle" id="name"
-                            placeholder="Informe seu nome" autofocus>
+                            placeholder="Informe seu nome" onkeyup="nameValidator(this.value)">
                         <div id="namevalidator"></div>
                     </div>
                 </div>
@@ -49,7 +73,7 @@
                     <div class="form-group">
                         <label for="lastname">Sobrenome:</label>
                         <input type="text" name="txt_lastname" class="form-control input-circle" id="lastname"
-                            placeholder="Informe seu sobrenome">
+                            placeholder="Informe seu sobrenome" onkeyup="lastnameValidator(this.value)">
                         <div id="lastnamevalidator"></div>
                     </div>
                 </div>
@@ -64,8 +88,8 @@
 
             <div class="form-group">
                 <label for="email">E-mail:</label>
-                <input type="email" name="email_email" class="form-control input-circle" id="email"
-                    placeholder="Informe seu e-mail">
+                <input type="text" name="email_email" class="form-control input-circle" id="email"
+                    placeholder="Informe seu e-mail" onkeyup="emailValidator(this.value)">
                 <div id="emailvalidator"></div>
             </div>
 

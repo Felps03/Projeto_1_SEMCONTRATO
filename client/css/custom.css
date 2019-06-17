@@ -10,7 +10,7 @@
 
 /* Positions */
 
-.header-position { position: initial !important }
+.header-position { position: sticky !important }
 
 .page-position {position: sticky !important }
 
@@ -53,4 +53,28 @@
     border-left: 8px solid #f1be1d;
     text-indent: 8px;
     color: #283772;
+}
+
+/* Menu */
+
+.custom-icon {color: #f1be1d }
+
+.menu-icon { font-size: 2rem }
+
+.menu-icon:hover, .menu-icon:active { cursor: pointer }
+
+.menu-item {color: #283772 }
+
+.menu-align {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    line-height: 10px;
+}
+
+.menu-item:hover, .menu-item:active {
+    color: #f1be1d;
+    transition: color 0.3s;
+    text-decoration: none;
+    cursor: pointer;
 }
