@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator/check');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
@@ -25,27 +26,53 @@ class AuthController {
         return (req, resp) => {
             const userDao = new UserDao();
             userDao.list((error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                }
                 resp.send(result);
-                // TODO: controle de erros
             });
         }
     }
 
     add() {
         return (req, resp) => {
+            const error = validationResult(req);
+            let errorList = [];
+
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
+
             const userDao = new UserDao();
             userDao.add(req.body, (error, result) => {
-                console.log('result: ,', result);
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                }
                 resp.send(result);
-                // TODO: controle de erros
             });
         }
     }
 
     update() {
         return (req, resp) => {
+
+            const error = validationResult(req);
+            let errorList = [];
+
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
+
             const userDao = new UserDao();
             userDao.update(req.body, req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                }
                 resp.send(result);
             });
         }
@@ -55,6 +82,10 @@ class AuthController {
         return (req, resp) => {
             const userDao = new UserDao;
             userDao.remove(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de remover o usuario favor olhar o log');
+                }
                 resp.status(200).end();
             });
         }
@@ -64,6 +95,10 @@ class AuthController {
         return (req, resp) => {
             const userDao = new UserDao;
             userDao.findById(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                }
                 resp.send(result)
             });
         }
