@@ -8,8 +8,11 @@ class UserDao {
         });
     }
 
-    add(user, callback) {
-        const { name, lastName, userName, email, password, file_photo, dateOfBirth } = user;
+    add(user, image, callback) {
+        const { originalname: file_photo} = image; 
+
+        const { name, lastName, userName, email, password, dateOfBirth } = user;
+
         UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
             if (err) return callback(err, null)
 
