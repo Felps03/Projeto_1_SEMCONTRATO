@@ -46,8 +46,8 @@ class AuthController {
         return (req, resp) => {
             const userDao = new UserDao();
             userDao.update(req.body, req.params.id, (error, result) => {
-
-            })
+                resp.send(result);
+            });
         }
     }
 
