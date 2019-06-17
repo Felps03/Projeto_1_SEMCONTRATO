@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         select: false
     },
-    photo: {
+    file_photo: {
         type: String
     },
     dateOfBirth: {
