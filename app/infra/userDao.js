@@ -32,6 +32,14 @@ class UserDao {
         });
     }
 
+    findEmail(email, callback) {
+        UserSchema.findOne({ email }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+
 }
 
 module.exports = UserDao;
