@@ -11,12 +11,12 @@ module.exports = (app) => {
 
     app.post(rotasAuth.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), authController.add());
 
-    app.put(rotasAuth.edicao,UserValidation.validation(), authController.update());
+    app.put(rotasAuth.edicao, UserValidation.validation(), authController.update());
 
     app.delete(rotasAuth.deletar, authController.remove());
 
     app.post(rotasAuth.authenticate, authController.authenticate());
 
-    app.post(rotasAuth.resetPassword, authController.resetPassword());
+    //app.post(rotasAuth.resetPassword, authController.resetPassword());
 
 }
