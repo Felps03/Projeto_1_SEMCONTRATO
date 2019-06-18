@@ -1,4 +1,6 @@
 const UserSchema = require('../models/user');
+
+const fs = require('fs');
 class UserDao {
 
     list(callback) {
@@ -14,8 +16,10 @@ class UserDao {
         const { name, lastName, userName, email, password, dateOfBirth } = user;
 
         UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
-            if (err) return callback(err, null)
-
+            if (err) {
+                fs.unlink(`./tmp/uploads/${file_photo}`);
+                return callback(err, null);
+            }
             callback(null, docs);
         });
     }
