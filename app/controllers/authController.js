@@ -52,8 +52,8 @@ class AuthController {
             const userDao = new UserDao();
 
             //TODO: Refatorar: Tirar o findeOnde e colocar no DAO
-            if (UserSchema.findOne({ email }))
-                return resp.status(400).send({ error: 'Usuário já existe' });
+            //if (UserSchema.findOne({ email }))
+              //  return resp.status(400).send({ error: 'Usuário já existe' });
 
             userDao.add(req.body, (error, result) => {
                 if (error) {
