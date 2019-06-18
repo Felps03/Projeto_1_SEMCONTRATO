@@ -13,4 +13,8 @@ module.exports = (app) => {
 
     app.delete(rotasAuth.deletar, authController.remove());
 
+    app.post(rotasAuth.authenticate, authController.authenticate());
+
+    app.post(rotasAuth.resetPassword, authController.resetPassword());
+
 }
