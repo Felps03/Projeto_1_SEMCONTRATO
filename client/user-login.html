@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="img/logo_compasso.ico">
-    <link rel="stylesheet" type="text/css"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Muli|Roboto|Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
+    <link href="lib/materialize/icons/icons.css" rel="stylesheet">
+    <link href="lib/materialize/fonts/fonts.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/custom.css">
     <title>Área de Acesso</title>
 </head>
@@ -17,29 +16,29 @@
 <body>
     <nav class="navbar navbar-inverse bg-light navbar-light fixed-top shadow header-position">
         <div class="container">
-            <div class="navbar-header">
-                <img src="img/logo_compasso.png" href="">
+            <div class="navbar-header ml-n2">
+                <img src="img/logo_compasso.png" href="#!">
             </div>
-            <h5 class="txt-primary">Área de Acesso</h5>
+            <h5 class="txt-primary ml-n3">Área de Acesso</h5>
         </div>
     </nav>
 
     <div class="container page-position">
-
         <div class="row justify-content-center align-items-center">
             <div class="col-md-5">
+                <div class="ml-2 mr-2" id="error"></div>
                 <div class="col-12">
-                    <form id="login-form" class="form" action="" method="post">
+                    <form class="form" method="post" action="#" id="login-form" autocomplete="off">
 
                         <div class="vt-line mt-5 mb-3">
                             <h3><strong>Login</strong></h3>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Nome de Usuário:</label>
-                            <input type="email" name="email_email" class="form-control input-circle" id="email"
+                            <label for="username">Nome de Usuário:</label>
+                            <input type="text" name="txt_username" class="form-control input-circle" id="username"
                                 placeholder="Informe seu nome de usuário">
-                            <div id="emailvalidator"></div>
+                            <div id="usernamevalidator"></div>
                         </div>
 
                         <div class="form-group">
@@ -51,7 +50,7 @@
 
                         <div class="form-group">
                             <label for="recovery_password">
-                                <span><a class="menu-item" href="#!">Esqueceu sua senha?</a></span>
+                                <span><a class="menu-item" href="user-recovery-password.html">Esqueceu sua senha?</a></span>
                             </label><br>
 
                             <label for="register">
@@ -59,17 +58,17 @@
                             </label><br>
                         </div>
 
-                        <button type="submit" name="send" class="btn btn-success float-right pr-4 pl-4 input-circle">Acessar</button>
+                        <button type="submit" name="send" class="btn btn-success float-right pr-4 pl-4 input-circle" id="access">Acessar</button>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+    <script src="lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="js/user-login-utils.js"></script>
 </body>
 
 </html>

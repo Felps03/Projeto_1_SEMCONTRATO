@@ -14,7 +14,9 @@ class AuthController {
             lista: '/users',
             cadastro: '/users/user/',
             edicao: '/users/user/:id',
-            deletar: '/users/user/:id'
+            deletar: '/users/user/:id',
+            authenticate: '/users/authenticate',
+            resetPassword: '/users/user/:id'
         }
     }
 
@@ -39,6 +41,7 @@ class AuthController {
 
     add() {
         return (req, resp) => {
+            console.log(req.body);
             const error = validationResult(req);
             let errorList = [];
 
@@ -52,10 +55,17 @@ class AuthController {
             const userDao = new UserDao();
 
             //TODO: Refatorar: Tirar o findeOnde e colocar no DAO
+<<<<<<< HEAD
             //if (UserSchema.findOne({ email }))
               //  return resp.status(400).send({ error: 'Usuário já existe' });
+=======
+            /*
+            if (UserSchema.findOne({ email }))
+                return resp.status(400).send({ error: 'Usuário já existe' });
+                */
+>>>>>>> faff4e249b1f4f904324608d1967023723a4c2bb
 
-            userDao.add(req.body, (error, result) => {
+            userDao.add(req.body, req.file, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
@@ -65,9 +75,6 @@ class AuthController {
 
         };
     }
-
-
-
 
     update() {
         return (req, resp) => {
@@ -117,6 +124,52 @@ class AuthController {
         }
     }
 
+
+    authenticate() {
+        return (req, resp) => {
+            const { email, password } = req.body;
+
+            const userDao = new UserDao;
+            userDao.findOneJoker(email, '+password', (error, result) => {
+                if (error) {
+                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                } else {
+                    resp.status(200).send(result);
+                }
+
+                //resp.send(result)
+            });
+
+
+
+
+
+        }
+    }
+
+
+    /*
+        resetPassword() {
+            return (req, resp) => {
+                const { email, token, password } = req.body;
+
+                const user = User.findOne({ email }).select('+passwordResetToken');
+
+                if (!user)
+                    return email.status(400).send({ error: 'User not found' });
+
+                if (token !== user.passwordResetToken)
+                    return email.status(400).send({ error: 'Token invalid' });
+
+                user.password = password;
+
+                user.save();
+
+            }
+        }
+        */
+
 }
+
 
 module.exports = AuthController;

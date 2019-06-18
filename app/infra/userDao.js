@@ -8,9 +8,12 @@ class UserDao {
         });
     }
 
-    add(user, callback) {
+    add(user, image, callback) {
+        const { originalname: file_photo} = image; 
+
         const { name, lastName, userName, email, password, dateOfBirth } = user;
-        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
+
+        UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
             if (err) return callback(err, null)
 
             callback(null, docs);
@@ -39,7 +42,12 @@ class UserDao {
         });
     }
 
-
+    findOneJoker(email, joker, callback) {
+        UserSchema.find({ email }).select(joker).exec((err, docs) => {
+            if (err) return callback(err, null);
+            callback(null, docs);
+        });
+    }
 }
 
 module.exports = UserDao;

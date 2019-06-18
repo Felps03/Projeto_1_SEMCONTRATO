@@ -20,9 +20,11 @@
 
 .ext-placeholder { color: #dddddd }
 
-.btn-danger { border: 1px solid #d9534f !important }
+.btn-outline-danger { border: 1px solid #d9534f !important }
 
 .btn-success { border: 1px solid #5cb85c !important }
+
+.btn-warning { border: 1px solid #ffc107 !important }
 
 .btn-danger:hover {
     background: #ffffff !important;
@@ -34,6 +36,12 @@
     background: #ffffff !important;
     color: #5cb85c !important;
     border: 1px solid #5cb85c !important;
+}
+
+.btn-warning:hover {
+    background: #ffffff !important;
+    color: #ffc107 !important;
+    border: 1px solid #ffc107 !important;
 }
 
 .input-circle {

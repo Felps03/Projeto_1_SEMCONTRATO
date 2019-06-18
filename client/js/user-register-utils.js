@@ -346,6 +346,7 @@ function headerError() {
 	document.querySelector("#error").innerHTML = errorsView;
 }
 
+
 //Validators test
 let register = document.getElementById('register-new-user');
 
@@ -371,7 +372,3 @@ register.addEventListener('click', function(event) {
 			`;
 	}
 });
-
-function unfocusBackground() {
-	document.querySelector("#teste").classList.add("unfocus-back");
-}
