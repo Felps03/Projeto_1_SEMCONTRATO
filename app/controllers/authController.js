@@ -6,6 +6,8 @@ const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
 
+const JSON = require('circular-json');
+
 const UserSchema = require('../models/user');
 
 class AuthController {
@@ -119,51 +121,20 @@ class AuthController {
         }
     }
 
-
     authenticate() {
         return (req, resp) => {
             const { email, password } = req.body;
 
             const userDao = new UserDao;
-            userDao.findOneJoker(email, '+password', (error, result) => {
+            userDao.authenticate(email, password, (error, result) => {
                 if (error) {
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
                 } else {
                     resp.status(200).send(result);
                 }
-
-                //resp.send(result)
             });
-
-
-
-
-
         }
     }
-
-
-    /*
-        resetPassword() {
-            return (req, resp) => {
-                const { email, token, password } = req.body;
-
-                const user = User.findOne({ email }).select('+passwordResetToken');
-
-                if (!user)
-                    return email.status(400).send({ error: 'User not found' });
-
-                if (token !== user.passwordResetToken)
-                    return email.status(400).send({ error: 'Token invalid' });
-
-                user.password = password;
-
-                user.save();
-
-            }
-        }
-        */
-
 }
 
 
