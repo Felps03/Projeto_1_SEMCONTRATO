@@ -6,11 +6,6 @@ register.addEventListener('click', function(event) {
     inputsValidator();
     
     if(formValidator()) {
-            let name = document.getElementById('name').value;
-            let lastName = document.getElementById('lastname').value;
-            let dateOfBirth = document.getElementById('birthdate').value;
-            let email = document.getElementById('email').value;
-            let photo = document.getElementById('photo').value;
             let userName = document.getElementById('username').value;  
             let password = document.getElementById('password').value;  
 

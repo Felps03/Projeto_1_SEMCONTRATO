@@ -102,6 +102,23 @@ function headerError() {
 	document.querySelector("#error").innerHTML = errorsView;
 }
 
+function inputsValidator() {
+	nameValidator();
+	lastnameValidator();
+	birthdateValidator();
+	emailValidator();
+	photoValidator();
+	usernameValidator();
+	passwordValidator();
+	passwordConfirmValidator();
+}
+
+function formValidator() {
+	return nameValidator() && lastnameValidator() && birthdateValidator() && emailValidator() 
+		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator()
+}
+
+
 //Validator test
 let access = document.getElementById('access');
 
