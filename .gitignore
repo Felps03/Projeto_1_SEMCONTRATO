@@ -90,3 +90,5 @@ client/js/dist/
 
 # DynamoDB Local files
 .dynamodb/
+
+client/dist

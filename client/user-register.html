@@ -6,145 +6,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="img/logo_compasso.ico">
-    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link href="lib/materialize/icons/icons.css" rel="stylesheet">
     <link href="lib/materialize/fonts/fonts.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <link rel="stylesheet" href="css/custom.css">
     <title>Área de Cadastro do Usuário</title>
 </head>
-    <body>
-        <nav class="navbar navbar-inverse bg-light navbar-light fixed-top shadow header-position">
-            <div class="container">
-                <div class="navbar-header ml-n2">
-                    <i class="navbar-toggle material-icons menu-icon align-middle ml-n2" data-toggle="collapse" data-target="#myNavbar">menu</i>
-                    <img src="img/logo_compasso.png" href="#!">
+
+<body>
+    <nav class="navbar navbar-inverse bg-light navbar-light fixed-top shadow header-position">
+        <div class="container">
+            <div class="navbar-header ml-n2">
+                <i class="navbar-toggle material-icons menu-icon align-middle ml-n2" data-toggle="collapse"
+                    data-target="#myNavbar">menu</i>
+                <img src="img/logo_compasso.png" href="#!">
+            </div>
+            <h5 class="txt-primary ml-n3">Área de Cadastro do Usuário</h5>
+
+            <div class="collapse navbar-collapse ml-n5 mb-n3" id="myNavbar">
+                <div class="list-inline ml-n2">
+                    <ul class="justify-center">
+                        <li class="list-inline-item mt-1">
+                            <a href="user-login.html" class="menu-item">
+                                <i class="material-icons align-middle custom-icon mr-1 mb-1">account_circle</i>
+                                <strong>Área de Acesso</strong>
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item ml-sm-3">
+                            <a href="user-register.html" class="menu-item">
+                                <i class="material-icons align-middle custom-icon mr-1 mb-1">add_circle</i>
+                                <strong>Área de Cadastro</strong>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <h5 class="txt-primary ml-n3">Área de Cadastro do Usuário</h5>
-            
-                <div class="collapse navbar-collapse ml-n5 mb-n3" id="myNavbar">
-                    <div class="list-inline ml-n2">
-                        <ul class="justify-center">
-                            <li class="list-inline-item mt-1">
-                                <a href="user-login.html" class="menu-item">
-                                    <i class="material-icons align-middle custom-icon mr-1 mb-1">account_circle</i>
-                                    <strong>Área de Acesso</strong>
-                                </a>
-                            </li> 
-                            
-                            <li class="list-inline-item ml-sm-3">
-                                <a href="user-register.html" class="menu-item">
-                                    <i class="material-icons align-middle custom-icon mr-1 mb-1">add_circle</i>
-                                    <strong>Área de Cadastro</strong>
-                                </a>
-                            </li>
-                        </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container page-position col-md-5" id="register">
+        <div id="error"></div>
+
+        <form class="mt-5" method="post" id="user-register" autocomplete="off">
+
+            <div class="vt-line mb-3">
+                <h3>
+                    <strong>Dados pessoais</strong>
+                </h3>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="name">Primeiro Nome:</label>
+                        <input type="text" name="txt_name" class="form-control input-circle" id="name"
+                            placeholder="Informe seu nome" autofocus>
+                        <div id="namevalidator"></div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="lastname">Sobrenome:</label>
+                        <input type="text" name="txt_lastname" class="form-control input-circle" id="lastname"
+                            placeholder="Informe seu sobrenome">
+                        <div id="lastnamevalidator"></div>
                     </div>
                 </div>
             </div>
-        </nav>
 
-        <div class="container page-position col-md-5" id="register">
-            <div id="error"></div>
+            <div class="form-group">
+                <label for="birthdate">Data de nascimento:</label>
+                <input type="date" name="date_brithdate" class="form-control ext-placeholder input-circle"
+                    id="birthdate">
+                <div id="birthdatevalidator"></div>
+            </div>
 
-            <form class="mt-5" method="post" action="#" id="user-register" autocomplete="off">
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="text" name="email_email" class="form-control input-circle" id="email"
+                    placeholder="Informe seu e-mail">
+                <div id="emailvalidator"></div>
+            </div>
 
-                <div class="vt-line mb-3">
-                    <h3>
-                        <strong>Dados pessoais</strong>
-                    </h3>
+            <div class="vt-line mt-5 mb-3">
+                <h3>
+                    <strong>Dados de usuário</strong>
+                </h3>
+            </div>
+
+            <div class="form-group">
+                <div class="input-file mt-n4" name="photo">
+                    <label for="password">Foto de Perfil:</label>
+                    <input type="text" name="file_photo" class="form-control input-circle" id="photo"
+                        placeholder='Selecione uma imagem'>
+                    <div id="photovalidator"></div>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="name">Primeiro Nome:</label>
-                            <input type="text" name="txt_name" class="form-control input-circle" id="name"
-                                placeholder="Informe seu nome" autofocus>
-                            <div id="namevalidator"></div>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label for="username">Nome de usuário:</label>
+                <input type="text" name="txt_username" class="form-control input-circle" id="username"
+                    placeholder="Informe um nome de usuário">
+                <div id="usernamevalidator"></div>
+            </div>
 
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="lastname">Sobrenome:</label>
-                            <input type="text" name="txt_lastname" class="form-control input-circle" id="lastname"
-                                placeholder="Informe seu sobrenome">
-                            <div id="lastnamevalidator"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="birthdate">Data de nascimento:</label>
-                    <input type="date" name="date_brithdate" class="form-control ext-placeholder input-circle"
-                        id="birthdate">
-                    <div id="birthdatevalidator"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input type="text" name="email_email" class="form-control input-circle" id="email"
-                        placeholder="Informe seu e-mail">
-                    <div id="emailvalidator"></div>
-                </div>
-
-                <div class="vt-line mt-5 mb-3">
-                    <h3>
-                        <strong>Dados de usuário</strong>
-                    </h3>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-file mt-n4" name="photo">
-                        <label for="password">Foto de Perfil:</label>
-                        <input type="text" name="file_photo" class="form-control input-circle" id="photo"
-                            placeholder='Selecione uma imagem'>
-                        <div id="photovalidator"></div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" name="pass_password" class="form-control input-circle" id="password"
+                            placeholder="Informe uma senha" maxlength="8">
+                        <div id="passwordvalidator"></div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="username">Nome de usuário:</label>
-                    <input type="text" name="txt_username" class="form-control input-circle" id="username"
-                        placeholder="Informe um nome de usuário">
-                    <div id="usernamevalidator"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="password">Senha:</label>
-                            <input type="password" name="pass_password" class="form-control input-circle" id="password"
-                                placeholder="Informe uma senha" maxlength="8">
-                            <div id="passwordvalidator"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="password">Confirmação:</label>
-                            <input type="password" name="pass_passwordConfirm" class="form-control input-circle"
-                                id="passwordConfirm" placeholder="Informe a senha novamente" maxlength="8">
-                            <div id="passwordconfirmvalidator"></div>
-                        </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="password">Confirmação:</label>
+                        <input type="password" name="pass_passwordConfirm" class="form-control input-circle"
+                            id="passwordConfirm" placeholder="Informe a senha novamente" maxlength="8">
+                        <div id="passwordconfirmvalidator"></div>
                     </div>
                 </div>
+            </div>
 
-                <button type="submit" name="send"
-                    class="btn btn-success float-right mb- mt-4 ml-2 pr-4 pl-4 input-circle" id="register-new-user">Cadastrar</button>
-                <button type="reset" name="reset"
-                    class="btn btn-outline-danger float-right mb-4 mt-4 pr-4 pl-4 input-circle">Cancelar</button>
-            </form>
+            <button type="submit" name="send" class="btn btn-success float-right mb- mt-4 ml-2 pr-4 pl-4 input-circle"
+                id="register-new-user">Cadastrar</button>
+            <button type="reset" name="reset"
+                class="btn btn-outline-danger float-right mb-4 mt-4 pr-4 pl-4 input-circle" data-toggle="modal"
+                data-target="#cancelModal">Cancelar</button>
+        </form>
+    </div>
+
+    <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog"
+        aria-labelledby="cancelTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelTitle">Cancelar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">Deseja cancelar processo de cadastro?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger pr-4 pl-4" data-dismiss="modal">Não</button>
+                    <button type="button" class="btn btn-success pr-4 pl-4" onclick="redirect()">Sim</button>
+                </div>
+            </div>
         </div>
-        
-    <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/bootstrap/bootstrap.min.js"></script>
-    <script src="lib/bootstrap/bootstrap.bundle.min.js"></script>
+    </div>
+
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/user-register.js"></script>
     <script src="js/user-register-utils.js"></script>
     <script src="js/user-register-file-util.js"></script>
-    <!--
-    <script src="js/user-register.js"></script>
-    -->
+    <script>
+        function redirect() {
+            location.replace("user-login.html");
+        }
+    </script>
 </body>
 
 </html>

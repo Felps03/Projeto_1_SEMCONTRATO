@@ -346,13 +346,7 @@ function headerError() {
 	document.querySelector("#error").innerHTML = errorsView;
 }
 
-
-//Validators test
-let register = document.getElementById('register-new-user');
-
-register.addEventListener('click', function(event) {
-    event.preventDefault();
-
+function inputsValidator() {
 	nameValidator();
 	lastnameValidator();
 	birthdateValidator();
@@ -361,14 +355,9 @@ register.addEventListener('click', function(event) {
 	usernameValidator();
 	passwordValidator();
 	passwordConfirmValidator();
+}
 
-	if(nameValidator() && lastnameValidator() && birthdateValidator() && emailValidator() 
-		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator()) {
-		document.querySelector("#register").innerHTML = `
-            <div class="alert alert-success alert-dismissible mt-4 border-0 input-circle" id="errormessage">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>Você foi cadastrado com sucesso!
-			</div>
-			<span><a class="menu-item float-right mt-5" href="user-login.html">Ir para a página de acesso</a></span>
-			`;
-	}
-});
+function formValidator() {
+	return nameValidator() && lastnameValidator() && birthdateValidator() && emailValidator() 
+		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator()
+}

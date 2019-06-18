@@ -1,3 +1,6 @@
+const sha256 = require('js-sha256').sha256;
+const salt = require('../config/salt');
+
 const mongoose = require('../../database/index');
 
 const UserSchema = new mongoose.Schema({
@@ -45,6 +48,12 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+UserSchema.pre('save', async function(next) {
+    const hash = sha256(this.password + salt);
+    this.password = hash;
+
+    next();
+});
 
 
 const User = mongoose.model('User', UserSchema);
