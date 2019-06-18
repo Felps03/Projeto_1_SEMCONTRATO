@@ -13,13 +13,6 @@ register.addEventListener('click', function(event) {
             let photo = document.getElementById('photo').value;
             let userName = document.getElementById('username').value;  
             let password = document.getElementById('password').value;  
-
-		document.querySelector("#register").innerHTML = `
-            <div class="alert alert-success alert-dismissible mt-4 border-0 input-circle" id="errormessage">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>Você foi cadastrado com sucesso!
-			</div>
-			<span><a class="menu-item float-right mt-2" href="user-login.html">Ir para a página de acesso</a></span>
-			`;
 	}
 
 
@@ -45,10 +38,10 @@ register.addEventListener('click', function(event) {
             console.log(data);
             document.querySelector("#register").innerHTML = `
                 <div class="alert alert-success alert-dismissible mt-4 border-0 input-circle" id="errormessage">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button> Cadastrado com sucesso!
-                </div>
-                <span><a class="menu-item pull-right" href="#!">Voltar a página de acesso</a></span>
-                `;
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>Você foi cadastrado com sucesso!
+			    </div>
+			    <span><a class="menu-item float-right mt-2" href="user-login.html">Ir para a página de acesso</a></span>
+			`;
         },
          error: function (request, status, error) {
             //alert(request.responseText);

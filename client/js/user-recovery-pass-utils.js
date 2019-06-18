@@ -6,9 +6,8 @@ function hasNumber(value) {
 	}
 }
 
-//VALIDATORS
-
 //Validators
+
 var errors = [];
 
 //Email

@@ -31,6 +31,7 @@ function hasSolitaryChar(value) {
 };
 
 //Validators
+
 var errors = [];
 
 //Name validator
@@ -359,5 +360,5 @@ function inputsValidator() {
 
 function formValidator() {
 	return nameValidator() && lastnameValidator() && birthdateValidator() && emailValidator() 
-		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator()
+		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator();
 }

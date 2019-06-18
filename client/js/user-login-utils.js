@@ -14,9 +14,8 @@ function hasSolitaryChar(value) {
 	}
 };
 
-//VALIDATORS
-
 //Validators
+
 var errors = [];
 
 //Username
@@ -103,32 +102,10 @@ function headerError() {
 }
 
 function inputsValidator() {
-	nameValidator();
-	lastnameValidator();
-	birthdateValidator();
-	emailValidator();
-	photoValidator();
 	usernameValidator();
 	passwordValidator();
-	passwordConfirmValidator();
 }
 
 function formValidator() {
-	return nameValidator() && lastnameValidator() && birthdateValidator() && emailValidator() 
-		&& photoValidator() && usernameValidator() && passwordValidator() && passwordConfirmValidator()
+	return usernameValidator() && passwordValidator();
 }
-
-
-//Validator test
-let access = document.getElementById('access');
-
-access.addEventListener('click', function(event) {
-    event.preventDefault();
-
-	usernameValidator();
-	passwordValidator();
-
-	if(usernameValidator() && passwordValidator()) {
-		location.replace("user-login.html");
-	}
-});
