@@ -58,7 +58,7 @@ class AuthController {
 
             //TODO: Refatorar: Tirar o findeOnde e colocar no DAO
             //if (UserSchema.findOne({ email }))
-              //  return resp.status(400).send({ error: 'Usuário já existe' });
+            //  return resp.status(400).send({ error: 'Usuário já existe' });
 
             userDao.add(req.body, req.file, (error, result) => {
                 if (error) {
@@ -124,9 +124,14 @@ class AuthController {
             const { email, password } = req.body;
 
             const userDao = new UserDao;
+
             userDao.authenticate(email, password, (error, result) => {
                 if (error) {
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                }
+
+                if (result.length == 0) {
+                    resp.status(400).send('Email ou senha inválidos');
                 } else {
                     resp.status(200).send(result);
                 }
@@ -135,5 +140,4 @@ class AuthController {
     }
 }
 
-
-module.exports = AuthController;
+module.exports = AuthController
