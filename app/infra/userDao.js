@@ -1,4 +1,6 @@
 const UserSchema = require('../models/user');
+const crypto = require("crypto");
+
 class UserDao {
 
     list(callback) {
@@ -9,11 +11,14 @@ class UserDao {
     }
 
     add(user, image, callback) {
-        const { filename: file_photo } = image;
+
+        console.log(image);
+
+        const { filename : file_photo } = image;
+
+        //file_photo = `${hash.toString("hex")}-${file_photo}`
 
         const { name, lastName, userName, email, password, dateOfBirth } = user;
-
-        console.log(user);
 
         UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
             if (err) return callback(err, null)
