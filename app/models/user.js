@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false
+        select: true
     },
     passwordResetToken: {
         type: String,
@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', function(next) {
     const hash = sha256(this.password + salt);
     this.password = hash;
 

@@ -2,6 +2,9 @@ const { validationResult } = require('express-validator/check');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
+const sha256 = require('js-sha256').sha256;
+const salt = require('../config/salt');
+
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
@@ -123,13 +126,17 @@ class AuthController {
         return (req, resp) => {
             const { email, password } = req.body;
 
-            const userDao = new UserDao;
+            const hash = sha256(password + salt);
+            
+            console.log(hash);
+            
 
-            userDao.authenticate(email, password, (error, result) => {
+            const userDao = new UserDao();
+            userDao.authenticate(email, hash, (error, result) => {
                 if (error) {
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
                 }
-
+                console.log(result);
                 if (result.length == 0) {
                     resp.status(400).send('Email ou senha inválidos');
                 } else {
