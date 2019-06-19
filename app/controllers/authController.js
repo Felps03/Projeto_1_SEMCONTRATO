@@ -21,7 +21,7 @@ class AuthController {
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
             authenticate: '/users/authenticate',
-            resetPassword: '/users/user/:id'
+            resetPassword: '/users/user/recover'
         }
     }
 
@@ -127,9 +127,9 @@ class AuthController {
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
-            
+
             console.log(hash);
-            
+
 
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
@@ -143,6 +143,24 @@ class AuthController {
                     resp.status(200).send(result);
                 }
             });
+        }
+    }
+
+    resetPassword() {
+        return (req, res) => {
+            // email
+            const userEmail = req.body.email;
+            const dao = new UserDao();
+            // oleiro87teste@gmail.com
+            dao.findEmail(userEmail, (error, answer) => {
+            });
+
+            // checar no banco se o email existe, chamando dao
+
+            // se o email existir, eu chamo de enviar email e salvar a string no banco
+            // se não tiver, informa que o email não existe no db
+
+            // res.send('oi');
         }
     }
 }

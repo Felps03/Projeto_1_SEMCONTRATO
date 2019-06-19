@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 
 class TokenHandler {
 
-
     generateToken(user, secret) {
 
         return jwt.sign({ email: `${user.email}` }, secret);
