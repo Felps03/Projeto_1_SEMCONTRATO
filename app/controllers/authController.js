@@ -8,7 +8,7 @@ const salt = require('../config/salt');
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
-const GenerateEmail = require('../utils/GenerateEmail');
+const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 
 const JSON = require('circular-json');
