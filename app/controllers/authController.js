@@ -8,6 +8,8 @@ const salt = require('../config/salt');
 const User = require('../models/user');
 const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
+const GenerateEmail = require('../utils/GenerateEmail');
+const RecoverDataDao = require('../infra/RecoverDataDao');
 
 const JSON = require('circular-json');
 
@@ -21,7 +23,8 @@ class AuthController {
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
             authenticate: '/users/authenticate',
-            resetPassword: '/users/user/recover'
+            resetPassword: '/users/user/recover',
+            verifyCode: '/users/code/verify'
         }
     }
 
@@ -150,17 +153,56 @@ class AuthController {
         return (req, res) => {
             // email
             const userEmail = req.body.email;
-            const dao = new UserDao();
-            // oleiro87teste@gmail.com
-            dao.findEmail(userEmail, (error, answer) => {
+            const userDao = new UserDao();
+
+            userDao.findEmail(userEmail, (error, answer) => {
+
+                if (error) {
+                    res.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                }
+                if (answer == null) { // if answer its null, userEmail doenst exist on DB
+                    res.status(400).send('Email não cadastrado');
+                } else { // userEmail exists on DB
+                    const generateEmail = new GenerateEmail();
+                    generateEmail.sendEmail(userEmail)
+                        .then(randomString => {
+                            const now = new Date();
+                            const expires = new Date(now);
+                            expires.setMinutes(expires.getMinutes() + 10);
+                            // console.log("email enviado")
+                            const recoverDataDao = new RecoverDataDao();
+                            recoverDataDao.add(userEmail, randomString, expires, (err) => {
+                                // console.log(err);
+                                if (err) {
+                                    res.status(500).send(err);
+                                }
+                                res.status(200).send();
+                            });
+                        })
+                        .catch(e => console.error(e));
+                }
             });
+        }
+    }
+    verifyCode() {
+        return (req, res) => {
+            const { emailCode, email } = req.body;
 
-            // checar no banco se o email existe, chamando dao
+            const recoverDataDao = new RecoverDataDao();
 
-            // se o email existir, eu chamo de enviar email e salvar a string no banco
-            // se não tiver, informa que o email não existe no db
+            recoverDataDao.findExpires(emailCode, email, (err, docs) => {
 
-            // res.send('oi');
+                console.log(`Retorno: ${docs.expires}`);
+
+                const exp = docs.expires;
+                const now = new Date();
+
+                if (exp > now) {
+                    res.status(200).send("código válido");
+                } else {
+                    res.status(400).send("código inválido");
+                }
+            });
         }
     }
 }

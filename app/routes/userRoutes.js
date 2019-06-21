@@ -18,4 +18,6 @@ module.exports = (app) => {
     app.post(rotasAuth.authenticate, authController.authenticate());
 
     app.post(rotasAuth.resetPassword, authController.resetPassword());
+
+    app.post(rotasAuth.verifyCode, authController.verifyCode());
 }
