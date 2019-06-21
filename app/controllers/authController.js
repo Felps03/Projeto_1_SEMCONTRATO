@@ -13,6 +13,8 @@ const JSON = require('circular-json');
 
 const UserSchema = require('../models/user');
 
+const TokenHandler = require('../utils/TokenHandler');
+
 class AuthController {
     static rotas() {
         return {
@@ -63,12 +65,22 @@ class AuthController {
             //if (UserSchema.findOne({ email }))
             //  return resp.status(400).send({ error: 'Usuário já existe' });
 
+            const tokenHandler = new TokenHandler();
+
             userDao.add(req.body, req.file, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
                 }
-                resp.send(result);
+
+                let token = tokenHandler.generateToken(email, 'semcontrato');
+
+                let response = {
+                    result,
+                    token
+                }
+
+                resp.send(response);
             })
 
         };
