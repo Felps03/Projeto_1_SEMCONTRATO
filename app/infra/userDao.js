@@ -34,6 +34,13 @@ class UserDao {
         });
     }
 
+    updatePassword(password, id, callback) {
+        UserSchema.findByIdAndUpdate(id,  {password} , { new: true }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
     remove(id, callback) {
         UserSchema.findByIdAndRemove(id, (err, docs) => {
             if (err) return callback(err, null)

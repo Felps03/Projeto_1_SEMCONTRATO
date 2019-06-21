@@ -11,4 +11,6 @@ mongoose.connect(MONGO_DEV, {
 
 mongoose.Promise = global.Promise;
 
+// mongoose.set('useFindAndModify', false);
+
 module.exports = mongoose;

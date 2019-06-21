@@ -143,7 +143,9 @@ class AuthController {
 
             const hash = sha256(password + salt);
 
-            console.log(hash);
+            console.log("Email: ", email, "Senha: ", hash);
+
+            // console.log(hash);
 
 
             const userDao = new UserDao();
@@ -165,6 +167,7 @@ class AuthController {
         return (req, res) => {
             // email
             const userEmail = req.body.email;
+            console.log(req.body);
             const userDao = new UserDao();
 
             userDao.findEmail(userEmail, (error, answer) => {
@@ -198,9 +201,12 @@ class AuthController {
     }
     verifyCode() {
         return (req, res) => {
-            const { emailCode, email } = req.body;
+            // TODO: Alterar, ver onde a senha irá ficar: 
+            // const { emailCode, email } = req.body;
+            const { emailCode, email, password } = req.body;
 
             const recoverDataDao = new RecoverDataDao();
+            const userDao = new UserDao();
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
 
@@ -210,7 +216,28 @@ class AuthController {
                 const now = new Date();
 
                 if (exp > now) {
-                    res.status(200).send("código válido");
+
+                    userDao.findEmail(email, (error, answer) => { 
+                        if (error) {
+                            res.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                        }
+                        const { _id } = answer;
+                        
+                        const hash = sha256(password + salt);
+                        console.log(hash);
+                        userDao.updatePassword(hash, _id, (errorUpd, answerUpd) => { 
+                            if (error) {
+                                console.log('Error Banco : ', errorUpd);
+                                //res.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                            }
+                            console.log(answerUpd);
+                            //res.status(200).send("senha trocada com sucesso");
+                        });
+                       
+                    });
+                    // res.status(200).send("código válido");
+                    res.status(200).send("senha trocada com sucesso");
+                    
                 } else {
                     res.status(400).send("código inválido");
                 }
