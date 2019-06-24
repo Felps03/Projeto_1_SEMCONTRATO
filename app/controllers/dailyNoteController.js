@@ -1,4 +1,10 @@
-class dailyNoteController {
+
+const { validationResult } = require('express-validator/check');
+const { Controller } = require('./Controller');
+
+require('../infra/dailyNoteDao');
+
+class DailyNoteController extends Controller {
     static rotas() {
         return {
             cadastro: '/dailys/daily/', 
@@ -14,10 +20,8 @@ class dailyNoteController {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
                 return resp.status(400).send(errorList);
             }
-
-            const { id_user } = req.body;
-
-            const DailyNoteDao = new DailyNoteDao();
+            
+            const dailyNoteDao = new DailyNoteDate();
 
             dailyNoteDao.add(req.body, (error, result) => {
                 if (error) {
@@ -35,3 +39,5 @@ class dailyNoteController {
         };
     }
 }
+
+module.exports = DailyNoteController;
