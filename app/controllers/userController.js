@@ -1,3 +1,6 @@
+const sha256 = require('js-sha256').sha256;
+const salt = require('../config/salt');
+
 const { validationResult } = require('express-validator/check');
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
@@ -16,6 +19,7 @@ class UserController extends Controller {
             cadastro: '/users/user/',
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
+            changePassword: '/users/changePassword',
         }
     }
 
@@ -116,6 +120,26 @@ class UserController extends Controller {
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
                 }
                 resp.send(result)
+            });
+        }
+    }
+
+    changePassword() {
+        return (req, resp) => {
+            const userDao = new UserDao();
+            const { email, password } = req.body;
+
+            userDao.findEmail(email, (error, answer) => {
+                if (error) resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+
+                const { _id } = answer;
+
+                const hash = sha256(password + salt);
+
+                userDao.updatePassword(hash, _id, (errorUpd, answerUpd) => {
+                    if (errorUpd) resp.status(400).send(errorUpd);
+                    else resp.status(200).send(answerUpd);
+                });
             });
         }
     }
