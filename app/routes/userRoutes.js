@@ -14,4 +14,6 @@ module.exports = (app) => {
     app.put(rotasUser.edicao, UserValidation.validation(), userController.update());
 
     app.delete(rotasUser.deletar, userController.remove());
+
+    app.post(rotasUser.changePassword, userController.changePassword());
 }

@@ -19,11 +19,14 @@ class GenerateEmail {
                 auth: {
                     user: email, // email account
                     pass: passwd // email password
-                }
-                , tls: {
+                },
+                tls: {
                     rejectUnauthorized: false
                 }
             });
+
+            //url change password 
+            const url = "https://semcontrato.netlify.com/recovery.html";
 
             // generating string to send via email
             const randomString = generateString();
@@ -34,20 +37,24 @@ class GenerateEmail {
              use this to set our promise to the function's return
             */
 
+
+
             // sending email
             sender.sendMail({
-                from: `"Equipe Sem Contrato" <${email}>`, // sender address
-                to: `${userEmail}`, // list of receivers
-                subject: "Recuperação de senha!", // Subject line
-                text: `
-                    Você solicitou a recuperação de senha, insira este código no campo solicitado.
+                    from: `"Equipe Sem Contrato" <${email}>`, // sender address
+                    to: `${userEmail}`, // list of receivers
+                    subject: "Recuperação de senha!", // Subject line
+                    text: `
+                    Você solicitou a recuperação de senha, acesse o link abaixo e insira o código no campo solicitado.
                     
+                    ${url}
+
                     Código: ${randomString}
                     
                     
                     Equipe Sem Contrato!
                     `,
-            })
+                })
                 .then(() => {
                     resolve(randomString);
                 })
