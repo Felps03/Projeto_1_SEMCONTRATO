@@ -2,7 +2,7 @@
 const { validationResult } = require('express-validator/check');
 const { Controller } = require('./Controller');
 
-require('../infra/dailyNoteDao');
+const DailyNoteDao = require('../infra/dailyNoteDao');
 
 class DailyNoteController extends Controller {
     static rotas() {
@@ -20,8 +20,8 @@ class DailyNoteController extends Controller {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
                 return resp.status(400).send(errorList);
             }
-            
-            const dailyNoteDao = new DailyNoteDate();
+
+            const dailyNoteDao = new DailyNoteDao();
 
             dailyNoteDao.add(req.body, (error, result) => {
                 if (error) {
