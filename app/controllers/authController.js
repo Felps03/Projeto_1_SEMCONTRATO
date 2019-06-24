@@ -1,21 +1,9 @@
-const { validationResult } = require('express-validator/check');
-const express = require('express');
-const jwt = require('jsonwebtoken');
-
 const sha256 = require('js-sha256').sha256;
 const salt = require('../config/salt');
 
-const User = require('../models/user');
-const authConfig = require('../../config/auth.json');
 const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
-
-const JSON = require('circular-json');
-
-const UserSchema = require('../models/user');
-
-const TokenHandler = require('../utils/TokenHandler');
 
 class AuthController {
     static rotas() {
