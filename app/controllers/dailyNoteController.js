@@ -8,11 +8,14 @@ class DailyNoteController extends Controller {
     static rotas() {
         return {
             cadastro: '/dailys/daily/', 
+            edicao: '/dailys/daily/:id',
         }
     }
+    
     list() {
         // A implementar
     }
+
     add() {
         return (req, resp) => {
             console.log(req.body);
@@ -41,10 +44,30 @@ class DailyNoteController extends Controller {
 
         };
     }
-    update() {
-        
-    }
 
+    update() {
+        return (req, resp) => {
+
+            const error = validationResult(req);
+            let errorList = [];
+
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
+
+            const dailyNoteDao = new DailyNoteDao();
+            dailyNoteDao.update(req.body, req.params.id, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                }
+                resp.send(result);
+            });
+        }
+    }
+   
+   
     remove() {
         throw new Error('O método deletar não existe');
     }
