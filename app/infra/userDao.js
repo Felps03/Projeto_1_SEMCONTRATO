@@ -67,6 +67,13 @@ class UserDao {
         });
     }
 
+    findById( _id, callback) {
+        UserSchema.findOne({ _id }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
     findOneJoker(email, joker, callback) {
         UserSchema.find({ email }).select(joker).exec((err, docs) => {
             if (err) return callback(err, null);
