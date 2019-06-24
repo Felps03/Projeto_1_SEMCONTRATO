@@ -14,7 +14,7 @@ class UserDao {
 
         console.log(image);
 
-        const { filename : file_photo } = image;
+        const { filename: file_photo } = image;
 
         //file_photo = `${hash.toString("hex")}-${file_photo}`
 
@@ -35,7 +35,7 @@ class UserDao {
     }
 
     updatePassword(password, id, callback) {
-        UserSchema.findByIdAndUpdate(id,  {password} , { new: true }, (err, docs) => {
+        UserSchema.findByIdAndUpdate(id, { password }, { new: true }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
