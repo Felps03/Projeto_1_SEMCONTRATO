@@ -1,23 +1,17 @@
-const AuthController = require('../controllers/authController');
-const authController = new AuthController();
+const UserController = require('../controllers/userController');
+const userController = new UserController();
 const UserValidation = require('../validation/userValidation');
 const multer = require("multer");
 const multerConfig = require("../config/multer");
 
 module.exports = (app) => {
-    const rotasAuth = AuthController.rotas();
+    const rotasUser = UserController.rotas();
 
-    app.get(rotasAuth.lista, authController.list());
+    app.get(rotasUser.lista, userController.list());
 
-    app.post(rotasAuth.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), authController.add());
+    app.post(rotasUser.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.add());
 
-    app.put(rotasAuth.edicao, UserValidation.validation(), authController.update());
+    app.put(rotasUser.edicao, UserValidation.validation(), userController.update());
 
-    app.delete(rotasAuth.deletar, authController.remove());
-
-    app.post(rotasAuth.authenticate, authController.authenticate());
-
-    app.post(rotasAuth.resetPassword, authController.resetPassword());
-
-    app.post(rotasAuth.verifyCode, authController.verifyCode());
+    app.delete(rotasUser.deletar, userController.remove());
 }
