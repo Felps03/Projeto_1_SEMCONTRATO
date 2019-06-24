@@ -86,15 +86,24 @@ class UserController extends Controller {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
                 return resp.status(400).send(errorList);
             }
-
             const userDao = new UserDao();
-            userDao.update(req.body, req.params.id, (error, result) => {
-                if (error) {
-                    console.log(error);
-                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
-                }
-                resp.send(result);
-            });
+            if(!req.file){
+                 UserDao.update(req.body, req.params.id, (error,result) => {
+                    if (error) {
+                        console.log(error);
+                        resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                    }
+                    resp.send(result);
+                 })
+            }else{
+                userDao.update(req.body, req.params.id, req.file, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                    }
+                    resp.send(result);
+                });
+            }    
         }
     }
 
