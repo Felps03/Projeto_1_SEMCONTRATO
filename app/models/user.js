@@ -1,49 +1,60 @@
-const mongoose = require('../../database');
+const sha256 = require('js-sha256').sha256;
+const salt = require('../config/salt');
+
+const mongoose = require('../../database/index');
 
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     lastName: {
         type: String,
-        required: true,
+        required: true
     },
-    usertName: {
+    userName: {
         type: String,
-        required: true,
+        required: true
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        lowercase: true,
+        lowercase: true
     },
     password: {
         type: String,
         required: true,
-        select: false,
+        select: true
     },
     passwordResetToken: {
         type: String,
-        select: false,
+        select: false
     },
     passwordResetExpires: {
         type: Date,
-        select: false,
+        select: false
     },
-    photo: {
-        type: String,
+    file_photo: {
+        type: String
     },
     dateOfBirth: {
         type: Date,
-        required: true,
+        required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-    },
+        default: Date.now
+    }
 });
+
+UserSchema.pre('save', function(next) {
+    const hash = sha256(this.password + salt);
+    this.password = hash;
+
+    next();
+});
+
 
 const User = mongoose.model('User', UserSchema);
 

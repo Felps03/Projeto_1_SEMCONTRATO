@@ -1,0 +1,1 @@
+module.exports = 'SeMc0nTrat0';

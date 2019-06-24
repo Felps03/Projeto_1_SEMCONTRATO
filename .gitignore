@@ -39,6 +39,7 @@ build/Release
 
 # Dependency directories
 node_modules/
+client/node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -46,6 +47,9 @@ typings/
 
 # TypeScript cache
 *.tsbuildinfo
+
+# TypeScript output directory
+client/js/dist/
 
 # Optional npm cache directory
 .npm
@@ -86,3 +90,5 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+client/dist
