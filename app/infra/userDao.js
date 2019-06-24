@@ -27,8 +27,20 @@ class UserDao {
     }
 
     update(user, id, callback) {
+
         const { name, lastName, email, password, dateOfBirth } = user;
         UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+    update(user, id, image, callback) {
+
+        const{ filename: file_photo} = image;
+
+        const { name, lastName, email, password, dateOfBirth } = user;
+        UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });

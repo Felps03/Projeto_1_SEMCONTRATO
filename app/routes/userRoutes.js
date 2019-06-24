@@ -11,7 +11,7 @@ module.exports = (app) => {
 
     app.post(rotasUser.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.add());
 
-    app.put(rotasUser.edicao, UserValidation.validation(), userController.update());
+    app.put(rotasUser.edicao, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.update());
 
     app.delete(rotasUser.deletar, userController.remove());
 
