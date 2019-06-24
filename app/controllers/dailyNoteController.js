@@ -10,6 +10,9 @@ class DailyNoteController extends Controller {
             cadastro: '/dailys/daily/', 
         }
     }
+    list() {
+        // A implementar
+    }
     add() {
         return (req, resp) => {
             console.log(req.body);
@@ -37,6 +40,13 @@ class DailyNoteController extends Controller {
             })
 
         };
+    }
+    update() {
+        
+    }
+
+    remove() {
+        throw new Error('O método deletar não existe');
     }
 }
 
