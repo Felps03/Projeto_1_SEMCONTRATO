@@ -26,6 +26,13 @@ class DailyNoteDao {
             callback(null, docs);
         });
     }
+    list(callback) {
+        DailyNoteSchema.find({}).exec((err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
 }
 
 module.exports = DailyNoteDao;

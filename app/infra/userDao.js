@@ -37,7 +37,7 @@ class UserDao {
 
     update(user, id, image, callback) {
 
-        const{ filename: file_photo} = image;
+        const { filename: file_photo } = image;
 
         const { name, lastName, email, password, dateOfBirth } = user;
         UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
@@ -60,14 +60,14 @@ class UserDao {
         });
     }
 
-    findEmail(email, callback) {
+    validateEmailAvailable(email, callback) {
         UserSchema.findOne({ email }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
 
-    findById( _id, callback) {
+    findById(_id, callback) {
         UserSchema.findOne({ _id }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
