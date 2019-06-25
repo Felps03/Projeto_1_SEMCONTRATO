@@ -86,7 +86,7 @@ class UserController extends Controller {
             }
             const userDao = new UserDao();
             if (!req.file) {
-                UserDao.update(req.body, req.params.id, (error, result) => {
+                userDao.update(req.body, req.params.id, (error, result) => {
                     if (error) {
                         console.log(error);
                         resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
