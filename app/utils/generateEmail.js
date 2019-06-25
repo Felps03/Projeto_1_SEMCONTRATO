@@ -24,7 +24,7 @@ class GenerateEmail {
                     rejectUnauthorized: false
                 }
             });
-
+            
             //url change password 
             const url = "https://semcontrato.netlify.com/recovery.html";
 

@@ -15,7 +15,7 @@ class UserController extends Controller {
 
     static rotas() {
         return {
-            lista: '/users',
+            lista: '/admin/users',
             cadastro: '/users/user/',
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
@@ -87,15 +87,15 @@ class UserController extends Controller {
                 return resp.status(400).send(errorList);
             }
             const userDao = new UserDao();
-            if(!req.file){
-                 UserDao.update(req.body, req.params.id, (error,result) => {
+            if (!req.file) {
+                UserDao.update(req.body, req.params.id, (error, result) => {
                     if (error) {
                         console.log(error);
                         resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
                     }
                     resp.send(result);
-                 })
-            }else{
+                })
+            } else {
                 userDao.update(req.body, req.params.id, req.file, (error, result) => {
                     if (error) {
                         console.log(error);
@@ -103,7 +103,7 @@ class UserController extends Controller {
                     }
                     resp.send(result);
                 });
-            }    
+            }
         }
     }
 

@@ -11,6 +11,27 @@ const app = express();
 
 app.use(cors(corsOption));
 
+app.use("/admin*", (req, res, next) => {
+    //somente admin
+    res.send("é rota de admin");
+
+});
+
+app.use(['/users', '/daily'], (req, res, next) => {
+    // somente logado
+    res.send("é rota de logado");
+});
+
+app.use("/register", (req, res, next) => {
+    // não logado ou admin
+    res.send("é rota de não logado ou admin");
+});
+app.use("/", (req, res, next) => {
+    // qualquer pessoa
+    res.send("é rota de qualquer um");
+});
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
