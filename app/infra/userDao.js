@@ -60,7 +60,7 @@ class UserDao {
         });
     }
 
-    findEmail(email, callback) {
+    validateEmailAvailable(email, callback) {
         UserSchema.findOne({ email }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
