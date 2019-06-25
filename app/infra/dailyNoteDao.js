@@ -20,6 +20,12 @@ class DailyNoteDao {
         });
     }
 
+    findByUserDate(id_user, date, callback){
+        DailyNoteSchema.findOne({id_user, date}, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
     list(callback) {
         DailyNoteSchema.find({}).exec((err, docs) => {
             if (err) return callback(err, null)
