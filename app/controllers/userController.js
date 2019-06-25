@@ -37,8 +37,7 @@ class UserController extends Controller {
     }
 
     add() {
-        return (req, resp) => {
-            console.log(req.body);
+        return (req, resp, next) => {
             const error = validationResult(req);
             let errorList = [];
 
@@ -51,9 +50,11 @@ class UserController extends Controller {
 
             const userDao = new UserDao();
 
-            //TODO: Refatorar: Tirar o findeOnde e colocar no DAO
-            //if (UserSchema.findOne({ email }))
-            //  return resp.status(400).send({ error: 'Usuário já existe' });
+            userDao.validateEmailAvailable(email, (error, result) => {
+                if (result) resp.status(400).send("Email já cadastrado");
+            });
+
+            next();
 
             const tokenHandler = new TokenHandler();
 
@@ -69,10 +70,8 @@ class UserController extends Controller {
                     result,
                     token
                 }
-
                 resp.send(response);
-            })
-
+            });
         };
     }
 
@@ -87,15 +86,15 @@ class UserController extends Controller {
                 return resp.status(400).send(errorList);
             }
             const userDao = new UserDao();
-            if(!req.file){
-                 UserDao.update(req.body, req.params.id, (error,result) => {
+            if (!req.file) {
+                UserDao.update(req.body, req.params.id, (error, result) => {
                     if (error) {
                         console.log(error);
                         resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
                     }
                     resp.send(result);
-                 })
-            }else{
+                })
+            } else {
                 userDao.update(req.body, req.params.id, req.file, (error, result) => {
                     if (error) {
                         console.log(error);
@@ -103,7 +102,7 @@ class UserController extends Controller {
                     }
                     resp.send(result);
                 });
-            }    
+            }
         }
     }
 
@@ -155,4 +154,4 @@ class UserController extends Controller {
 
 }
 
-module.exports = UserController
+module.exports = UserController;
