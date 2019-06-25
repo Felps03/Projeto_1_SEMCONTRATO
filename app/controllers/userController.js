@@ -37,7 +37,7 @@ class UserController extends Controller {
     }
 
     add() {
-        return (req, resp) => {
+        return (req, resp, next) => {
             const error = validationResult(req);
             let errorList = [];
 
@@ -50,9 +50,11 @@ class UserController extends Controller {
 
             const userDao = new UserDao();
 
-            userDao.findEmail(email, (error, result) => {
-                if (result) return resp.status(400).send("Email já cadastrado");
+            userDao.validateEmailAvailable(email, (error, result) => {
+                if (result) resp.status(400).send("Email já cadastrado");
             });
+
+            next();
 
             const tokenHandler = new TokenHandler();
 
