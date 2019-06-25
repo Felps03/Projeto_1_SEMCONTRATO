@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator/check');
 const { Controller } = require('./Controller');
 
 const DailyNoteDao = require('../infra/dailyNoteDao');
+const UserDao = require('../infra/userDao');
 
 class DailyNoteController extends Controller {
     static rotas() {
@@ -18,16 +19,26 @@ class DailyNoteController extends Controller {
 
     add() {
         return (req, resp) => {
-            console.log(req.body);
             const error = validationResult(req);
             let errorList = [];
-
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
                 return resp.status(400).send(errorList);
             }
 
+            let userDao = new UserDao();
+            userDao.findById(req.body.id_user, (error, result) => {
+                if(!result) {
+                    return resp.status(400).send('USUARIO não existente');
+                }
+            });
             const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, result)=>{
+                if(result) {
+                    return resp.status(400).send("DAILY já cadastrada hoje!");
+                }
+            });
 
             dailyNoteDao.add(req.body, (error, result) => {
                 if (error) {
@@ -40,8 +51,7 @@ class DailyNoteController extends Controller {
                 }
 
                 resp.send(response);
-            })
-
+            })    
         };
     }
 

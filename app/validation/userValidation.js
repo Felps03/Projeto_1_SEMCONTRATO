@@ -3,12 +3,12 @@ const { check } = require('express-validator/check');
 class User {
     static validation() {
         return [
-            check('name').isLength({ min: 3 }).withMessage('O NOME precisa ter no mínimo 3 caracteres!'),
-            check('lastName').isLength({ min: 3 }).withMessage('O SOBRENOME precisa ter no mínimo 3 caracteres!'),
-            check('userName').isLength({ min: 3 }).withMessage('O USERNAME de usuário precisa ter no mínimo 3 caracteres!'),
+            check('name').trim().isLength({ min: 3 }).withMessage('O NOME precisa ter no mínimo 3 caracteres!'),
+            check('lastName').trim().isLength({ min: 3 }).withMessage('O SOBRENOME precisa ter no mínimo 3 caracteres!'),
+            check('userName').trim().isLength({ min: 3 }).withMessage('O USERNAME de usuário precisa ter no mínimo 3 caracteres!'),
             check('email').isEmail().withMessage('EMAIL inválido!'),
             //check('photo').custom(this.isPhoto).withMessage('Imagem precisa estar no formato: jpg, png ou jpeg'),
-            check('password').isLength({ min: 6, max: 8 }).withMessage(' O password precisa ter no MÍNIMO 6 caracteres e no MÁXIMO 8!'),
+            check('password').trim().isLength({ min: 6, max: 8 }).withMessage(' O password precisa ter no MÍNIMO 6 caracteres e no MÁXIMO 8!'),
             check('dateOfBirth').custom(this.isValidDate).withMessage('A data é inválida. Deve estar no formato { aaaa-mm-dd }')
 
             // TODO: com o token vai estar presente no usuario
