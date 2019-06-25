@@ -9,13 +9,10 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/', 
             edicao: '/dailys/daily/:id',
+            lista: '/dailys/daily/', 
         }
     }
     
-    list() {
-        // A implementar
-    }
-
     add() {
         return (req, resp) => {
             console.log(req.body);
@@ -67,6 +64,20 @@ class DailyNoteController extends Controller {
         }
     }
    
+    list() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.list((error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                }
+                resp.send(result);
+            });
+        }
+    }
    
     remove() {
         throw new Error('O método deletar não existe');
