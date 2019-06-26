@@ -9,7 +9,10 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/',
             edicao: '/dailys/daily/:id',
-            lista: '/dailys/daily/',
+            listDate: '/dailys/daily/',
+            listUser: '/dailys/daily/',
+            listDateUser: '/dailys/daily/',
+            listAll: '/dailys/daily/',
         }
     }
 
@@ -60,14 +63,59 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
     }
 
-    list() {
+    listDate() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDate(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    /*listUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDate(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    listDateUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDateUser(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+    
+    listAll() {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
@@ -75,12 +123,12 @@ class DailyNoteController extends Controller {
             dailyNoteDao.list((error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
-    }
+    }*/
 
     remove() {
         throw new Error('O método deletar não existe');
