@@ -30,7 +30,7 @@ class DailyNoteController extends Controller {
 
             userDao.findById(req.body.id_user, (error, resultByID) => {
                 if (!resultByID) {
-                    return resp.status(400).send('USUARIO não existente');
+                    return resp.status(400).send(JSON.stringify({erro:'USUARIO não existente'}));
                 }
 
                 dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, resultUserDate) => {
@@ -39,7 +39,7 @@ class DailyNoteController extends Controller {
 
 
                     dailyNoteDao.add(req.body, (error, resultADD) => {
-                        if (resultADD) return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                        if (resultADD) return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar o usuario favor olhar o log'}));
 
                         resp.send(result);
                     });
