@@ -33,8 +33,6 @@ class DailyNoteController extends Controller {
                 dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, resultUserDate) => {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
-
-
                     dailyNoteDao.add(req.body, (error, resultADD) => {
                         if (resultADD) return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
 
