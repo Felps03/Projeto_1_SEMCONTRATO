@@ -15,7 +15,7 @@ class DailyNoteDao {
         const { id_user, yesterday, today, impediment, date } = dailyNote;
 
         DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment, date }, (err, docs) => {
-            if (err) return callback(err, null)
+            if (err) return callback(err, null);
             callback(null, docs);
         });
     }
@@ -26,12 +26,40 @@ class DailyNoteDao {
             callback(null, docs);
         });
     }
-    list(callback) {
-        DailyNoteSchema.find({}).exec((err, docs) => {
+
+    listDate(dailyNote, callback) {
+        const { date } = dailyNote;
+
+        DailyNoteSchema.find({date}, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
+
+    /*listUser(dailyNote, callback) {
+        const { id_user } = dailyNote;
+
+        DailyNoteSchema.find({id_user}, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+   
+    listDateUser(dailyNote, callback) {
+        const { id_user, date} = dailyNote;
+
+        DailyNoteSchema.find({id_user, date}, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+    listAll(callback) {
+        DailyNoteSchema.find({}).exec((err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }*/
 
 }
 

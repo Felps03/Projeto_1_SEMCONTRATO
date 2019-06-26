@@ -9,7 +9,10 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/',
             edicao: '/dailys/daily/:id',
-            lista: '/dailys/daily/',
+            listDate: '/dailys/daily/',
+            listUser: '/dailys/daily/',
+            listDateUser: '/dailys/daily/',
+            listAll: '/dailys/daily/',
         }
     }
 
@@ -27,14 +30,14 @@ class DailyNoteController extends Controller {
 
             userDao.findById(req.body.id_user, (error, resultByID) => {
                 if (!resultByID) {
-                    return resp.status(400).send('USUARIO não existente');
+                    return resp.status(400).send(JSON.stringify({erro:'USUARIO não existente'}));
                 }
 
                 dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, resultUserDate) => {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
                     dailyNoteDao.add(req.body, (error, resultADD) => {
-                        if (resultADD) return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                        if (resultADD) return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar o usuario favor olhar o log'}));
 
                         resp.send(result);
                     });
@@ -58,14 +61,59 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
     }
 
-    list() {
+    listDate() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDate(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    /*listUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDate(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    listDateUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDateUser(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+    
+    listAll() {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
@@ -73,12 +121,12 @@ class DailyNoteController extends Controller {
             dailyNoteDao.list((error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
-    }
+    }*/
 
     remove() {
         throw new Error('O método deletar não existe');
