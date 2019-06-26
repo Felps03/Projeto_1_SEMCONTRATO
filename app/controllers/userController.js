@@ -20,6 +20,7 @@ class UserController extends Controller {
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
             changePassword: '/users/changePassword',
+            findByEmail: '/users/:email',
         }
     }
 
@@ -70,10 +71,6 @@ class UserController extends Controller {
                 });
 
             });
-
-
-
-
         };
     }
 
@@ -110,7 +107,7 @@ class UserController extends Controller {
 
     remove() {
         return (req, resp) => {
-            const userDao = new UserDao;
+            const userDao = new UserDao();
             userDao.remove(req.params.id, (error, result) => {
                 if (error) {
                     console.log(error);
@@ -121,10 +118,23 @@ class UserController extends Controller {
         }
     }
 
+    findByEmail() {
+        return (req, resp) => {
+            const userDao = new UserDao();
+            userDao.validateEmailAvailable(req.params.email, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                }
+                resp.send(result)
+            });
+        }
+    }
+
     findById() {
         return (req, resp) => {
-            const userDao = new UserDao;
-            userDao.findById(req.params.id, (error, result) => {
+            const userDao = new UserDao();
+            userDao.findById(req.params.email, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');

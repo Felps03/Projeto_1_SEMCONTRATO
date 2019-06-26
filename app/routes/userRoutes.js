@@ -16,4 +16,6 @@ module.exports = (app) => {
     app.delete(rotasUser.deletar, userController.remove());
 
     app.post(rotasUser.changePassword, userController.changePassword());
+
+    app.get(rotasUser.findByEmail, userController.findByEmail());
 }
