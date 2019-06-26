@@ -54,8 +54,9 @@ class UserController extends Controller {
 
 
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
-                if (resultValidate) return resp.status(400).send("Email já cadastrado");
-
+                if (resultValidate) {
+                    return resp.status(400).send("Email já cadastrado");
+                }
                 userDao.add(req.body, req.file, (error, resultADD) => {
                     if (error) {
                         return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
