@@ -4,13 +4,11 @@ const secret = require('../config/secretJWT');
 
 class ValidateAccess {
 
-    checkAdmin(token, secret) {
-        const payload = tokenhandler.decodeToken(token, secret);
+    checkAdmin(payload) {
         return payload.isAdmin;
     }
 
-    checkLogged(token, secret) {
-        const payload = tokenhandler.decodeToken(token, secret);
+    checkLogged(token) {
         return payload.isValid;
     }
 }

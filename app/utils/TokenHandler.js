@@ -17,10 +17,18 @@ class TokenHandler {
     }
 
     // translate token to json if its valid
+
     decodeToken(token, secret) {
 
-        const payload = jwt.verify(token, secret);
-        return payload;
+        let tokenDecoded = false;
+
+        jwt.verify(token, secret, (err, decode) => {
+            if (!err) {
+                tokenDecoded = decode;
+            }
+        });
+
+        return tokenDecoded;
     }
 
 }
