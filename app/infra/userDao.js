@@ -21,19 +21,10 @@ class UserDao {
         const { name, lastName, userName, email, password, dateOfBirth } = user;
 
         UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
-            if (err){
+            if (err) {
                 fs.unlink(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
-            } 
-            callback(null, docs);
-        });
-    }
-
-    update(user, id, callback) {
-
-        const { name, lastName, email, password, dateOfBirth } = user;
-        UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
-            if (err) return callback(err, null)
+            }
             callback(null, docs);
         });
     }
@@ -42,10 +33,20 @@ class UserDao {
 
         const { filename: file_photo } = image;
 
-        const { name, lastName, email, password, dateOfBirth } = user;
-        UserSchema.findByIdAndUpdate(id, { name, lastName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
+        this.findById(id, (error, result) => {
+            if (error) {
+                console.log(error);
+                resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+            }
+            const { name, lastName, userName, email, password, dateOfBirth } = user;
+            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
+                if (err) {
+                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    return callback(err, null)
+                }
+                fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                callback(null, docs);
+            });
         });
     }
 

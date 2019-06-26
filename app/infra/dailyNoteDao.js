@@ -15,7 +15,7 @@ class DailyNoteDao {
         const { id_user, yesterday, today, impediment, date } = dailyNote;
 
         DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment, date }, (err, docs) => {
-            if (err) return callback(err, null)
+            if (err) return callback(err, null);
             callback(null, docs);
         });
     }

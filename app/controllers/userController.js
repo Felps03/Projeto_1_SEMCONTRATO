@@ -1,10 +1,10 @@
 const sha256 = require('js-sha256').sha256;
 const salt = require('../config/salt');
-
+const fs = require('fs');
 const { validationResult } = require('express-validator/check');
+
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
-
 const TokenHandler = require('../utils/TokenHandler');
 
 class UserController extends Controller {
@@ -41,9 +41,12 @@ class UserController extends Controller {
         return (req, resp) => {
             const error = validationResult(req);
             let errorList = [];
+            const { filename: file_photo } = req.file;
+
 
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return resp.status(400).send(errorList);
             }
 
@@ -55,6 +58,8 @@ class UserController extends Controller {
 
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
+                    console.log(file_photo);
+                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                     return resp.status(400).send("Email já cadastrado");
                 }
                 userDao.add(req.body, req.file, (error, resultADD) => {
@@ -68,10 +73,11 @@ class UserController extends Controller {
                         resultADD,
                         token
                     }
-                    return resp.send(response);
+                    return resp.status(201).send(response);
                 });
 
             });
+
         };
     }
 
@@ -80,30 +86,25 @@ class UserController extends Controller {
 
             const error = validationResult(req);
             let errorList = [];
-
+            const { filename: file_photo } = req.file;
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return resp.status(400).send(errorList);
             }
             const userDao = new UserDao();
-            if (!req.file) {
-                userDao.update(req.body, req.params.id, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
-                    }
-                    resp.send(result);
-                })
-            } else {
-                userDao.update(req.body, req.params.id, req.file, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
-                    }
-                    resp.send(result);
+
+            userDao.update(req.body, req.params.id, req.file, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log'); 
+                }
+               
+                return resp.status(201).send(result);
                 });
             }
-        }
+        
     }
 
     remove() {
@@ -135,7 +136,7 @@ class UserController extends Controller {
     findById() {
         return (req, resp) => {
             const userDao = new UserDao();
-            userDao.findById(req.params.email, (error, result) => {
+            userDao.findById(req.params.id, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
