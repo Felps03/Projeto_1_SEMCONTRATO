@@ -92,3 +92,5 @@ client/js/dist/
 .dynamodb/
 
 client/dist
+
+database/index.js
