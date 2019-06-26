@@ -37,7 +37,7 @@ class UserController extends Controller {
     }
 
     add() {
-        return (req, resp, next) => {
+        return (req, resp) => {
             const error = validationResult(req);
             let errorList = [];
 
@@ -49,29 +49,31 @@ class UserController extends Controller {
             const { email } = req.body;
 
             const userDao = new UserDao();
-
-            userDao.validateEmailAvailable(email, (error, result) => {
-                if (result) resp.status(400).send("Email já cadastrado");
-            });
-
-            next();
-
             const tokenHandler = new TokenHandler();
 
-            userDao.add(req.body, req.file, (error, result) => {
-                if (error) {
-                    console.log(error);
-                    resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
-                }
 
-                let token = tokenHandler.generateToken(email, 'semcontrato');
+            userDao.validateEmailAvailable(email, (error, resultValidate) => {
+                if (resultValidate) return resp.status(400).send("Email já cadastrado");
 
-                let response = {
-                    result,
-                    token
-                }
-                resp.send(response);
+                userDao.add(req.body, req.file, (error, resultADD) => {
+                    if (error) {
+                        return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                    }
+
+                    let token = tokenHandler.generateToken(email, 'semcontrato');
+
+                    let response = {
+                        resultADD,
+                        token
+                    }
+                    return resp.send(response);
+                });
+
             });
+
+
+
+
         };
     }
 
@@ -87,7 +89,7 @@ class UserController extends Controller {
             }
             const userDao = new UserDao();
             if (!req.file) {
-                UserDao.update(req.body, req.params.id, (error, result) => {
+                userDao.update(req.body, req.params.id, (error, result) => {
                     if (error) {
                         console.log(error);
                         resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
