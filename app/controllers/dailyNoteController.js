@@ -74,7 +74,7 @@ class DailyNoteController extends Controller {
 
             const dailyNoteDao = new DailyNoteDao();
 
-            dailyNoteDao.listDate(req.body, (err, result) => {
+            dailyNoteDao.listDate(req.body, req.params.page,(err, result) => {
                 if (err) {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
@@ -118,8 +118,7 @@ class DailyNoteController extends Controller {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
-
-            dailyNoteDao.listAll((error, result) => {
+            dailyNoteDao.listAll(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
