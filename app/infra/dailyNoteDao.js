@@ -1,5 +1,5 @@
 const DailyNoteSchema = require('../models/dailyNote');
-
+const pageLimit = 10;
 class DailyNoteDao {
 
     add(dailyNote, callback) {
@@ -27,10 +27,28 @@ class DailyNoteDao {
         });
     }
 
-    listDate(dailyNote, callback) {
+    listDate(dailyNote, page, callback) {
         const { date } = dailyNote;
 
-        DailyNoteSchema.find({date}, (err, docs) => {
+        DailyNoteSchema.paginate({date},
+            {
+                limit: pageLimit,
+                skyp: (page - 1) * pageLimit,
+                page: page
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+        });
+    }
+
+    listAll(page, callback) {
+        DailyNoteSchema.paginate({}, {
+            limit: pageLimit,
+            skyp: (page - 1) * pageLimit,
+            page: page
+        },
+        (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
@@ -54,12 +72,6 @@ class DailyNoteDao {
         });
     }*/
 
-    listAll(callback) {
-        DailyNoteSchema.find({}).exec((err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
-    }
 
 }
 
