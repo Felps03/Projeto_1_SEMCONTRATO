@@ -1,3 +1,4 @@
+var mongoosePaginate = require('mongoose-paginate');
 const mongoose = require('../../database/index');
 
 const DailyNoteSchema = new mongoose.Schema({
@@ -22,6 +23,8 @@ const DailyNoteSchema = new mongoose.Schema({
         required: true
     }
 });
+
+DailyNoteSchema.plugin(mongoosePaginate);
 
 const DailyNote = mongoose.model('DailyNote', DailyNoteSchema);
 

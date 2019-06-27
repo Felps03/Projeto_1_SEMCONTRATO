@@ -11,11 +11,13 @@ module.exports = (app) => {
 
     app.get(rotasDailyNote.listDate, dailyNoteController.listDate());
 
+    app.get(rotasDailyNote.listAll, dailyNoteController.listAll());
+
     /*
     app.get(rotasDailyNote.listUser, dailyNoteController.listUser());
     
     app.get(rotasDailyNote.listDateUser, dailyNoteController.listDateUser());
     
-    app.get(rotasDailyNote.listAll, dailyNoteController.listAll());
+    
     */
 }
