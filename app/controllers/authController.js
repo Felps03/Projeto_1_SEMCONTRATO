@@ -25,11 +25,11 @@ class AuthController {
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
                 if (error) {
-                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de encontrar o usuario favor olhar o log'}));
                 }
                 console.log(result);
                 if (result.length == 0) {
-                    resp.status(400).send('Email ou senha inválidos');
+                    resp.status(400).send(JSON.stringify({erro:'Email ou senha inválidos'}));
                 } else {
                     resp.status(200).send(result);
                 }
@@ -45,10 +45,10 @@ class AuthController {
             userDao.findEmail(userEmail, (error, answer) => {
 
                 if (error) {
-                    res.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                    res.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de encontrar o usuario favor olhar o log'}));
                 }
                 if (answer == null) { // if answer its null, userEmail doenst exist on DB
-                    res.status(400).send('Email não cadastrado');
+                    res.status(400).send(JSON.stringify({erro:'Email não cadastrado'}));
                 } else { // userEmail exists on DB
                     const generateEmail = new GenerateEmail();
                     generateEmail.sendEmail(userEmail)
@@ -86,9 +86,9 @@ class AuthController {
                 const now = new Date();
 
                 if (exp > now) {
-                    res.status(200).send("código válido");
+                    res.status(200).send(JSON.stringify({erro:"código válido"}));
                 } else {
-                    res.status(400).send("código inválido");
+                    res.status(400).send(JSON.stringify({erro:"código inválido"}));
                 }
             });
         }
