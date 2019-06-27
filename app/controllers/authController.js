@@ -4,6 +4,8 @@ const salt = require('../config/salt');
 const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
+const TokenHandler = require('../utils/TokenHandler');
+const secret = require('../config/secretJWT');
 
 class AuthController {
     static rotas() {
@@ -16,24 +18,36 @@ class AuthController {
 
     authenticate() {
         return (req, resp) => {
-            const { email, password } = req.body;
+            // const { email, password } = req.body;
 
-            const hash = sha256(password + salt);
+            // const hash = sha256(password + salt);
 
-            console.log("Email: ", email, "Senha: ", hash);
+            // console.log("Email: ", email, "Senha: ", hash);
 
             const userDao = new UserDao();
-            userDao.authenticate(email, hash, (error, result) => {
-                if (error) {
-                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
-                }
-                console.log(result);
-                if (result.length == 0) {
-                    resp.status(400).send('Email ou senha inválidos');
+            // userDao.authenticate(email, hash, (error, result) => {
+            //     if (error) {
+            //         resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+            //     }
+            //     console.log(result);
+            //     if (result.length == 0) {
+            //         resp.status(400).send('Email ou senha inválidos');
+            //     } else {
+            //adicionar o token
+            const email = "oleiro87teste@gmail.com";
+            const tokenHandler = new TokenHandler();
+            userDao.checkAdmin(email, (err, docs) => {
+                if (!err) {
+
+                    console.log(tokenHandler.generateToken(email, docs.isAdmin, secret));
+                    resp.send(tokenHandler.generateToken(email, docs.isAdmin, secret));
                 } else {
-                    resp.status(200).send(result);
+
+                    console.error(err);
                 }
+                // resp.status(200).send(tokenHandler.generateToken(email, docs.isAdmin, secret))
             });
+
         }
     }
 
@@ -96,3 +110,5 @@ class AuthController {
 }
 
 module.exports = AuthController
+
+

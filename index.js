@@ -18,20 +18,31 @@ app.use(cors(corsOption));
 app.use("*", (req, res, next) => {
 
     const url = req.originalUrl;
-    console.log(url);
-    const adminRegex = new RegExp("^/admin$[[\/]?[a-z0-9]*]*"); // admin
-    // const generalRegex = new RegExp("/*"); // index
-    // [[\/]?[a-z0-9]*]*
+    const routesType = url.split('/')[1].toLocaleLowerCase();
 
+    if (url.split('/')[2].toLocaleLowerCase() === 'authenticate') {
+        // res.send("passou no middleware");
+        next();
+    }
+    else {
+        if ((routesType === 'admin') || (routesType === 'users') || (routesType === 'daily')) {
 
-    // if (adminRegex.test(url)) {
-
-    // }
-
-    res.send(adminRegex.test(url));
-    // res.send(generalRegex.test(url));
-    // ([\/admin])\w+
-
+            const userData = getTokenFromHeader(req);
+            if (!userData) {
+                return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
+            }
+            if (!userData.logged) {
+                return res.status(401).send(JSON.stringify({ erro: 'Usuário não logado' }));
+            }
+            if (routesType === 'admin') {
+                if (!userData.admin) {
+                    return res.status(401).send(JSON.stringify({ erro: 'Usuário não autorizado' }));
+                }
+            }
+        }
+    }
+    next();
+    // res.send("passou no middleware");
 });
 /*
 app.use("/admin*", (req, res, next) => {
