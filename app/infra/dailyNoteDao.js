@@ -52,14 +52,14 @@ class DailyNoteDao {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }
+    }*/
 
     listAll(callback) {
         DailyNoteSchema.find({}).exec((err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }*/
+    }
 
 }
 

@@ -12,7 +12,7 @@ class DailyNoteController extends Controller {
             listDate: '/dailys/daily/',
             listUser: '/dailys/daily/',
             listDateUser: '/dailys/daily/',
-            listAll: '/dailys/daily/',
+            listAll: '/dailys',
         }
     }
 
@@ -112,22 +112,22 @@ class DailyNoteController extends Controller {
                 resp.send(result);
             });
         }
-    }
+    }*/
     
     listAll() {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
 
-            dailyNoteDao.list((error, result) => {
+            dailyNoteDao.listAll((error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
-    }*/
+    }
 
     remove() {
         throw new Error('O método deletar não existe');
