@@ -46,10 +46,10 @@ class DailyNote {
     static isToday(value){
         const dateHoje = new Date();
         const date = new Date(value);
-        console.log(date.getDate()+1);
+        console.log(date.getDate());
         console.log(dateHoje.getDate());
         if(date.getFullYear() == dateHoje.getFullYear() &&
-         date.getDate()+1 == dateHoje.getDate() 
+         date.getDate() == dateHoje.getDate() 
          && date.getMonth() == dateHoje.getMonth()){
             return value;
          } else{
