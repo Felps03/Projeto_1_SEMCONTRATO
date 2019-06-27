@@ -49,7 +49,7 @@ class DailyNote {
         console.log(date.getDate()+1);
         console.log(dateHoje.getDate());
         if(date.getFullYear() == dateHoje.getFullYear() &&
-         date.getDate() == dateHoje.getDate() 
+         date.getDate()+1 == dateHoje.getDate() 
          && date.getMonth() == dateHoje.getMonth()){
             return value;
          } else{
