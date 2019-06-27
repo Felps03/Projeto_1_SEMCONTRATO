@@ -37,9 +37,10 @@ class DailyNoteController extends Controller {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
                     dailyNoteDao.add(req.body, (error, resultADD) => {
+                        console.log(resultADD);
                         if (!resultADD) return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar a daily favor olhar o log'}));
 
-                        resp.send(result);
+                        resp.send(resultADD);
                     });
                 });
             });
@@ -61,7 +62,7 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
                 resp.send(result);
             });
@@ -76,7 +77,7 @@ class DailyNoteController extends Controller {
             dailyNoteDao.listDate(req.body, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
                 }
                 resp.send(result);
             });
