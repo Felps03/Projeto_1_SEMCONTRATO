@@ -5,6 +5,9 @@ const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 
+// recaptcha
+const recaptchaConfig = require('../../config/recaptcha');
+const fetch = require('node-fetch');
 class AuthController {
     static rotas() {
         return {
@@ -16,6 +19,24 @@ class AuthController {
 
     authenticate() {
         return (req, resp) => {
+
+            // recaptcha
+            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`
+
+            fetch(recaptchaConfig.url + reqParams, {
+                method: 'POST',
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(JSON.stringify(res));
+                    if (!res.success || res.action !== 'user_login') {
+                        return resp.status(400).send('invalid reCAPTCHA params');
+                    } else if (res.score < recaptchaConfig.tol) {
+                        return resp.status(409).send('likely a bot');
+                    }
+                });
+            //
+
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
