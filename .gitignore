@@ -93,6 +93,6 @@ client/js/dist/
 
 client/dist
 
-database/index.js
+# database/index.js
 
 tmp/uploads/*
