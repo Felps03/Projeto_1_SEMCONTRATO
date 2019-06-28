@@ -53,8 +53,8 @@ class UserController extends Controller {
             let recaptchaError = false;
 
             fetch(recaptchaConfig.url + reqParams, {
-                method: 'POST',
-            })
+                    method: 'POST',
+                })
                 .then(res => res.json())
                 .then(res => {
                     if (!res.success) {
@@ -81,8 +81,6 @@ class UserController extends Controller {
             const { email } = req.body;
 
             const userDao = new UserDao();
-            const tokenHandler = new TokenHandler();
-
 
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
@@ -95,11 +93,9 @@ class UserController extends Controller {
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
                     }
 
-                    let token = tokenHandler.generateToken(email, 'semcontrato');
-
                     let response = {
                         resultADD,
-                        token
+
                     }
                     return resp.status(201).send(response);
                 });

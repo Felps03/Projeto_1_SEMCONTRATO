@@ -3,6 +3,7 @@ const secret = require('../config/secretJWT');
 
 function getTokenFromHeader(req) {
 
+
     const tokenHeader = req.get("Authorization").split(" ")[1];
 
     const tokenHandler = new TokenHandler();
