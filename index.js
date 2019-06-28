@@ -21,11 +21,15 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-    // console.log(url.split('/').length);
-    // res.send(url.split('/').lenght);
+    console.log(path);
+    let needToken = true;
 
-    if ((routesType === 'admin') || ((routesType === 'users') && (path != 'authenticate')) || (routesType === 'daily')) {
+    if ((path === 'authenticate') || (path === 'user')) {
+        needToken = false;
+    }
 
+    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily')) {
+        console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {
             return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
