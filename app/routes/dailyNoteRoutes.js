@@ -9,6 +9,15 @@ module.exports = (app) => {
 
     app.put(rotasDailyNote.edicao, DailyNoteValidation.validation(), dailyNoteController.update());
 
-    app.get(rotasDailyNote.lista, dailyNoteController.list());
+    app.get(rotasDailyNote.listDate, dailyNoteController.listDate());
 
+    app.get(rotasDailyNote.listAll, dailyNoteController.listAll());
+
+    /*
+    app.get(rotasDailyNote.listUser, dailyNoteController.listUser());
+    
+    app.get(rotasDailyNote.listDateUser, dailyNoteController.listDateUser());
+    
+    
+    */
 }

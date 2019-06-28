@@ -9,7 +9,10 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/',
             edicao: '/dailys/daily/:id',
-            lista: '/dailys/daily/',
+            listDate: '/dailys/daily/',
+            listUser: '/dailys/daily/',
+            listDateUser: '/dailys/daily/',
+            listAll: '/dailys',
         }
     }
 
@@ -27,18 +30,17 @@ class DailyNoteController extends Controller {
 
             userDao.findById(req.body.id_user, (error, resultByID) => {
                 if (!resultByID) {
-                    return resp.status(400).send('USUARIO não existente');
+                    return resp.status(400).send(JSON.stringify({erro:'USUARIO não existente'}));
                 }
 
                 dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, resultUserDate) => {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
-
-
                     dailyNoteDao.add(req.body, (error, resultADD) => {
-                        if (resultADD) return resp.status(400).send('Houve Algum problema na hora de cadastrar o usuario favor olhar o log');
+                        console.log(resultADD);
+                        if (!resultADD) return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar a daily favor olhar o log'}));
 
-                        resp.send(result);
+                        resp.send(resultADD);
                     });
                 });
             });
@@ -60,22 +62,66 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send('Houve Algum problema na hora de atualizar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
     }
 
-    list() {
+    listDate() {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
 
-            dailyNoteDao.list((error, result) => {
+            dailyNoteDao.listDate(req.body, req.params.page,(err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    /*listUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDate(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
+
+    listDateUser() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listDateUser(req.body, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }*/
+    
+    listAll() {
+        return (req, resp) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+            dailyNoteDao.listAll(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send('Houve Algum problema na hora de listar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
                 resp.send(result);
             });

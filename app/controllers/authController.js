@@ -5,6 +5,9 @@ const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 
+// recaptcha
+const recaptchaConfig = require('../../config/recaptcha');
+const fetch = require('node-fetch');
 class AuthController {
     static rotas() {
         return {
@@ -16,6 +19,24 @@ class AuthController {
 
     authenticate() {
         return (req, resp) => {
+
+            // recaptcha
+            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`;
+
+            fetch(recaptchaConfig.url + reqParams, {
+                method: 'POST',
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(JSON.stringify(res));
+                    if (!res.success || res.action !== 'user_login') {
+                        return resp.status(400).send('invalid reCAPTCHA params');
+                    } else if (res.score < recaptchaConfig.tol) {
+                        return resp.status(409).send('likely a bot');
+                    }
+                });
+            //
+
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
@@ -25,11 +46,11 @@ class AuthController {
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
                 if (error) {
-                    resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                    resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
                 console.log(result);
                 if (result.length == 0) {
-                    resp.status(400).send('Email ou senha inválidos');
+                    resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
                 } else {
                     resp.status(200).send(result);
                 }
@@ -45,10 +66,10 @@ class AuthController {
             userDao.findEmail(userEmail, (error, answer) => {
 
                 if (error) {
-                    res.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
+                    res.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
                 if (answer == null) { // if answer its null, userEmail doenst exist on DB
-                    res.status(400).send('Email não cadastrado');
+                    res.status(400).send(JSON.stringify({ erro: 'Email não cadastrado' }));
                 } else { // userEmail exists on DB
                     const generateEmail = new GenerateEmail();
                     generateEmail.sendEmail(userEmail)
@@ -86,9 +107,9 @@ class AuthController {
                 const now = new Date();
 
                 if (exp > now) {
-                    res.status(200).send("código válido");
+                    res.status(200).send(JSON.stringify({ erro: "código válido" }));
                 } else {
-                    res.status(400).send("código inválido");
+                    res.status(400).send(JSON.stringify({ erro: "código inválido" }));
                 }
             });
         }
