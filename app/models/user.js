@@ -27,14 +27,6 @@ const UserSchema = new mongoose.Schema({
         required: true,
         select: true
     },
-    passwordResetToken: {
-        type: String,
-        select: false
-    },
-    passwordResetExpires: {
-        type: Date,
-        select: false
-    },
     file_photo: {
         type: String
     },
@@ -45,10 +37,15 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+        select: true
     }
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
     const hash = sha256(this.password + salt);
     this.password = hash;
 

@@ -19,7 +19,7 @@ class UserController extends Controller {
 
     static rotas() {
         return {
-            lista: '/users',
+            lista: '/admin/users',
             cadastro: '/users/user/',
             edicao: '/users/user/:id',
             deletar: '/users/user/:id',
