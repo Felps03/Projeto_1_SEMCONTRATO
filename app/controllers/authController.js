@@ -21,20 +21,27 @@ class AuthController {
         return (req, resp) => {
 
             // recaptcha
-            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`;
+            if (!req.body['g-recaptcha-response']) {
+                return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
+            }
+
+            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
+            let recaptchaError = false;
 
             fetch(recaptchaConfig.url + reqParams, {
                 method: 'POST',
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(JSON.stringify(res));
-                    if (!res.success || res.action !== 'user_login') {
-                        return resp.status(400).send('invalid reCAPTCHA params');
-                    } else if (res.score < recaptchaConfig.tol) {
-                        return resp.status(409).send('likely a bot');
+                    if (!res.success) {
+                        recaptchaError = true;
+                        console.log(res['error-codes']);
                     }
                 });
+
+            if (recaptchaError) {
+                return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
+            }
             //
 
             const { email, password } = req.body;
