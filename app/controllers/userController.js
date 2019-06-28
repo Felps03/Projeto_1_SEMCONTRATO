@@ -48,8 +48,8 @@ class UserController extends Controller {
             const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`
 
             fetch(recaptchaConfig.url + reqParams, {
-                method: 'POST',
-            })
+                    method: 'POST',
+                })
                 .then(res => res.json())
                 .then(res => {
                     console.log(JSON.stringify(res));
@@ -75,8 +75,6 @@ class UserController extends Controller {
             const { email } = req.body;
 
             const userDao = new UserDao();
-            const tokenHandler = new TokenHandler();
-
 
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
@@ -90,7 +88,8 @@ class UserController extends Controller {
                     }
 
                     let response = {
-                        resultADD
+                        resultADD,
+
                     }
                     return resp.status(201).send(response);
                 });
