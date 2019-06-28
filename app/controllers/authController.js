@@ -5,7 +5,7 @@ const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 const TokenHandler = require('../utils/TokenHandler');
-const secret = require('../config/secretJWT');
+const secretJWT = require('../config/secretJWT');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -65,7 +65,7 @@ class AuthController {
                         }
                         else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secret));
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
                         }
                     });
 
