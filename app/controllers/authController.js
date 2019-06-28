@@ -6,6 +6,7 @@ const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 const TokenHandler = require('../utils/TokenHandler');
 const secretJWT = require('../config/secretJWT');
+const getTokenFromHeader = require('../utils/getTokenFromHeader');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -15,7 +16,8 @@ class AuthController {
         return {
             authenticate: '/users/authenticate',
             resetPassword: '/users/user/recover',
-            verifyCode: '/users/code/verify'
+            verifyCode: '/users/code/verify',
+            logout: '/users/logout'
         }
     }
 
@@ -72,6 +74,13 @@ class AuthController {
                     resp.status(200);
                 }
             });
+        }
+    }
+
+    logout() {
+        return (req, res) => {
+            const userData = getTokenFromHeader(req);
+            res.send(userData)
         }
     }
 

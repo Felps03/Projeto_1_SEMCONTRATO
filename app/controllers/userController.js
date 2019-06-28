@@ -89,11 +89,8 @@ class UserController extends Controller {
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
                     }
 
-                    let token = tokenHandler.generateToken(email, 'semcontrato');
-
                     let response = {
-                        resultADD,
-                        token
+                        resultADD
                     }
                     return resp.status(201).send(response);
                 });

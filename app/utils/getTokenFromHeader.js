@@ -17,6 +17,7 @@ function getTokenFromHeader(req) {
     }
     else { // token ok
         userData = {
+            "email": payload.email,
             "admin": payload.isAdmin,
             "logged": payload.isValid,
         }

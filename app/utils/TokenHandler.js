@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = require('../config/secretJWT');
+// const secret = require('../config/secretJWT');
 
 
 class TokenHandler {
@@ -27,7 +27,7 @@ class TokenHandler {
                 tokenDecoded = decode;
             }
         });
-
+        // console.log(tokenDecoded);
         return tokenDecoded;
     }
 
