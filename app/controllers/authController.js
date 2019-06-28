@@ -4,6 +4,8 @@ const salt = require('../config/salt');
 const UserDao = require('../infra/userDao');
 const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
+const TokenHandler = require('../utils/TokenHandler');
+const secretJWT = require('../config/secretJWT');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -21,27 +23,34 @@ class AuthController {
         return (req, resp) => {
 
             // recaptcha
-            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`;
+            if (!req.body['g-recaptcha-response']) {
+                return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
+            }
+
+            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
+            let recaptchaError = false;
 
             fetch(recaptchaConfig.url + reqParams, {
                 method: 'POST',
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(JSON.stringify(res));
-                    if (!res.success || res.action !== 'user_login') {
-                        return resp.status(400).send('invalid reCAPTCHA params');
-                    } else if (res.score < recaptchaConfig.tol) {
-                        return resp.status(409).send('likely a bot');
+                    if (!res.success) {
+                        recaptchaError = true;
+                        console.log(res['error-codes']);
                     }
                 });
+
+            if (recaptchaError) {
+                return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
+            }
             //
 
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
 
-            console.log("Email: ", email, "Senha: ", hash);
+            // console.log("Email: ", email, "Senha: ", hash);
 
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
@@ -52,7 +61,22 @@ class AuthController {
                 if (result.length == 0) {
                     resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
                 } else {
-                    resp.status(200).send(result);
+                    //adicionar o token
+
+                    // const email = "oleiro87teste@gmail.com";
+                    const tokenHandler = new TokenHandler();
+                    userDao.checkAdmin(email, (err, docs) => {
+                        // console.log(docs.isAdmin);
+                        if (err) {
+                            resp.status(500).send('erro no servidor');
+                        }
+                        else {
+                            // resp.status(200).send(docs);
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                        }
+                    });
+
+                    resp.status(200);
                 }
             });
         }
@@ -117,3 +141,5 @@ class AuthController {
 }
 
 module.exports = AuthController
+
+

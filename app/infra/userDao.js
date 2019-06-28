@@ -92,6 +92,16 @@ class UserDao {
             callback(null, docs);
         });
     }
+    checkAdmin(email, callback) {
+        UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
+            console.log(`erro é ${err}`);
+            console.log(`docs é ${docs}`);
+
+            if (err) return callback(err, docs)
+
+            return callback(null, docs);
+        });
+    }
 }
 
 module.exports = UserDao;
