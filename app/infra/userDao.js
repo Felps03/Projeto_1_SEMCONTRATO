@@ -90,7 +90,12 @@ class UserDao {
     }
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
-            callback(err, docs);
+            console.log(`erro é ${err}`);
+            console.log(`docs é ${docs}`);
+
+            if (err) return callback(err, docs)
+
+            return callback(null, docs);
         });
     }
 }

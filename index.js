@@ -19,30 +19,27 @@ app.use("*", (req, res, next) => {
 
     const url = req.originalUrl;
     const routesType = url.split('/')[1].toLocaleLowerCase();
+    let path = "";
+    if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
+    // console.log(url.split('/').length);
+    // res.send(url.split('/').lenght);
 
-    if (url.split('/')[2].toLocaleLowerCase() === 'authenticate') {
-        // res.send("passou no middleware");
-        next();
-    }
-    else {
-        if ((routesType === 'admin') || (routesType === 'users') || (routesType === 'daily')) {
+    if ((routesType === 'admin') || ((routesType === 'users') && (path != 'authenticate')) || (routesType === 'daily')) {
 
-            const userData = getTokenFromHeader(req);
-            if (!userData) {
-                return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
-            }
-            if (!userData.logged) {
-                return res.status(401).send(JSON.stringify({ erro: 'Usuário não logado' }));
-            }
-            if (routesType === 'admin') {
-                if (!userData.admin) {
-                    return res.status(401).send(JSON.stringify({ erro: 'Usuário não autorizado' }));
-                }
+        const userData = getTokenFromHeader(req);
+        if (!userData) {
+            return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
+        }
+        if (!userData.logged) {
+            return res.status(401).send(JSON.stringify({ erro: 'Usuário não logado' }));
+        }
+        if (routesType === 'admin') {
+            if (!userData.admin) {
+                return res.status(401).send(JSON.stringify({ erro: 'Usuário não autorizado' }));
             }
         }
     }
     next();
-    // res.send("passou no middleware");
 });
 /*
 app.use("/admin*", (req, res, next) => {

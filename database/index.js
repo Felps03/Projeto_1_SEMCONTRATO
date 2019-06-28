@@ -8,7 +8,7 @@ const MONGO_LOCAL = 'mongodb://localhost/teste';
 mongoose.connect(MONGO_LOCAL, {
     useNewUrlParser: true
 })
-    .then(() => console.log('mongoose ok...'))
+    // .then(() => console.log('mongoose ok...'))
     .catch(err => console.log(err));
 
 mongoose.Promise = global.Promise;

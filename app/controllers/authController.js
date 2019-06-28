@@ -18,36 +18,39 @@ class AuthController {
 
     authenticate() {
         return (req, resp) => {
-            // const { email, password } = req.body;
+            const { email, password } = req.body;
 
-            // const hash = sha256(password + salt);
+            const hash = sha256(password + salt);
 
             // console.log("Email: ", email, "Senha: ", hash);
 
             const userDao = new UserDao();
-            // userDao.authenticate(email, hash, (error, result) => {
-            //     if (error) {
-            //         resp.status(400).send('Houve Algum problema na hora de encontrar o usuario favor olhar o log');
-            //     }
-            //     console.log(result);
-            //     if (result.length == 0) {
-            //         resp.status(400).send('Email ou senha inválidos');
-            //     } else {
-            //adicionar o token
-            const email = "oleiro87teste@gmail.com";
-            const tokenHandler = new TokenHandler();
-            userDao.checkAdmin(email, (err, docs) => {
-                if (!err) {
-
-                    console.log(tokenHandler.generateToken(email, docs.isAdmin, secret));
-                    resp.send(tokenHandler.generateToken(email, docs.isAdmin, secret));
-                } else {
-
-                    console.error(err);
+            userDao.authenticate(email, hash, (error, result) => {
+                if (error) {
+                    resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
-                // resp.status(200).send(tokenHandler.generateToken(email, docs.isAdmin, secret))
-            });
+                console.log(result);
+                if (result.length == 0) {
+                    resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                } else {
+                    //adicionar o token
 
+                    // const email = "oleiro87teste@gmail.com";
+                    const tokenHandler = new TokenHandler();
+                    userDao.checkAdmin(email, (err, docs) => {
+                        // console.log(docs.isAdmin);
+                        if (err) {
+                            resp.status(500).send('erro no servidor');
+                        }
+                        else {
+                            // resp.status(200).send(docs);
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secret));
+                        }
+                    });
+
+                    resp.status(200);
+                }
+            });
         }
     }
 
