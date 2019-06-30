@@ -79,8 +79,12 @@ class AuthController {
 
     logout() {
         return (req, res) => {
+            const tokenHandler = new TokenHandler();
             const userData = getTokenFromHeader(req);
-            res.send(userData)
+            const newToken = tokenHandler.generateToken(userData.email, userData.admin, secretJWT, false);
+            res.set("Token", newToken);
+            res.status(200).send();
+            // res.send(tokenHandler.decodeToken(newToken, secretJWT));
         }
     }
 

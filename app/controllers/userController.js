@@ -48,8 +48,8 @@ class UserController extends Controller {
             const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`
 
             fetch(recaptchaConfig.url + reqParams, {
-                    method: 'POST',
-                })
+                method: 'POST',
+            })
                 .then(res => res.json())
                 .then(res => {
                     console.log(JSON.stringify(res));
@@ -75,7 +75,6 @@ class UserController extends Controller {
             const { email } = req.body;
 
             const userDao = new UserDao();
-
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
                     console.log(file_photo);
@@ -91,6 +90,17 @@ class UserController extends Controller {
                         resultADD,
 
                     }
+                    const tokenHandler = new TokenHandler();
+                    userDao.checkAdmin(email, (err, docs) => {
+                        // console.log(docs.isAdmin);
+                        if (err) {
+                            resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
+                        }
+                        else {
+                            // resp.status(200).send(docs);
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                        }
+                    });
                     return resp.status(201).send(response);
                 });
 
