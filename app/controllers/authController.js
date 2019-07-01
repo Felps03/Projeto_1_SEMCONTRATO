@@ -25,6 +25,7 @@ class AuthController {
         return (req, resp) => {
 
             // recaptcha
+            /*
             const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`;
 
             fetch(recaptchaConfig.url + reqParams, {
@@ -39,7 +40,7 @@ class AuthController {
                         return resp.status(409).send('likely a bot');
                     }
                 });
-
+*/
 
             const { email, password } = req.body;
 
@@ -64,15 +65,14 @@ class AuthController {
                     userDao.checkAdmin(email, (err, docs) => {
                         // console.log(docs.isAdmin);
                         if (err) {
-                            resp.status(500).send('erro no servidor');
-                        }
-                        else {
+                            return resp.status(500).send('erro no servidor');
+                        } else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).send(result);
                         }
                     });
 
-                    resp.status(200).send(result);
+                    //  resp.status(200).send(result);
                 }
             });
         }
@@ -148,5 +148,3 @@ class AuthController {
 }
 
 module.exports = AuthController
-
-
