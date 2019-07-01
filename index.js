@@ -27,6 +27,7 @@ app.use("*", (req, res, next) => {
     if ((path === 'authenticate') || (path === 'user')) {
         needToken = false;
     }
+    const userData = getTokenFromHeader(req);
 
     if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily')) {
         // console.log("entrou no if");
@@ -43,7 +44,7 @@ app.use("*", (req, res, next) => {
             }
         }
     }
-    next();
+    // next();
 });
 
 app.use(bodyParser.json());

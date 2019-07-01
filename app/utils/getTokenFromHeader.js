@@ -3,12 +3,21 @@ const secret = require('../config/secretJWT');
 
 function getTokenFromHeader(req) {
 
+    console.log(req.get("Authorization"));
+    let tokenHeader = '';
+    let payload;
+    if (!req.get("Authorization")) {
+        // console.log("header vazio")
+        payload = false;
+    }
+    else {
 
-    const tokenHeader = req.get("Authorization").split(" ")[1];
+        tokenHeader = req.get("Authorization").split(" ")[1];
 
-    const tokenHandler = new TokenHandler();
+        const tokenHandler = new TokenHandler();
 
-    const payload = tokenHandler.decodeToken(tokenHeader, secret);
+        payload = tokenHandler.decodeToken(tokenHeader, secret);
+    }
 
     let userData = '';
 
