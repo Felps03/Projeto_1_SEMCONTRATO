@@ -6,6 +6,7 @@ const GenerateEmail = require('../utils/generateEmail');
 const RecoverDataDao = require('../infra/RecoverDataDao');
 const TokenHandler = require('../utils/TokenHandler');
 const secretJWT = require('../config/secretJWT');
+const getTokenFromHeader = require('../utils/getTokenFromHeader');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -15,7 +16,8 @@ class AuthController {
         return {
             authenticate: '/users/authenticate',
             resetPassword: '/users/user/recover',
-            verifyCode: '/users/code/verify'
+            verifyCode: '/users/code/verify',
+            logout: '/users/logout'
         }
     }
 
@@ -31,8 +33,8 @@ class AuthController {
             let recaptchaError = false;
 
             fetch(recaptchaConfig.url + reqParams, {
-                method: 'POST',
-            })
+                    method: 'POST',
+                })
                 .then(res => res.json())
                 .then(res => {
                     if (!res.success) {
@@ -65,20 +67,29 @@ class AuthController {
 
                     // const email = "oleiro87teste@gmail.com";
                     const tokenHandler = new TokenHandler();
+                    // console.log("oi");
                     userDao.checkAdmin(email, (err, docs) => {
                         // console.log(docs.isAdmin);
                         if (err) {
-                            resp.status(500).send('erro no servidor');
-                        }
-                        else {
+                            return resp.status(500).send('erro no servidor');
+                        } else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).send(result);
                         }
                     });
-
-                    resp.status(200);
                 }
             });
+        }
+    }
+
+    logout() {
+        return (req, res) => {
+            const tokenHandler = new TokenHandler();
+            const userData = getTokenFromHeader(req);
+            const newToken = tokenHandler.generateToken(userData.email, userData.admin, secretJWT, false);
+            res.set("Token", newToken);
+            res.status(200).send();
+            // res.send(tokenHandler.decodeToken(newToken, secretJWT));
         }
     }
 
@@ -141,5 +152,3 @@ class AuthController {
 }
 
 module.exports = AuthController
-
-
