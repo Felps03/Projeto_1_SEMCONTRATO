@@ -39,7 +39,7 @@ class AuthController {
                         return resp.status(409).send('likely a bot');
                     }
                 });
-            //
+
 
             const { email, password } = req.body;
 
@@ -60,6 +60,7 @@ class AuthController {
 
                     // const email = "oleiro87teste@gmail.com";
                     const tokenHandler = new TokenHandler();
+                    // console.log("oi");
                     userDao.checkAdmin(email, (err, docs) => {
                         // console.log(docs.isAdmin);
                         if (err) {
@@ -71,7 +72,7 @@ class AuthController {
                         }
                     });
 
-                    resp.status(200);
+                    resp.status(200).send(result);
                 }
             });
         }
