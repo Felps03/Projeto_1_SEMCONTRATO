@@ -25,6 +25,7 @@ class AuthController {
         return (req, resp) => {
 
             // recaptcha
+            /*
             if (!req.body['g-recaptcha-response']) {
                 return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
             }
@@ -48,6 +49,7 @@ class AuthController {
             }
             //
 
+            */
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);

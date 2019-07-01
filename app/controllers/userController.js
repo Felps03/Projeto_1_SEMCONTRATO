@@ -44,6 +44,7 @@ class UserController extends Controller {
     add() {
         return (req, resp) => {
 
+            /*
             // recaptcha
             if (!req.body['g-recaptcha-response']) {
                 return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
@@ -68,6 +69,7 @@ class UserController extends Controller {
             }
             //
 
+            */
             const error = validationResult(req);
             let errorList = [];
             const { filename: file_photo } = req.file;
@@ -101,8 +103,7 @@ class UserController extends Controller {
                         // console.log(docs.isAdmin);
                         if (err) {
                             resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
-                        }
-                        else {
+                        } else {
                             // resp.status(200).send(docs);
                             resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
                         }
