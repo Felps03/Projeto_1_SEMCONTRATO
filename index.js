@@ -21,15 +21,16 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-    console.log(path);
+    // console.log(path);
     let needToken = true;
 
     if ((path === 'authenticate') || (path === 'user')) {
         needToken = false;
     }
+    const userData = getTokenFromHeader(req);
 
     if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily')) {
-        console.log("entrou no if");
+        // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {
             return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
@@ -45,54 +46,6 @@ app.use("*", (req, res, next) => {
     }
     next();
 });
-/*
-app.use("/admin*", (req, res, next) => {
-
-    const userData = getTokenFromHeader(req);
-
-    if (!userData) {
-        res.status(401).send("token inválido");
-    }
-
-    if (!userData.isValid) {
-        res.status(401).send("não logado");
-    }
-    if (!userData.isAdmin) {
-        res.status(401).send("não é admin");
-    }
-
-    res.status(200).send("sim");
-
-});
-
-app.use(['/users', '/daily'], (req, res, next) => {
-    // somente logado
-    res.send("é rota de logado");
-});
-
-app.use("/register", (req, res, next) => {
-    // não logado ou admin
-    res.send("é rota de não logado ou admin");
-});
-app.use("/", (req, res, next) => {
-    // qualquer pessoa
-    const headerToken = getTokenFromHeader(req);
-    res.send(headerToken);
-
-    // if (!headerToken) {
-    //     res.status(401).send("token inválido");
-    // }
-    // else {
-
-    //     if (!headerToken.isValid) {
-    //         res.status(401).send("não logado");
-    //     }
-    // }
-    // res.status(200).send("sim");
-
-});
-*/
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
