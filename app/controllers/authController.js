@@ -25,12 +25,12 @@ class AuthController {
         return (req, resp) => {
 
             // recaptcha
-            /*
+
             const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body.recaptchaToken)}`;
 
             fetch(recaptchaConfig.url + reqParams, {
-                method: 'POST',
-            })
+                    method: 'POST',
+                })
                 .then(res => res.json())
                 .then(res => {
                     console.log(JSON.stringify(res));
@@ -40,7 +40,7 @@ class AuthController {
                         return resp.status(409).send('likely a bot');
                     }
                 });
-*/
+
 
             const { email, password } = req.body;
 
@@ -71,8 +71,6 @@ class AuthController {
                             return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).send(result);
                         }
                     });
-
-                    //  resp.status(200).send(result);
                 }
             });
         }
