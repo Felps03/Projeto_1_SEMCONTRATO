@@ -97,10 +97,12 @@ class AuthController {
 
     resetPassword() {
         return (req, res) => {
+            console.log(req.body);
             const userEmail = req.body.email;
             const userDao = new UserDao();
+            console.log(userEmail);
 
-            userDao.findEmail(userEmail, (error, answer) => {
+            userDao.validateEmailAvailable(userEmail, (error, answer) => {
 
                 if (error) {
                     res.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));

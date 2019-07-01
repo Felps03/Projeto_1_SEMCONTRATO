@@ -36,7 +36,7 @@ class UserDao {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
-                resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de encontrar o usuario favor olhar o log'}));
+                resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
             const { name, lastName, userName, email, password, dateOfBirth } = user;
             UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
