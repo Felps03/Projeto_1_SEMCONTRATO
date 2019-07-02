@@ -18,6 +18,7 @@ class DailyNoteController extends Controller {
 
     add() {
         return (req, resp) => {
+            
             const error = validationResult(req);
             let errorList = [];
             if (!error.isEmpty()) {
@@ -28,18 +29,22 @@ class DailyNoteController extends Controller {
             let userDao = new UserDao();
             const dailyNoteDao = new DailyNoteDao();
 
-            userDao.findById(req.body.id_user, (error, resultByID) => {
+            userDao.validateEmailAvailable(req.body.email, (error, resultByID) => {
                 if (!resultByID) {
                     return resp.status(400).send(JSON.stringify({erro:'USUARIO não existente'}));
                 }
+                const { _id } = resultByID
 
-                dailyNoteDao.findByUserDate(req.body.id_user, req.body.date, (error, resultUserDate) => {
+                dailyNoteDao.findByUserDate(_id, new Date(), (error, resultUserDate) => {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
-                    dailyNoteDao.add(req.body, (error, resultADD) => {
+                    dailyNoteDao.add(req.body, _id, (error, resultADD) => {
                         console.log(resultADD);
-                        if (!resultADD) return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar a daily favor olhar o log'}));
-
+                        if (!resultADD) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar a daily favor olhar o log'}));   
+                        }
+                        
                         resp.send(resultADD);
                     });
                 });
