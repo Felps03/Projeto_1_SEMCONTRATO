@@ -24,7 +24,7 @@ app.use("*", (req, res, next) => {
         // console.log(path);
     let needToken = true;
 
-    if ((path === 'authenticate') || (path === 'user')) {
+    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword')) {
         needToken = false;
     }
     const userData = getTokenFromHeader(req);

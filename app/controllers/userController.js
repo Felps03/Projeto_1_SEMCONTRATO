@@ -185,8 +185,7 @@ class UserController extends Controller {
         return (req, resp) => {
             const userDao = new UserDao();
             const { email, password } = req.body;
-
-            userDao.findEmail(email, (error, answer) => {
+            userDao.validateEmailAvailable(email, (error, answer) => {
                 if (error) resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
 
                 const { _id } = answer;
