@@ -76,7 +76,7 @@ class AuthController {
                             return resp.status(500).send('erro no servidor');
                         } else {
                             // resp.status(200).send(docs);
-                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).send(result);
+                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
                         }
                     });
                 }

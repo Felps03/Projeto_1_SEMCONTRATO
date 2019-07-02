@@ -105,7 +105,7 @@ class UserController extends Controller {
                             resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
                         } else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token');
                         }
                     });
                     return resp.status(201).send(response);
