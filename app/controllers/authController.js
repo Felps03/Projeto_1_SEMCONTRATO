@@ -123,7 +123,7 @@ class AuthController {
                                 if (err) {
                                     res.status(500).send(err);
                                 }
-                                res.status(200).send();
+                                res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
                             });
                         })
                         .catch(e => console.error(e));
