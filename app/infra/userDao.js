@@ -11,18 +11,31 @@ class UserDao {
         });
     }
 
-    add(user, image, callback) {
+    // add(user, image, callback) {
 
-        console.log(image);
+    //     console.log(image);
 
-        const { filename: file_photo } = image;
-        //file_photo = `${hash.toString("hex")}-${file_photo}`
+    //     const { filename: file_photo } = image;
+    //     //file_photo = `${hash.toString("hex")}-${file_photo}`
+
+    //     const { name, lastName, userName, email, password, dateOfBirth } = user;
+
+    //     UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
+    //         if (err) {
+    //             fs.unlink(`./tmp/uploads/${file_photo}`);
+    //             return callback(err, null);
+    //         }
+    //         callback(null, docs);
+    //     });
+    // }
+
+    // taking off photo from users register
+    add(user, callback) {
 
         const { name, lastName, userName, email, password, dateOfBirth } = user;
 
-        UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
+        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if (err) {
-                fs.unlink(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
             }
             callback(null, docs);

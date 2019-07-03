@@ -27,9 +27,9 @@ const UserSchema = new mongoose.Schema({
         required: true,
         select: true
     },
-    file_photo: {
-        type: String
-    },
+    // file_photo: {
+    //     type: String
+    // },
     dateOfBirth: {
         type: Date,
         required: true
