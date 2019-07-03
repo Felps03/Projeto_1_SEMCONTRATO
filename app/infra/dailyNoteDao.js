@@ -2,9 +2,10 @@ const DailyNoteSchema = require('../models/dailyNote');
 const pageLimit = 10;
 class DailyNoteDao {
 
-    add(dailyNote, callback) {
-        const { id_user, yesterday, today, impediment, date } = dailyNote;
-        
+    add(dailyNote, id_user, callback) {
+        const { yesterday, today, impediment } = dailyNote;
+        let date = new Date();
+        console.log(id_user, yesterday, today, impediment , date);
         DailyNoteSchema.create({ id_user, yesterday, today, impediment, date }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);

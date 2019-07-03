@@ -26,7 +26,7 @@ class GenerateEmail {
             });
             
             //url change password 
-            const url = "https://semcontrato.netlify.com/recovery.html";
+            const url = "http://semcontrato.azurewebsites.net/user-recovery.html";
 
             // generating string to send via email
             const randomString = generateString();
@@ -46,8 +46,10 @@ class GenerateEmail {
                     subject: "Recuperação de senha!", // Subject line
                     text: `
                     Você solicitou a recuperação de senha, acesse o link abaixo e insira o código no campo solicitado.
+
+                    Click no link, abaixo.
                     
-                    ${url}
+                    ${url}?key=${randomString}
 
                     Código: ${randomString}
                     

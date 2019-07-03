@@ -76,7 +76,7 @@ class AuthController {
                             return resp.status(500).send('erro no servidor');
                         } else {
                             // resp.status(200).send(docs);
-                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).send(result);
+                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
                         }
                     });
                 }
@@ -97,10 +97,12 @@ class AuthController {
 
     resetPassword() {
         return (req, res) => {
+            console.log(req.body);
             const userEmail = req.body.email;
             const userDao = new UserDao();
+            console.log(userEmail);
 
-            userDao.findEmail(userEmail, (error, answer) => {
+            userDao.validateEmailAvailable(userEmail, (error, answer) => {
 
                 if (error) {
                     res.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
@@ -121,7 +123,7 @@ class AuthController {
                                 if (err) {
                                     res.status(500).send(err);
                                 }
-                                res.status(200).send();
+                                res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
                             });
                         })
                         .catch(e => console.error(e));

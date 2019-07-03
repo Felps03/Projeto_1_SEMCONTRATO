@@ -105,7 +105,7 @@ class UserController extends Controller {
                             resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
                         } else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT));
+                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token');
                         }
                     });
                     return resp.status(201).send(response);
@@ -185,8 +185,7 @@ class UserController extends Controller {
         return (req, resp) => {
             const userDao = new UserDao();
             const { email, password } = req.body;
-
-            userDao.findEmail(email, (error, answer) => {
+            userDao.validateEmailAvailable(email, (error, answer) => {
                 if (error) resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
 
                 const { _id } = answer;

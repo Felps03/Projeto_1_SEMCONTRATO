@@ -21,10 +21,10 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-    // console.log(path);
+        // console.log(path);
     let needToken = true;
 
-    if ((path === 'authenticate') || (path === 'user')) {
+    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword')) {
         needToken = false;
     }
     const userData = getTokenFromHeader(req);
