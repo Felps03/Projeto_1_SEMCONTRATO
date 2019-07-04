@@ -15,14 +15,14 @@ class UserDao {
 
         console.log(image);
 
-        const { filename: file_photo } = image;
+        //const { filename: file_photo } = image;
         //file_photo = `${hash.toString("hex")}-${file_photo}`
 
         const { name, lastName, userName, email, password, dateOfBirth } = user;
 
-        UserSchema.create({ name, lastName, userName, email, password, file_photo, dateOfBirth }, (err, docs) => {
+        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if (err) {
-                fs.unlink(`./tmp/uploads/${file_photo}`);
+                fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
             }
             callback(null, docs);

@@ -9,9 +9,9 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/',
             edicao: '/dailys/daily/:id',
-            listDate: '/dailys/daily/',
+            listDate: '/dailys/daily/date',
             listUser: '/dailys/daily/',
-            listDateUser: '/dailys/daily/',
+           // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
         }
     }
@@ -78,8 +78,9 @@ class DailyNoteController extends Controller {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
-
-            dailyNoteDao.listDate(req.body, req.params.page,(err, result) => {
+            var page = 1;
+            console.log(req.body.date);
+            dailyNoteDao.listDate(req.body, page,(err, result) => {
                 if (err) {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
@@ -102,22 +103,22 @@ class DailyNoteController extends Controller {
                 resp.send(result);
             });
         }
-    }
-
-    listDateUser() {
-        return (req, resp) => {
-
-            const dailyNoteDao = new DailyNoteDao();
-
-            dailyNoteDao.listDateUser(req.body, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar o usuario favor olhar o log" }));
-                }
-                resp.send(result);
-            });
-        }
     }*/
+
+    // listLastDaily() {
+    //     return (req, resp) => {
+
+    //         const dailyNoteDao = new DailyNoteDao();
+
+    //         dailyNoteDao.listLastDaily((err, result) => {
+    //             if (err) {
+    //                 console.log(err);
+    //                 resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar ultimas Dailys favor olhar o log" }));
+    //             }
+    //             resp.send(result);
+    //         });
+    //     }
+    // }
     
     listAll() {
         return (req, resp) => {

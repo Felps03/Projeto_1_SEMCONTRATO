@@ -4,7 +4,7 @@ const UserDao = require("../infra/userDao");
 class DailyNote {
     static validation() {
         return [
-            check('email').custom(this.isNull).withMessage('O email do USUARIO não pode ser vazio'),
+            //check('email').custom(this.isNull).withMessage('O email do USUARIO não pode ser vazio'),
             check('yesterday').trim().isLength({ min: 3 }).withMessage('O campo ONTEM precisa ter no mínimo 3 caracteres!'),
             check('today').trim().isLength({ min: 3 }).withMessage('O campo HOJE precisa ter no mínimo 3 caracteres!'),
             check('impediment').trim().isLength({min: 3}).withMessage('O campo IMPEDIMENTO precisa ter no minimo 3 caracteres!'),

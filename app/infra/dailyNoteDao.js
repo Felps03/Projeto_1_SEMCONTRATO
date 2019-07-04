@@ -1,5 +1,6 @@
 const DailyNoteSchema = require('../models/dailyNote');
 const pageLimit = 10;
+const lastLimit = 3;
 class DailyNoteDao {
 
     add(dailyNote, id_user, callback) {
@@ -62,18 +63,22 @@ class DailyNoteDao {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }
-   
-    listDateUser(dailyNote, callback) {
-        const { id_user, date} = dailyNote;
-
-        DailyNoteSchema.find({id_user, date}, (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
     }*/
-
-
+   
+    // listLastDaily(callback) {
+        
+    //     DailyNoteSchema.paginate({}, {
+    //         limit: lastLimit,
+    //         page: 1,
+    //         sort:{
+    //             date: -1
+    //         }
+    //     } ,(err, docs) => {
+    //         if (err) return callback(err, null)
+            
+    //         callback(null, docs);
+    //     });
+    // }
 }
 
 module.exports = DailyNoteDao;
