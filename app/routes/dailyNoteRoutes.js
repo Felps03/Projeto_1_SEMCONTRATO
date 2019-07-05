@@ -13,10 +13,12 @@ module.exports = (app) => {
 
     app.get(rotasDailyNote.listAll, dailyNoteController.listAll());
 
+    //app.get(rotasDailyNote.listLastDaily, dailyNoteController.listLastDaily());
+
     /*
     app.get(rotasDailyNote.listUser, dailyNoteController.listUser());
     
-    app.get(rotasDailyNote.listDateUser, dailyNoteController.listDateUser());
+    
     
     
     */

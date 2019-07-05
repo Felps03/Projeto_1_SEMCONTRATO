@@ -36,6 +36,7 @@ class UserDao {
 
         UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if (err) {
+                //fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
             }
             callback(null, docs);

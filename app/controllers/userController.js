@@ -2,6 +2,7 @@ const sha256 = require('js-sha256').sha256;
 const salt = require('../config/salt');
 const fs = require('fs');
 const { validationResult } = require('express-validator/check');
+const secretJWT = require('jsonwebtoken');
 
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
@@ -150,10 +151,11 @@ class UserController extends Controller {
             */
             const error = validationResult(req);
             let errorList = [];
+            //const { filename: file_photo } = req.file;
 
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
-                // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+               // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return resp.status(400).send(errorList);
             }
 
