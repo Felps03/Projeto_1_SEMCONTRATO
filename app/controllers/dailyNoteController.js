@@ -78,9 +78,8 @@ class DailyNoteController extends Controller {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
-            var page = 1;
-            console.log(req.body.date);
-            dailyNoteDao.listDate(req.body, page,(err, result) => {
+            console.log(req.body);
+            dailyNoteDao.listDate(req.body, req.params.page,(err, result) => {
                 if (err) {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
