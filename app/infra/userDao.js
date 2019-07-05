@@ -43,9 +43,30 @@ class UserDao {
         });
     }
 
-    update(user, id, image, callback) {
+    // update(user, id, image, callback) {
 
-        const { filename: file_photo } = image;
+    //     const { filename: file_photo } = image;
+
+    //     this.findById(id, (error, result) => {
+    //         if (error) {
+    //             console.log(error);
+    //             resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+    //         }
+    //         const { name, lastName, userName, email, password, dateOfBirth } = user;
+    //         UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
+    //             if (err) {
+    //                 fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+    //                 return callback(err, null)
+    //             }
+    //             fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+    //             callback(null, docs);
+    //         });
+    //     });
+    // }
+
+    // taking off photo
+    update(user, id, callback) {
+
 
         this.findById(id, (error, result) => {
             if (error) {
@@ -53,16 +74,17 @@ class UserDao {
                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
             const { name, lastName, userName, email, password, dateOfBirth } = user;
-            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, file_photo, dateOfBirth }, { new: true }, (err, docs) => {
+            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
                 if (err) {
-                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                     return callback(err, null)
                 }
-                fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
                 callback(null, docs);
             });
         });
     }
+
 
     updatePassword(password, id, callback) {
         UserSchema.findByIdAndUpdate(id, { password }, { new: true }, (err, docs) => {

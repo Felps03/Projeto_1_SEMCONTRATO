@@ -2,12 +2,11 @@ const sha256 = require('js-sha256').sha256;
 const salt = require('../config/salt');
 const fs = require('fs');
 const { validationResult } = require('express-validator/check');
-const secretJWT = require('jsonwebtoken');
+const secretJWT = require('../config/secretJWT');
 
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
 const TokenHandler = require('../utils/TokenHandler');
-const secretJWT = require('../config/secretJWT');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -155,7 +154,7 @@ class UserController extends Controller {
 
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
-               // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return resp.status(400).send(errorList);
             }
 
@@ -174,10 +173,6 @@ class UserController extends Controller {
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
                     }
 
-                    let response = {
-                        resultADD,
-
-                    }
                     const tokenHandler = new TokenHandler();
                     userDao.checkAdmin(email, (err, docs) => {
                         // console.log(docs.isAdmin);
@@ -185,7 +180,7 @@ class UserController extends Controller {
                             return resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
                         } else {
                             // resp.status(200).send(docs);
-                            return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(JSON.stringify({ msg: "Usário cadastrado" }));
+                            return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(resultADD);
                         }
                     });
                     // return resp.status(201).send(response);
@@ -196,26 +191,49 @@ class UserController extends Controller {
         };
     }
 
+    // update() {
+    //     return (req, resp) => {
+
+    //         const error = validationResult(req);
+    //         let errorList = [];
+    //         const { filename: file_photo } = req.file;
+    //         if (!error.isEmpty()) {
+    //             error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+    //             fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+    //             return resp.status(400).send(errorList);
+    //         }
+    //         const userDao = new UserDao();
+
+    //         userDao.update(req.body, req.params.id, req.file, (error, result) => {
+    //             if (error) {
+    //                 console.log(error);
+    //                 fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+    //                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+    //             }
+
+    //             return resp.status(201).send(result);
+    //         });
+    //     }
+
+    // }
+
+    // takking off photo
     update() {
         return (req, resp) => {
-
             const error = validationResult(req);
             let errorList = [];
-            const { filename: file_photo } = req.file;
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
-                fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return resp.status(400).send(errorList);
             }
-            const userDao = new UserDao();
 
-            userDao.update(req.body, req.params.id, req.file, (error, result) => {
+            const userDao = new UserDao();
+            userDao.update(req.body, req.params.id, (error, result) => {
+                console.log(result);
                 if (error) {
                     console.log(error);
-                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
-                    resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
                 }
-
                 return resp.status(201).send(result);
             });
         }
