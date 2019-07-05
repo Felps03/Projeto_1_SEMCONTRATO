@@ -2,7 +2,6 @@ const sha256 = require('js-sha256').sha256;
 const salt = require('../config/salt');
 const fs = require('fs');
 const { validationResult } = require('express-validator/check');
-const secretJWT = require('jsonwebtoken');
 
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
