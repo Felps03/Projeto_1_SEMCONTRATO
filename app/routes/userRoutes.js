@@ -9,7 +9,10 @@ module.exports = (app) => {
 
     app.get(rotasUser.lista, userController.list());
 
-    app.post(rotasUser.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.add());
+    // app.post(rotasUser.cadastro, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.add());
+
+    // taking off photo from register
+    app.post(rotasUser.cadastro, UserValidation.validation(), userController.add());
 
     app.put(rotasUser.edicao, multer(multerConfig).single("file_photo"), UserValidation.validation(), userController.update());
 

@@ -7,6 +7,7 @@ const secretJWT = require('jsonwebtoken');
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
 const TokenHandler = require('../utils/TokenHandler');
+const secretJWT = require('../config/secretJWT');
 
 // recaptcha
 const recaptchaConfig = require('../../config/recaptcha');
@@ -41,6 +42,83 @@ class UserController extends Controller {
             });
         }
     }
+
+    // add() {
+    //     return (req, resp) => {
+
+    //         /*
+    //         // recaptcha
+    //         if (!req.body['g-recaptcha-response']) {
+    //             return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
+    //         }
+
+    //         const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
+    //         let recaptchaError = false;
+
+    //         fetch(recaptchaConfig.url + reqParams, {
+    //             method: 'POST',
+    //         })
+    //             .then(res => res.json())
+    //             .then(res => {
+    //                 if (!res.success) {
+    //                     recaptchaError = true;
+    //                     console.log(res['error-codes']);
+    //                 }
+    //             });
+
+    //         if (recaptchaError) {
+    //             return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
+    //         }
+    //         //
+
+    //         */
+    //         const error = validationResult(req);
+    //         let errorList = [];
+    //         const { filename: file_photo } = req.file;
+
+    //         if (!error.isEmpty()) {
+    //             error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+    //             fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+    //             return resp.status(400).send(errorList);
+    //         }
+
+    //         const { email } = req.body;
+
+    //         const userDao = new UserDao();
+    //         userDao.validateEmailAvailable(email, (error, resultValidate) => {
+    //             if (resultValidate) {
+    //                 console.log(file_photo);
+    //                 fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+    //                 return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
+    //             }
+    //             userDao.add(req.body, req.file, (error, resultADD) => {
+    //                 if (error) {
+    //                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
+    //                 }
+
+    //                 let response = {
+    //                     resultADD,
+
+    //                 }
+    //                 const tokenHandler = new TokenHandler();
+    //                 userDao.checkAdmin(email, (err, docs) => {
+    //                     // console.log(docs.isAdmin);
+    //                     if (err) {
+    //                         resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
+    //                     } else {
+    //                         // resp.status(200).send(docs);
+    //                         resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token');
+    //                     }
+    //                 });
+    //                 return resp.status(201).send(response);
+    //             });
+
+    //         });
+
+    //     };
+    // }
+
+    // taking off photo from register
 
     add() {
         return (req, resp) => {
@@ -86,12 +164,13 @@ class UserController extends Controller {
             const userDao = new UserDao();
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
-                    //console.log(file_photo);
-                    fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    // console.log(file_photo);
+                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                     return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
                 }
-                userDao.add(req.body, req.file, (error, resultADD) => {
+                userDao.add(req.body, (error, resultADD) => {
                     if (error) {
+                        console.log(error);
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
                     }
 
@@ -103,13 +182,13 @@ class UserController extends Controller {
                     userDao.checkAdmin(email, (err, docs) => {
                         // console.log(docs.isAdmin);
                         if (err) {
-                            resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
+                            return resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
                         } else {
                             // resp.status(200).send(docs);
-                            resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token');
+                            return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(JSON.stringify({ msg: "Usário cadastrado" }));
                         }
                     });
-                    return resp.status(201).send(response);
+                    // return resp.status(201).send(response);
                 });
 
             });
