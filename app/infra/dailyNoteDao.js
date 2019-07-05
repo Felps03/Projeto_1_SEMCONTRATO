@@ -29,8 +29,7 @@ class DailyNoteDao {
         });
     }
 
-    listDate(dailyNote, page, callback) {
-        const { date } = dailyNote;
+    listDate(date, page, callback) {
 
         DailyNoteSchema.paginate({date},
             {
