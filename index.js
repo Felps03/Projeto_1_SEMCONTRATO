@@ -29,7 +29,7 @@ app.use("*", (req, res, next) => {
     }
     const userData = getTokenFromHeader(req);
 
-    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'dailys')) {
+    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily') || (routesType === 'helps') ) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {

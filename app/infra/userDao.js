@@ -70,7 +70,7 @@ class UserDao {
 
         this.findById(id, (error, result) => {
             if (error) {
-                console.log(error);
+                // console.log(error);
                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
             const { name, lastName, userName, email, password, dateOfBirth } = user;
@@ -118,7 +118,7 @@ class UserDao {
         UserSchema.find({ email }).select(joker).exec((err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
-            console.log(docs);
+            // console.log(docs);
         });
     }
 
@@ -128,10 +128,11 @@ class UserDao {
             callback(null, docs);
         });
     }
+    
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
-            console.log(`erro é ${err}`);
-            console.log(`docs é ${docs}`);
+            // console.log(`erro é ${err}`);
+            // console.log(`docs é ${docs}`);
 
             if (err) return callback(err, docs)
 

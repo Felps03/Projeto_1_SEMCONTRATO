@@ -29,14 +29,16 @@ class DailyNoteDao {
         });
     }
 
-    listDate(dailyNote, page, callback) {
-        const { date } = dailyNote;
+    listDate(date, page, callback) {
 
         DailyNoteSchema.paginate({date},
             {
                 limit: pageLimit,
                 skyp: (page - 1) * pageLimit,
-                page: page
+                page: page,
+                sort:{
+                    date: -1
+                }
             },
             (err, docs) => {
                 if (err) return callback(err, null)
@@ -48,7 +50,10 @@ class DailyNoteDao {
         DailyNoteSchema.paginate({}, {
             limit: pageLimit,
             skyp: (page - 1) * pageLimit,
-            page: page
+            page: page,
+            sort:{
+                date: -1
+            }
         },
         (err, docs) => {
             if (err) return callback(err, null)

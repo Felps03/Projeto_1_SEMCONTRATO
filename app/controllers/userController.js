@@ -34,7 +34,7 @@ class UserController extends Controller {
             const userDao = new UserDao();
             userDao.list((error, result) => {
                 if (error) {
-                    console.log(error);
+                    // console.log(error);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
@@ -169,7 +169,7 @@ class UserController extends Controller {
                 }
                 userDao.add(req.body, (error, resultADD) => {
                     if (error) {
-                        console.log(error);
+                        // console.log("Erro :", error);
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
                     }
 
@@ -183,7 +183,6 @@ class UserController extends Controller {
                             return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(resultADD);
                         }
                     });
-                    // return resp.status(201).send(response);
                 });
 
             });
