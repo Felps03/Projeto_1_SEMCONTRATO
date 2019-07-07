@@ -29,5 +29,20 @@ class HelpCenterDao {
             callback(null, docs);
         });
     }
+
+    remove(id, callback) {
+        HelpCenterSchema.findByIdAndRemove(id, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+    findById(_id, callback) {
+        HelpCenterSchema.findOne({ _id }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
 }
 module.exports = HelpCenterDao;

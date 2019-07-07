@@ -9,6 +9,10 @@ module.exports = (app) => {
 
     app.put(rotasHelpCenter.editarPost, HelpCenterValidation.validation(), helpCenterController.update());
 
-    app.get(rotasHelpCenter.lista, helpCenterController.list());
+    app.get(rotasHelpCenter.listaPost, helpCenterController.list());
+
+    app.delete(rotasHelpCenter.deletarPost, helpCenterController.remove());
+
+    app.get(rotasHelpCenter.findById, helpCenterController.findById());
 
 }

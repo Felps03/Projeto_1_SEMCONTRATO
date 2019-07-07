@@ -10,7 +10,9 @@ class HelperCenterController extends Controller {
         return {
             cadastroPost: '/helps/post/',
             editarPost: '/helps/post/:id',
-            lista: '/helps/post'
+            listaPost: '/helps/post',
+            deletarPost: '/helps/post/:id',
+            findById: '/helps/post/:id'
         }
     }
 
@@ -75,12 +77,39 @@ class HelperCenterController extends Controller {
             const helpCenterDao = new HelperCenterDao();
             helpCenterDao.list((error, result) => {
                 if (error) {
-                    // console.log(error);
+                    console.log(error);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });
         }
     }
+
+    remove() {
+        return (req, resp) => {
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.remove(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                }
+                return resp.status(200).end(JSON.stringify({msg : 'HelpCenter removido'}));
+            });
+        }
+    }
+
+    findById(){
+        return (req, resp) => {
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.findById(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                }
+                return resp.status(200).end(JSON.stringify(result));
+            });
+        }
+    }
+
 }
 module.exports = HelperCenterController;
