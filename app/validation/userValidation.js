@@ -32,16 +32,10 @@ class User {
 
     static isValidDate(value) {
         if (!value.match(/^\d{4}-\d{2}-\d{2}$/)) return false;
-
-        console.log("chegou");
-
         const date = new Date(value);
         const dateYear = date.getFullYear();
         let today = new Date().getFullYear();
-
-
-        console.log(dateYear);
-        
+       
         if (dateYear > today) return false;
         if (!date.getTime()) return false;
         return date.toISOString().slice(0, 10) === value;

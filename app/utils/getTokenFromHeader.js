@@ -3,7 +3,7 @@ const secret = require('../config/secretJWT');
 
 function getTokenFromHeader(req) {
 
-    console.log(req.get("Authorization"));
+    // console.log(req.get("Authorization"));
     let tokenHeader = '';
     let payload;
     if (!req.get("Authorization")) {

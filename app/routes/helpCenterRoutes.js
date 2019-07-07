@@ -7,4 +7,8 @@ module.exports = (app) => {
 
     app.post(rotasHelpCenter.cadastroPost, HelpCenterValidation.validation(), helpCenterController.add());
 
+    app.put(rotasHelpCenter.editarPost, HelpCenterValidation.validation(), helpCenterController.update());
+
+    app.get(rotasHelpCenter.lista, helpCenterController.list());
+
 }

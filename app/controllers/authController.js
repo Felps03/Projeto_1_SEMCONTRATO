@@ -61,7 +61,7 @@ class AuthController {
                 if (error) {
                     resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
-                console.log(result);
+                // console.log(result);
                 if (result.length == 0) {
                     resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
                 } else {
