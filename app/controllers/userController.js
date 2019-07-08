@@ -26,6 +26,7 @@ class UserController extends Controller {
             deletar: '/users/user/:id',
             changePassword: '/users/changePassword',
             findByEmail: '/users/:email',
+            findById: '/users/user/:id',
         }
     }
 
