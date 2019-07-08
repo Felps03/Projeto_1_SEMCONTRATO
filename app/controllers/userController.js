@@ -283,15 +283,17 @@ class UserController extends Controller {
             const userDao = new UserDao();
             const { email, password } = req.body;
             userDao.validateEmailAvailable(email, (error, answer) => {
-                if (error) resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+
+                if (answer === null) return resp.status(400).send(JSON.stringify({ erro: 'E-mail não cadastrado' }));
 
                 const { _id } = answer;
 
                 const hash = sha256(password + salt);
 
                 userDao.updatePassword(hash, _id, (errorUpd, answerUpd) => {
-                    if (errorUpd) resp.status(400).send(errorUpd);
-                    else resp.status(200).send(answerUpd);
+                    if (errorUpd) return resp.status(400).send(errorUpd);
+                    else return resp.status(200).send(answerUpd);
                 });
             });
         }
