@@ -34,9 +34,15 @@ class DailyNoteDao {
         const dateBegin = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]));
         const dateEnd = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]) + 1);
 
-        DailyNoteSchema.paginate({ date }, {
-            $gte: dateBegin,
-            $lt: dateEnd
+        // DailyNoteSchema.paginate({ date }, {
+        //     $gte: dateBegin,
+        //     $lt: dateEnd
+        // },
+        DailyNoteSchema.paginate({
+            date: {
+                $gte: dateBegin,
+                $lt: dateEnd
+            }
         },
             {
                 limit: pageLimit,
@@ -44,7 +50,6 @@ class DailyNoteDao {
                 page: page
             },
             (err, docs) => {
-                console.log("entrou aqui")
                 if (err) return callback(err, null)
                 callback(null, docs);
             });
