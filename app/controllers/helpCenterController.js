@@ -10,7 +10,7 @@ class HelperCenterController extends Controller {
         return {
             cadastroPost: '/helps/post/',
             editarPost: '/helps/post/:id',
-            listaPost: '/helps/post',
+            listaPost: '/helps/post/list',
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByTitle: '/helps/post/title/',
@@ -90,12 +90,17 @@ class HelperCenterController extends Controller {
     remove() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
-            helpCenterDao.remove(req.params.id, (error, result) => {
-                if (error) {
-                    console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
-                }
-                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+
+            helpCenterDao.findById(req.params.id, (error, resultByID) => {
+                if (resultByID === null) return resp.status(400).send(JSON.stringify({ erro: 'HelpCenter não encontrada' }));
+
+                helpCenterDao.remove(req.params.id, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                    }
+                    return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                });
             });
         }
     }

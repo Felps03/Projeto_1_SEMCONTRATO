@@ -10,7 +10,7 @@ class HelperCenterAskController extends Controller {
         return {
             cadastroAsk: '/helps/ask/',
             editarAsk: '/helps/ask/:id',
-            listaAsk: '/helps/ask',
+            listaAsk: '/helps/ask/list',
             deletarAsk: '/helps/ask/:id',
             findById: '/helps/ask/:id'
         }
@@ -110,7 +110,7 @@ class HelperCenterAskController extends Controller {
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
                 }
                 if (result === null) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Daily nao cadastrada' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'HelpCenter nao cadastrada' }));
                 }
                 helperCenterAskDao.remove(req.params.id, (error, result) => {
                     if (error) {
