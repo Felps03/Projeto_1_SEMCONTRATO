@@ -128,7 +128,7 @@ class UserDao {
             callback(null, docs);
         });
     }
-    
+
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
             // console.log(`erro é ${err}`);
@@ -138,6 +138,11 @@ class UserDao {
 
             return callback(null, docs);
         });
+    }
+
+    getUserName(id) {
+        console.log(id);
+        UserSchema.findById({ id }, { name: 1, lastName: 1 })
     }
 }
 
