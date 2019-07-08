@@ -4,7 +4,7 @@ class HelpCenterDao {
     add(helpCenter, callback) {
 
         const { id_user, title, desc } = helpCenter;
-        const date = new Date().toISOString().slice(0,10); // DateFormat "yyyy-mm-dd"
+        const date = new Date().toLocaleDateString('pt-BR').slice(0,10); // DateFormat "yyyy-mm-dd"
         
         HelpCenterSchema.create({ id_user, title, desc, date }, (err, docs) => {
             if (err) {

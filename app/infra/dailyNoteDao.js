@@ -5,8 +5,7 @@ class DailyNoteDao {
 
     add(dailyNote, id_user, callback) {
         const { yesterday, today, impediment } = dailyNote;
-        let date = new Date();
-        console.log(id_user, yesterday, today, impediment , date);
+        let date = new Date().toLocaleDateString('pt-BR').slice(0,10);
         DailyNoteSchema.create({ id_user, yesterday, today, impediment, date }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
