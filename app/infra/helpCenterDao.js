@@ -1,5 +1,7 @@
 const HelpCenterSchema = require('../models/helpCenter');
 
+const lastLimit = 3;
+
 class HelpCenterDao {
     add(helpCenter, callback) {
 
@@ -56,6 +58,19 @@ class HelpCenterDao {
         const { desc } = helpCenter;
         HelpCenterSchema.find({ desc: new RegExp(desc, 'i') }, (err, docs) => {
             if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+    listLastHelp(callback) {    
+        HelpCenterSchema.paginate({}, {
+            limit: lastLimit,
+            page: 1,
+            sort:{
+                date: -1
+            }
+        } ,(err, docs) => {
+            if (err) return callback(err, null)
+            
             callback(null, docs);
         });
     }

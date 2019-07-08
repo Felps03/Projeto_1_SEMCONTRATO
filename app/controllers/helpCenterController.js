@@ -14,7 +14,8 @@ class HelperCenterController extends Controller {
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByTitle: '/helps/post/title/',
-            findByDesc: '/helps/post/desc/'
+            findByDesc: '/helps/post/desc/',
+            listLastHelp: '/helps/last/'
         }
     }
 
@@ -86,6 +87,18 @@ class HelperCenterController extends Controller {
             });
         }
     }
+    listLastHelp() {
+        return (req, resp) => {
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.listLastHelp((error, result) => {
+                if (error) {
+                    console.log(error);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
+                }
+                resp.send(result);
+            });
+        }
+    }
 
     remove() {
         return (req, resp) => {
@@ -106,7 +119,7 @@ class HelperCenterController extends Controller {
             helpCenterDao.findById(req.params.id, (error, result) => {
                 if (error) {
                     console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
                 }
                 return resp.status(200).end(JSON.stringify(result));
             });
@@ -119,7 +132,7 @@ class HelperCenterController extends Controller {
             helpCenterDao.findByTitle(req.body, (error, result) => {
                 if (error) {
                     console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
                 }
                 return resp.status(200).end(JSON.stringify(result));
             });
@@ -133,7 +146,7 @@ class HelperCenterController extends Controller {
             helpCenterDao.findByDesc(req.body, (error, result) => {
                 if (error) {
                     console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscaar o usuario favor olhar o log' }));
                 }
                 return resp.status(200).end(JSON.stringify(result));
             });
