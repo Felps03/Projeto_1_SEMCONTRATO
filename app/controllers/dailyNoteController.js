@@ -11,14 +11,14 @@ class DailyNoteController extends Controller {
             edicao: '/dailys/daily/:id',
             listDate: '/dailys/daily/:date/:page',
             listUser: '/dailys/daily/',
-           // listLastDaily: '/dailys/daily/last',
+            // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
         }
     }
 
     add() {
         return (req, resp) => {
-            
+
             const error = validationResult(req);
             let errorList = [];
             if (!error.isEmpty()) {
@@ -28,22 +28,22 @@ class DailyNoteController extends Controller {
 
             let userDao = new UserDao();
             const dailyNoteDao = new DailyNoteDao();
-         
+
             userDao.validateEmailAvailable(req.body.email, (error, resultByID) => {
                 if (!resultByID) {
-                    return resp.status(400).send(JSON.stringify({erro:'USUARIO não existente'}));
+                    return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
                 }
                 const { _id } = resultByID
 
-                dailyNoteDao.findByUserDate(_id, new Date().toLocaleDateString('pt-BR').slice(0,10), (error, resultUserDate) => {
+                dailyNoteDao.findByUserDate(_id, new Date().toLocaleDateString('pt-BR').slice(0, 10), (error, resultUserDate) => {
                     if (resultUserDate) return resp.status(400).send(JSON.stringify({ erro: "DAILY já cadastrada hoje!" }));
 
                     dailyNoteDao.add(req.body, _id, (error, resultADD) => {
                         if (!resultADD) {
                             console.log(error);
-                            return resp.status(400).send(JSON.stringify({erro:'Houve Algum problema na hora de cadastrar a daily favor olhar o log'}));   
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
                         }
-                        
+
                         resp.send(resultADD);
                     });
                 });
@@ -78,7 +78,10 @@ class DailyNoteController extends Controller {
 
             const dailyNoteDao = new DailyNoteDao();
             console.log(req.params);
-            dailyNoteDao.listDate(req.params.date, parseInt(req.params.page),(err, result) => {
+            // console.log(req.body);
+            // dailyNoteDao.listDate(req.body, req.params.page, (err, result) => {
+            // resp.send(req.params.date);
+            dailyNoteDao.listDate(req.params.date, req.params.page, (err, result) => {
                 if (err) {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
@@ -117,7 +120,7 @@ class DailyNoteController extends Controller {
     //         });
     //     }
     // }
-    
+
     listAll() {
         return (req, resp) => {
 
