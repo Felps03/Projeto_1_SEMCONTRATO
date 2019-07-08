@@ -12,7 +12,9 @@ class HelperCenterController extends Controller {
             editarPost: '/helps/post/:id',
             listaPost: '/helps/post',
             deletarPost: '/helps/post/:id',
-            findById: '/helps/post/:id'
+            findById: '/helps/post/:id',
+            findByTitle: '/helps/post/title/',
+            findByDesc: '/helps/post/desc/'
         }
     }
 
@@ -93,15 +95,42 @@ class HelperCenterController extends Controller {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
                 }
-                return resp.status(200).end(JSON.stringify({msg : 'HelpCenter removido'}));
+                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
             });
         }
     }
 
-    findById(){
+    findById() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
             helpCenterDao.findById(req.params.id, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                }
+                return resp.status(200).end(JSON.stringify(result));
+            });
+        }
+    }
+
+    findByTitle() {
+        return (req, resp) => {
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.findByTitle(req.body, (error, result) => {
+                if (error) {
+                    console.log(error);
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                }
+                return resp.status(200).end(JSON.stringify(result));
+            });
+        }
+    }
+
+
+    findByDesc() {
+        return (req, resp) => {
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.findByDesc(req.body, (error, result) => {
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
