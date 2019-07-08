@@ -104,13 +104,26 @@ class HelperCenterAskController extends Controller {
     remove() {
         return (req, resp) => {
             const helperCenterAskDao = new HelpCenterAskDao();
-            helperCenterAskDao.remove(req.params.id, (error, result) => {
+            helperCenterAskDao.findById(req.params.id, (error, result) => {
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
                 }
-                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                if (result === null) {
+                    return resp.status(400).send(JSON.stringify({ erro: 'Daily nao cadastrada' }));
+                }
+                helperCenterAskDao.remove(req.params.id, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o usuario favor olhar o log' }));
+                    }
+                    return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                });
+
+
             });
+
+
         }
     }
 
