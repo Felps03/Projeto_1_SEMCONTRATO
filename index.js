@@ -21,15 +21,15 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-        // console.log(path);
+        //console.log(path, routesType);
     let needToken = true;
 
-    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword')) {
+    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path === 'post')) {
         needToken = false;
     }
     const userData = getTokenFromHeader(req);
 
-    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily') || (routesType === 'helps') ) {
+    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'daily') || ((routesType === 'helps') && (needToken))) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {
