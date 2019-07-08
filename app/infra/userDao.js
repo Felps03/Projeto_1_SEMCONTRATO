@@ -65,23 +65,14 @@ class UserDao {
     // }
 
     // taking off photo
-    update(user, id, callback) {
-
-
-        this.findById(id, (error, result) => {
-            if (error) {
-                // console.log(error);
-                resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+    update(user, hash, id, callback) {
+        const password = hash;
+        const { name, lastName, userName, email, dateOfBirth } = user;
+        UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
+            if (err) {
+                return callback(err, null)
             }
-            const { name, lastName, userName, email, password, dateOfBirth } = user;
-            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
-                if (err) {
-                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
-                    return callback(err, null)
-                }
-                // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
-                callback(null, docs);
-            });
+            callback(null, docs);
         });
     }
 
@@ -128,7 +119,7 @@ class UserDao {
             callback(null, docs);
         });
     }
-    
+
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
             // console.log(`erro é ${err}`);

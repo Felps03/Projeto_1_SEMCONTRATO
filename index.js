@@ -23,8 +23,8 @@ app.use("*", (req, res, next) => {
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
     let needToken = true;
 
-    console.log('path: ',path);
-    console.log('routesType: ',routesType);
+    // console.log('path: ',path);
+    // console.log('routesType: ',routesType);
 
     if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path === 'list') || (path === 'ask')) {
         needToken = false;
