@@ -1,4 +1,6 @@
 const HelpCenterSchema = require('../models/helpCenter');
+const pageLimit = 10;
+const lastLimit = 3;
 
 class HelpCenterDao {
     add(helpCenter, callback) {
@@ -23,11 +25,24 @@ class HelpCenterDao {
         });
     }
 
-    list(callback) {
-        HelpCenterSchema.find({}).exec((err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+    list(page, callback) {
+        const aggregrate = HelpCenterSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        HelpCenterSchema.aggregatePaginate(
+            aggregrate, {
+                page: page,
+                limit: pageLimit
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
     }
 
     remove(id, callback) {

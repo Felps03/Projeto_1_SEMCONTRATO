@@ -10,7 +10,7 @@ class HelperCenterAskController extends Controller {
         return {
             cadastroAsk: '/helps/ask/',
             editarAsk: '/helps/ask/:id',
-            listaAsk: '/helps/ask/list',
+            listaAsk: '/helps/ask/list/:page',
             deletarAsk: '/helps/ask/:id',
             findById: '/helps/ask/:id'
         }
@@ -91,12 +91,29 @@ class HelperCenterAskController extends Controller {
     list() {
         return (req, resp) => {
             const helperCenterAskDao = new HelpCenterAskDao();
-            helperCenterAskDao.list((error, result) => {
+            helperCenterAskDao.list(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
                 }
-                resp.send(result);
+
+                let response = new Array();
+
+                let docs = result.docs;
+
+
+                docs.forEach(doc => {
+                    response.push({
+                        "_id": doc._id,
+                        "title": doc.title,
+                        "desc": doc.desc,
+                        "date": doc.date,
+                        "help": doc.help[0]['title'],
+                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+
+                resp.send(response);
             });
         }
     }

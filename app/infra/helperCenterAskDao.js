@@ -1,7 +1,8 @@
 const HelpCenterAskSchema = require('../models/helpCenterAsk');
+const pageLimit = 10;
+const lastLimit = 3;
 
 class HelpCenterAskDao {
-
     add(helpCenterAsk, callback) {
         const { id_user, id_helpCenter, desc } = helpCenterAsk;
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
@@ -22,11 +23,30 @@ class HelpCenterAskDao {
         });
     }
 
-    list(callback) {
-        HelpCenterAskSchema.find({}).exec((err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+    list(page, callback) {
+        const aggregrate = HelpCenterAskSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        aggregrate.lookup({
+            from: "helpcenters",
+            localField: "id_helpCenter",
+            foreignField: "_id",
+            as: "help"
+        })
+        HelpCenterAskSchema.aggregatePaginate(
+            aggregrate, {
+                page: page,
+                limit: pageLimit
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
     }
 
     remove(id, callback) {

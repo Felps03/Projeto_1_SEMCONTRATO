@@ -1,9 +1,10 @@
-var mongoosePaginate = require('mongoose-paginate');
+const mongoosePaginate = require('mongoose-paginate');
 const mongoose = require('../../database/index');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const HelpCenterSchema = new mongoose.Schema({
     id_user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     title: {
@@ -21,6 +22,8 @@ const HelpCenterSchema = new mongoose.Schema({
 });
 
 HelpCenterSchema.plugin(mongoosePaginate);
+HelpCenterSchema.plugin(aggregatePaginate);
+
 
 const HelpCenter = mongoose.model('HelpCenter', HelpCenterSchema);
 
