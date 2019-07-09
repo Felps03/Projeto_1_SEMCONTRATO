@@ -1,28 +1,28 @@
 const DailyNoteSchema = require('../models/dailyNote');
 const pageLimit = 10;
-const lastLimit = 3;
+
 class DailyNoteDao {
 
     add(dailyNote, id_user, callback) {
         const { yesterday, today, impediment } = dailyNote;
-        let date = new Date().toLocaleDateString('pt-BR').slice(0,10);
+        let date = new Date().toLocaleDateString('pt-BR').slice(0, 10);
         DailyNoteSchema.create({ id_user, yesterday, today, impediment, date }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
 
-    update(dailyNote, id, callback){
+    update(dailyNote, id, callback) {
         const { id_user, yesterday, today, impediment, date } = dailyNote;
 
-        DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment, date }, (err, docs) => {
+        DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment }, (err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
         });
     }
 
-    findByUserDate(id_user, date, callback){
-        DailyNoteSchema.findOne({id_user, date}, (err, docs) => {
+    findByUserDate(id_user, date, callback) {
+        DailyNoteSchema.findOne({ id_user, date }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
@@ -30,34 +30,33 @@ class DailyNoteDao {
 
     listDate(date, page, callback) {
 
-        DailyNoteSchema.paginate({date},
-            {
+        DailyNoteSchema.paginate({ date }, {
                 limit: pageLimit,
                 skyp: (page - 1) * pageLimit,
                 page: page,
-                sort:{
+                sort: {
                     date: -1
                 }
             },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
-        });
+            });
     }
 
     listAll(page, callback) {
         DailyNoteSchema.paginate({}, {
-            limit: pageLimit,
-            skyp: (page - 1) * pageLimit,
-            page: page,
-            sort:{
-                date: -1
-            }
-        },
-        (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+                limit: pageLimit,
+                skyp: (page - 1) * pageLimit,
+                page: page,
+                sort: {
+                    date: -1
+                }
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            });
     }
 
     /*listUser(dailyNote, callback) {
@@ -68,9 +67,9 @@ class DailyNoteDao {
             callback(null, docs);
         });
     }*/
-   
+
     // listLastDaily(callback) {
-        
+
     //     DailyNoteSchema.paginate({}, {
     //         limit: lastLimit,
     //         page: 1,
@@ -79,7 +78,7 @@ class DailyNoteDao {
     //         }
     //     } ,(err, docs) => {
     //         if (err) return callback(err, null)
-            
+
     //         callback(null, docs);
     //     });
     // }

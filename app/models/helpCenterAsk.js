@@ -2,13 +2,13 @@ const mongoosePaginate = require('mongoose-paginate');
 const mongoose = require('../../database/index');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const HelpCenterSchema = new mongoose.Schema({
+const HelpCenterAskSchema = new mongoose.Schema({
     id_user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    title: {
-        type: String,
+    id_helpCenter: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     desc: {
@@ -21,10 +21,10 @@ const HelpCenterSchema = new mongoose.Schema({
     }
 });
 
-HelpCenterSchema.plugin(mongoosePaginate);
-HelpCenterSchema.plugin(aggregatePaginate);
+HelpCenterAskSchema.plugin(mongoosePaginate);
+HelpCenterAskSchema.plugin(aggregatePaginate);
+
+const HelpCenterAsk = mongoose.model('HelpCenterAsk', HelpCenterAskSchema);
 
 
-const HelpCenter = mongoose.model('HelpCenter', HelpCenterSchema);
-
-module.exports = HelpCenter;
+module.exports = HelpCenterAsk;
