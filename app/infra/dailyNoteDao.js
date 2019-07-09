@@ -1,6 +1,6 @@
 const DailyNoteSchema = require('../models/dailyNote');
 const pageLimit = 10;
-const lastLimit = 3;
+
 class DailyNoteDao {
 
     add(dailyNote, id_user, callback) {
@@ -15,7 +15,7 @@ class DailyNoteDao {
     update(dailyNote, id, callback) {
         const { id_user, yesterday, today, impediment, date } = dailyNote;
 
-        DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment, date }, (err, docs) => {
+        DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment }, (err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
         });
