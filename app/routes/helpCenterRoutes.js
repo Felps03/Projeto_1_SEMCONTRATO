@@ -3,20 +3,20 @@ const helpCenterController = new HelpCenterController();
 const HelpCenterValidation = require('../validation/helpCenterValidation');
 
 module.exports = (app) => {
-    const rotasHelpCenter = HelpCenterController.rotas();
+    const routesHelpCenter = HelpCenterController.routes();
 
-    app.post(rotasHelpCenter.cadastroPost, HelpCenterValidation.validation(), helpCenterController.add());
+    app.post(routesHelpCenter.registerPost, HelpCenterValidation.validation(), helpCenterController.add());
 
-    app.put(rotasHelpCenter.editarPost, HelpCenterValidation.validation(), helpCenterController.update());
+    app.put(routesHelpCenter.editPost, HelpCenterValidation.validation(), helpCenterController.update());
 
-    app.get(rotasHelpCenter.listaPost, helpCenterController.list());
+    app.get(routesHelpCenter.listPost, helpCenterController.list());
 
-    app.delete(rotasHelpCenter.deletarPost, helpCenterController.remove());
+    app.delete(routesHelpCenter.deletePost, helpCenterController.remove());
 
-    app.get(rotasHelpCenter.findById, helpCenterController.findById());
+    app.get(routesHelpCenter.findById, helpCenterController.findById());
 
-    app.post(rotasHelpCenter.findByTitle, helpCenterController.findByTitle());
+    app.post(routesHelpCenter.findByTitle, helpCenterController.findByTitle());
 
-    app.post(rotasHelpCenter.findByDesc, helpCenterController.findByDesc());
+    app.post(routesHelpCenter.findByDesc, helpCenterController.findByDesc());
 
 }

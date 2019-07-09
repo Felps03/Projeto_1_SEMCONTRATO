@@ -5,10 +5,10 @@ const DailyNoteDao = require('../infra/dailyNoteDao');
 const UserDao = require('../infra/userDao');
 
 class DailyNoteController extends Controller {
-    static rotas() {
+    static routes() {
         return {
-            cadastro: '/dailys/daily/',
-            edicao: '/dailys/daily/:id',
+            register: '/dailys/daily/',
+            edit: '/dailys/daily/:id',
             listDate: '/dailys/daily/:date/:page',
             listUser: '/dailys/daily/',
            // listLastDaily: '/dailys/daily/last',

@@ -6,12 +6,12 @@ const UserDao = require('../infra/userDao');
 
 class HelperCenterController extends Controller {
 
-    static rotas() {
+    static routes() {
         return {
-            cadastroPost: '/helps/post/',
-            editarPost: '/helps/post/:id',
-            listaPost: '/helps/post/list/:page',
-            deletarPost: '/helps/post/:id',
+            registerPost: '/helps/post/',
+            editPost: '/helps/post/:id',
+            listPost: '/helps/post/list/:page',
+            deletePost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByTitle: '/helps/post/title/',
             findByDesc: '/helps/post/desc/',
@@ -81,7 +81,7 @@ class HelperCenterController extends Controller {
             helpCenterDao.list(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listr o usuario favor olhar o log" }));
                 }
 
                 let response = new Array();
@@ -116,7 +116,7 @@ class HelperCenterController extends Controller {
             helpCenterDao.listLastHelp((error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listr o usuario favor olhar o log" }));
                 }
                 resp.send(result);
             });

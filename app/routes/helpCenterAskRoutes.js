@@ -3,16 +3,16 @@ const helperCenterAskController = new HelperCenterAskController();
 const HelpCenterAskValidation = require('../validation/helpCenterAskValidation');
 
 module.exports = (app) => {
-    const rotasHelpCenterAsk = HelperCenterAskController.rotas();
+    const routesHelpCenterAsk = HelperCenterAskController.routes();
 
-    app.post(rotasHelpCenterAsk.cadastroAsk, HelpCenterAskValidation.validation(), helperCenterAskController.add());
+    app.post(routesHelpCenterAsk.registerAsk, HelpCenterAskValidation.validation(), helperCenterAskController.add());
 
-    app.put(rotasHelpCenterAsk.editarAsk, HelpCenterAskValidation.validation(), helperCenterAskController.update());
+    app.put(routesHelpCenterAsk.editAsk, HelpCenterAskValidation.validation(), helperCenterAskController.update());
 
-    app.get(rotasHelpCenterAsk.listaAsk, helperCenterAskController.list());
+    app.get(routesHelpCenterAsk.listAsk, helperCenterAskController.list());
 
-    app.delete(rotasHelpCenterAsk.deletarAsk, helperCenterAskController.remove());
+    app.delete(routesHelpCenterAsk.deleteAsk, helperCenterAskController.remove());
 
-    app.get(rotasHelpCenterAsk.findById, helperCenterAskController.findById());
+    app.get(routesHelpCenterAsk.findById, helperCenterAskController.findById());
 
 }

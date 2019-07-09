@@ -18,12 +18,12 @@ class UserController extends Controller {
         super();
     }
 
-    static rotas() {
+    static routes() {
         return {
-            lista: '/admin/users',
-            cadastro: '/users/user/',
-            edicao: '/users/user/:id',
-            deletar: '/users/user/:id',
+            list: '/admin/users',
+            register: '/users/user/',
+            edit: '/users/user/:id',
+            delete: '/users/user/:id',
             changePassword: '/users/changePassword',
             findByEmail: '/users/:email',
         }

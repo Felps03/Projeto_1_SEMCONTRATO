@@ -2,8 +2,6 @@ const HelpCenterSchema = require('../models/helpCenter');
 const pageLimit = 10;
 const lastLimit = 3;
 
-const lastLimit = 3;
-
 class HelpCenterDao {
     add(helpCenter, callback) {
 

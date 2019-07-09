@@ -3,11 +3,11 @@ const dailyNoteController = new DailyNoteController();
 const DailyNoteValidation = require('../validation/dailyNoteValidation');
 
 module.exports = (app) => {
-    const rotasDailyNote = DailyNoteController.rotas();
+    const rotasDailyNote = DailyNoteController.routes();
 
-    app.post(rotasDailyNote.cadastro, DailyNoteValidation.validation(), dailyNoteController.add());
+    app.post(rotasDailyNote.register, DailyNoteValidation.validation(), dailyNoteController.add());
 
-    app.put(rotasDailyNote.edicao, DailyNoteValidation.validation(), dailyNoteController.update());
+    app.put(rotasDailyNote.edit, DailyNoteValidation.validation(), dailyNoteController.update());
 
     app.get(rotasDailyNote.listDate, dailyNoteController.listDate());
 
