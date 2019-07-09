@@ -140,10 +140,6 @@ class UserDao {
         });
     }
 
-    getUserName(id) {
-        console.log(id);
-        UserSchema.findById({ id }, { name: 1, lastName: 1 })
-    }
 }
 
 module.exports = UserDao;

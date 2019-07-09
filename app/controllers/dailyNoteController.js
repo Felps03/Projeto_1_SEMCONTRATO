@@ -77,10 +77,7 @@ class DailyNoteController extends Controller {
         return (req, resp) => {
 
             const dailyNoteDao = new DailyNoteDao();
-            console.log(req.params);
-            // console.log(req.body);
-            // dailyNoteDao.listDate(req.body, req.params.page, (err, result) => {
-            // resp.send(req.params.date);
+
             dailyNoteDao.listDate(req.params.date, req.params.page, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -88,19 +85,27 @@ class DailyNoteController extends Controller {
                 }
                 const userDao = new UserDao();
                 let docs = result.docs;
-                // let response = [];
+                let response = new Array();
 
-                console.log(docs[0].id_user);
-                resp.send(userDao.getUserName(docs[0].id_user))
+                docs.forEach(doc => {
+                    response.push({
+                        yesterday: doc.yesterday,
+                        today: doc.today,
+                        impediment: doc.impediment,
+                        date: doc.date,
+                        owner: doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+                return resp.send(response);
             });
         }
     }
 
     /*listUser() {
         return (req, resp) => {
-
+     
             const dailyNoteDao = new DailyNoteDao();
-
+     
             dailyNoteDao.listDate(req.body, (err, result) => {
                 if (err) {
                     console.log(err);

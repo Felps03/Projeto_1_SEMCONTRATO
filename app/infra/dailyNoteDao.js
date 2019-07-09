@@ -33,21 +33,30 @@ class DailyNoteDao {
         const dateBegin = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]));
         const dateEnd = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]) + 1);
 
-        DailyNoteSchema.paginate({
+        const aggregrate = DailyNoteSchema.aggregate();
+        aggregrate.match({
             date: {
                 $gte: dateBegin,
                 $lt: dateEnd
             }
-        },
+        });
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        DailyNoteSchema.aggregatePaginate(
+            aggregrate,
             {
-                limit: pageLimit,
-                skyp: (page - 1) * pageLimit,
-                page: page
+                page: page,
+                limit: pageLimit
             },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
-            });
+            }
+        )
     }
 
     listAll(page, callback) {
