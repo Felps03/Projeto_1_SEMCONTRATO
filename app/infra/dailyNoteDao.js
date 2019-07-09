@@ -1,6 +1,6 @@
 const DailyNoteSchema = require('../models/dailyNote');
 const pageLimit = 10;
-const lastLimit = 3;
+
 class DailyNoteDao {
 
     add(dailyNote, id_user, callback) {
