@@ -86,9 +86,10 @@ class DailyNoteController extends Controller {
                 const userDao = new UserDao();
                 let docs = result.docs;
                 let response = new Array();
-
+                // resp.send(result);
                 docs.forEach(doc => {
                     response.push({
+                        id_user: doc.id_user,
                         yesterday: doc.yesterday,
                         today: doc.today,
                         impediment: doc.impediment,
@@ -96,10 +97,15 @@ class DailyNoteController extends Controller {
                         owner: doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
                     })
                 });
+                response.push({
+                    totalDocs: result.totalDocs,
+                    totalPages: result.totalPages,
+                });
                 return resp.send(response);
             });
         }
     }
+
 
     /*listUser() {
         return (req, resp) => {
