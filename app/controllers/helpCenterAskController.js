@@ -108,9 +108,18 @@ class HelperCenterAskController extends Controller {
                         "title": doc.title,
                         "desc": doc.desc,
                         "date": doc.date,
+                        "id_user": doc.id_user,
+                        "id_helpCenter": doc.id_helpCenter,
                         "help": doc.help[0]['title'],
-                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName']
                     })
+                });
+
+                response.push({
+                    totalDocs: result.totalDocs,
+                    limit: result.limit,
+                    page: result.page,
+                    totalPages: result.totalPages,
                 });
 
                 resp.send(response);
