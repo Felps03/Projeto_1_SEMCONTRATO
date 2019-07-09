@@ -130,6 +130,7 @@ class UserDao {
             return callback(null, docs);
         });
     }
+
 }
 
 module.exports = UserDao;

@@ -1,9 +1,14 @@
 var mongoosePaginate = require('mongoose-paginate');
 const mongoose = require('../../database/index');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const DailyNoteSchema = new mongoose.Schema({
+    // id_user: {
+    //     type: String,
+    //     required: true
+    // },
     id_user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     yesterday: {
@@ -25,6 +30,7 @@ const DailyNoteSchema = new mongoose.Schema({
 });
 
 DailyNoteSchema.plugin(mongoosePaginate);
+DailyNoteSchema.plugin(aggregatePaginate);
 
 const DailyNote = mongoose.model('DailyNote', DailyNoteSchema);
 

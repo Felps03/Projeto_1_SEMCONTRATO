@@ -29,30 +29,45 @@ class DailyNoteDao {
     }
 
     listDate(date, page, callback) {
+        // const { date } = dailyNote;
+        const dateBegin = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]));
+        const dateEnd = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]) + 1);
 
-        DailyNoteSchema.paginate({ date }, {
-                limit: pageLimit,
-                skyp: (page - 1) * pageLimit,
+        const aggregrate = DailyNoteSchema.aggregate();
+        aggregrate.match({
+            date: {
+                $gte: dateBegin,
+                $lt: dateEnd
+            }
+        });
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        DailyNoteSchema.aggregatePaginate(
+            aggregrate,
+            {
                 page: page,
-                sort: {
-                    date: -1
-                }
+                limit: pageLimit
             },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
-            });
+            }
+        )
     }
 
     listAll(page, callback) {
         DailyNoteSchema.paginate({}, {
-                limit: pageLimit,
-                skyp: (page - 1) * pageLimit,
-                page: page,
-                sort: {
-                    date: -1
-                }
-            },
+            limit: pageLimit,
+            skyp: (page - 1) * pageLimit,
+            page: page,
+            sort: {
+                date: -1
+            }
+        },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
