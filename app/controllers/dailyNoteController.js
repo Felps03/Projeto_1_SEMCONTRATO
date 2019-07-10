@@ -100,6 +100,8 @@ class DailyNoteController extends Controller {
                 response.push({
                     totalDocs: result.totalDocs,
                     totalPages: result.totalPages,
+                    limit: result.limit,
+                    page: result.page,
                 });
                 return resp.send(response);
             });

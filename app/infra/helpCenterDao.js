@@ -37,31 +37,18 @@ class HelpCenterDao {
             title,
             desc
         }, {
-            new: true
-        }, (err, docs) => {
+                new: true
+            }, (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            });
+    }
+
+    list(callback) {
+        HelpCenterSchema.find({}).exec((err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }
-
-    list(page, callback) {
-        const aggregrate = HelpCenterSchema.aggregate();
-        aggregrate.lookup({
-            from: "users",
-            localField: "id_user",
-            foreignField: "_id",
-            as: "owner"
-        })
-        HelpCenterSchema.aggregatePaginate(
-            aggregrate, {
-                page: page,
-                limit: pageLimit
-            },
-            (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            }
-        )
     }
 
     remove(id, callback) {
@@ -81,18 +68,24 @@ class HelpCenterDao {
     }
 
     findByTitle(helpCenter, callback) {
+<<<<<<< HEAD
         const {
             title
         } = helpCenter;
         HelpCenterSchema.find({
             title: new RegExp(title, 'i')
         }, (err, docs) => {
+=======
+        const { title } = helpCenter;
+        HelpCenterSchema.find({ title: new RegExp(title, 'i')  } , (err, docs) => {
+>>>>>>> 8dd8e420b45a2ad5ae08837f7bf3db3b8b61dc4d
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
 
     findByDesc(helpCenter, callback) {
+<<<<<<< HEAD
         const {
             desc
         } = helpCenter;
@@ -113,6 +106,11 @@ class HelpCenterDao {
         }, (err, docs) => {
             if (err) return callback(err, null)
 
+=======
+        const { desc } = helpCenter;
+        HelpCenterSchema.find({ desc: new RegExp(desc, 'i')  } , (err, docs) => {
+            if (err) return callback(err, null)
+>>>>>>> 8dd8e420b45a2ad5ae08837f7bf3db3b8b61dc4d
             callback(null, docs);
         });
     }
