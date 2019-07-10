@@ -89,6 +89,7 @@ class DailyNoteController extends Controller {
                 // resp.send(result);
                 docs.forEach(doc => {
                     response.push({
+                        id_daily: doc._id,
                         id_user: doc.id_user,
                         yesterday: doc.yesterday,
                         today: doc.today,
