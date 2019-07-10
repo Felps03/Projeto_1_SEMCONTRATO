@@ -68,24 +68,18 @@ class HelpCenterDao {
     }
 
     findByTitle(helpCenter, callback) {
-<<<<<<< HEAD
         const {
             title
         } = helpCenter;
         HelpCenterSchema.find({
             title: new RegExp(title, 'i')
         }, (err, docs) => {
-=======
-        const { title } = helpCenter;
-        HelpCenterSchema.find({ title: new RegExp(title, 'i')  } , (err, docs) => {
->>>>>>> 8dd8e420b45a2ad5ae08837f7bf3db3b8b61dc4d
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
 
     findByDesc(helpCenter, callback) {
-<<<<<<< HEAD
         const {
             desc
         } = helpCenter;
@@ -106,11 +100,6 @@ class HelpCenterDao {
         }, (err, docs) => {
             if (err) return callback(err, null)
 
-=======
-        const { desc } = helpCenter;
-        HelpCenterSchema.find({ desc: new RegExp(desc, 'i')  } , (err, docs) => {
-            if (err) return callback(err, null)
->>>>>>> 8dd8e420b45a2ad5ae08837f7bf3db3b8b61dc4d
             callback(null, docs);
         });
     }

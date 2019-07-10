@@ -60,18 +60,24 @@ class DailyNoteDao {
     }
 
     listAll(page, callback) {
-        DailyNoteSchema.paginate({}, {
-            limit: pageLimit,
-            skyp: (page - 1) * pageLimit,
-            page: page,
-            sort: {
-                date: -1
-            }
-        },
+        const aggregrate = DailyNoteSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        DailyNoteSchema.aggregatePaginate(
+            aggregrate,
+            {
+                page: page,
+                limit: pageLimit
+            },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
-            });
+            }
+        )
     }
 
     /*listUser(dailyNote, callback) {

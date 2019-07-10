@@ -12,7 +12,7 @@ class DailyNoteController extends Controller {
             listDate: '/dailys/daily/:date/:page',
             listUser: '/dailys/daily/',
             // listLastDaily: '/dailys/daily/last',
-            listAll: '/dailys',
+            listAll: '/dailys/:page',
         }
     }
 
@@ -141,14 +141,34 @@ class DailyNoteController extends Controller {
 
     listAll() {
         return (req, resp) => {
-
             const dailyNoteDao = new DailyNoteDao();
-            dailyNoteDao.listAll(req.params.page, (error, result) => {
-                if (error) {
-                    console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
+
+            dailyNoteDao.listAll(req.params.page, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
                 }
-                resp.send(result);
+
+                const userDao = new UserDao();
+                let docs = result.docs;
+                let response = new Array();
+                docs.forEach(doc => {
+                    response.push({
+                        id_user: doc.id_user,
+                        yesterday: doc.yesterday,
+                        today: doc.today,
+                        impediment: doc.impediment,
+                        date: doc.date,
+                        owner: doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+                response.push({
+                    totalDocs: result.totalDocs,
+                    totalPages: result.totalPages,
+                    limit: result.limit,
+                    page: result.page,
+                });
+                return resp.send(response);
             });
         }
     }
