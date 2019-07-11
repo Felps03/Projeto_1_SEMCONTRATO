@@ -24,9 +24,9 @@ class DailyNoteController extends Controller {
             const dailyNoteDao = new DailyNoteDao();
             dailyNoteDao.listById(req.params.id, (err, result) => {
                 if (err) {
-                    res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
+                    return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                 }
-                res.send(result);
+                return res.send(result);
             })
 
         }
@@ -61,7 +61,7 @@ class DailyNoteController extends Controller {
                             return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
                         }
 
-                        resp.send(resultADD);
+                        return resp.send(resultADD);
                     });
                 });
             });
@@ -83,9 +83,9 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
+                    return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
-                resp.status(200).send(result);
+                return resp.status(200).send(result);
             });
         }
     }
@@ -164,9 +164,9 @@ class DailyNoteController extends Controller {
             dailyNoteDao.listAll(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
+                    return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
-                resp.send(result);
+                return resp.send(result);
             });
         }
     }
