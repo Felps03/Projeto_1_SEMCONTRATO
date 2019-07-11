@@ -10,7 +10,7 @@ class HelperCenterController extends Controller {
         return {
             cadastroPost: '/helps/post/',
             editarPost: '/helps/post/:id',
-            listaPost: '/helps/post/list/:page',
+            listaPost: '/helps/list/post/:page',
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByTitle: '/helps/post/title/',

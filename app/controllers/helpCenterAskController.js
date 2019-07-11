@@ -10,7 +10,7 @@ class HelperCenterAskController extends Controller {
         return {
             cadastroAsk: '/helps/ask/',
             editarAsk: '/helps/ask/:id',
-            listaAsk: '/helps/ask/list/:page',
+            listaAsk: '/helps/list/ask/:page',
             deletarAsk: '/helps/ask/:id',
             findById: '/helps/ask/:id'
         }
