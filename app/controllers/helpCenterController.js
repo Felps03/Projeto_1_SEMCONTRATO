@@ -158,7 +158,7 @@ class HelperCenterController extends Controller {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
 
-            helpCenterDao.findByTitle(req.body, req.params.page, (error, result) => {
+            helpCenterDao.findByJoker(req.body, req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
@@ -197,9 +197,9 @@ class HelperCenterController extends Controller {
             const helpCenterDao = new HelperCenterDao();
 
             // console.log(req.body);
-            
+
             helpCenterDao.findByDesc(req.body, req.params.page, (error, result) => {
-                
+
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscaar o usuario favor olhar o log' }));

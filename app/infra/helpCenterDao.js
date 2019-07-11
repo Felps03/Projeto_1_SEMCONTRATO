@@ -61,8 +61,9 @@ class HelpCenterDao {
         });
     }
 
-    findByTitle(helpCenter, page, callback) {
-        const { title } = helpCenter;
+    findByJoker(helpCenter, page, callback) {
+        const { joker } = helpCenter;
+        console.log(joker);
         const aggregrate = HelpCenterSchema.aggregate();
         aggregrate.lookup({
             from: "users",
@@ -71,7 +72,7 @@ class HelpCenterDao {
             as: "owner"
         })
         aggregrate.match({
-            title: new RegExp(title, 'i')
+            $or: [{ title: new RegExp(joker, 'i') }, { desc: new RegExp(joker, 'i') }]
         })
         HelpCenterSchema.aggregatePaginate(
             aggregrate, {
