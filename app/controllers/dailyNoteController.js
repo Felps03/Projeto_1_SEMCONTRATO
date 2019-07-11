@@ -13,8 +13,25 @@ class DailyNoteController extends Controller {
             listUser: '/dailys/daily/',
             // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
+            listDailyById: '/dailys/:id'
         }
     }
+
+    listDailyById() {
+        return (req, res) => {
+            // res.send('oi')
+            // res.send(req.params.id)
+            const dailyNoteDao = new DailyNoteDao();
+            dailyNoteDao.listById(req.params.id, (err, result) => {
+                if (err) {
+                    return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
+                }
+                return res.send(result);
+            })
+
+        }
+    }
+
 
     add() {
         return (req, resp) => {
@@ -44,7 +61,7 @@ class DailyNoteController extends Controller {
                             return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
                         }
 
-                        resp.send(resultADD);
+                        return resp.send(resultADD);
                     });
                 });
             });
@@ -66,9 +83,9 @@ class DailyNoteController extends Controller {
             dailyNoteDao.update(req.body, req.params.id, (err, result) => {
                 if (err) {
                     console.log(err);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
+                    return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
-                resp.send(result);
+                return resp.status(200).send(result);
             });
         }
     }
@@ -89,6 +106,7 @@ class DailyNoteController extends Controller {
                 // resp.send(result);
                 docs.forEach(doc => {
                     response.push({
+                        id_daily: doc._id,
                         id_user: doc.id_user,
                         yesterday: doc.yesterday,
                         today: doc.today,
@@ -100,6 +118,8 @@ class DailyNoteController extends Controller {
                 response.push({
                     totalDocs: result.totalDocs,
                     totalPages: result.totalPages,
+                    limit: result.limit,
+                    page: result.page,
                 });
                 return resp.send(response);
             });
@@ -144,9 +164,9 @@ class DailyNoteController extends Controller {
             dailyNoteDao.listAll(req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
-                    resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
+                    return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
-                resp.send(result);
+                return resp.send(result);
             });
         }
     }

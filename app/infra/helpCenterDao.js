@@ -5,19 +5,10 @@ const lastLimit = 3;
 class HelpCenterDao {
     add(helpCenter, callback) {
 
-        const {
-            id_user,
-            title,
-            desc
-        } = helpCenter;
+        const { id_user, title, desc } = helpCenter;
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
 
-        HelpCenterSchema.create({
-            id_user,
-            title,
-            desc,
-            date
-        }, (err, docs) => {
+        HelpCenterSchema.create({ id_user, title, desc, date }, (err, docs) => {
             if (err) {
                 return callback(err, null);
             }
@@ -37,31 +28,18 @@ class HelpCenterDao {
             title,
             desc
         }, {
-            new: true
-        }, (err, docs) => {
+                new: true
+            }, (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            });
+    }
+
+    list(callback) {
+        HelpCenterSchema.find({}).exec((err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }
-
-    list(page, callback) {
-        const aggregrate = HelpCenterSchema.aggregate();
-        aggregrate.lookup({
-            from: "users",
-            localField: "id_user",
-            foreignField: "_id",
-            as: "owner"
-        })
-        HelpCenterSchema.aggregatePaginate(
-            aggregrate, {
-                page: page,
-                limit: pageLimit
-            },
-            (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            }
-        )
     }
 
     remove(id, callback) {
@@ -81,21 +59,15 @@ class HelpCenterDao {
     }
 
     findByTitle(helpCenter, callback) {
-        const {
-            title
-        } = helpCenter;
-        HelpCenterSchema.find({
-            title: new RegExp(title, 'i')
-        }, (err, docs) => {
+        const { title } = helpCenter;
+        HelpCenterSchema.find({ title: new RegExp(title, 'i') }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
 
     findByDesc(helpCenter, callback) {
-        const {
-            desc
-        } = helpCenter;
+        const { desc } = helpCenter;
         HelpCenterSchema.find({
             desc: new RegExp(desc, 'i')
         }, (err, docs) => {
@@ -103,6 +75,7 @@ class HelpCenterDao {
             callback(null, docs);
         });
     }
+
     listLastHelp(callback) {
         HelpCenterSchema.paginate({}, {
             limit: lastLimit,
