@@ -70,9 +70,13 @@ class HelpCenterDao {
             localField: "id_user",
             foreignField: "_id",
             as: "owner"
-        })
+        });
         aggregrate.match({
             $or: [{ title: new RegExp(joker, 'i') }, { desc: new RegExp(joker, 'i') }]
+        });
+        aggregrate.sort({
+            title: -1,
+            desc: 1
         })
         HelpCenterSchema.aggregatePaginate(
             aggregrate, {
