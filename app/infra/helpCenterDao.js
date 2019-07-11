@@ -17,29 +17,34 @@ class HelpCenterDao {
     }
 
     update(helpCenter, id, callback) {
-        const {
-            id_user,
-            title,
-            desc
-        } = helpCenter;
+        const { id_user, title, desc } = helpCenter;
 
-        HelpCenterSchema.findByIdAndUpdate(id, {
-            id_user,
-            title,
-            desc
-        }, {
-                new: true
-            }, (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            });
-    }
-
-    list(callback) {
-        HelpCenterSchema.find({}).exec((err, docs) => {
+        HelpCenterSchema.findByIdAndUpdate(id, { id_user, title, desc }, {
+            new: true
+        }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
+    }
+
+    list(page, callback) {
+        const aggregrate = HelpCenterSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        HelpCenterSchema.aggregatePaginate(
+            aggregrate, {
+                page: page,
+                limit: pageLimit
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
     }
 
     remove(id, callback) {
@@ -50,9 +55,7 @@ class HelpCenterDao {
     }
 
     findById(_id, callback) {
-        HelpCenterSchema.findOne({
-            _id
-        }, (err, docs) => {
+        HelpCenterSchema.findOne({ _id }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
@@ -60,7 +63,9 @@ class HelpCenterDao {
 
     findByTitle(helpCenter, callback) {
         const { title } = helpCenter;
-        HelpCenterSchema.find({ title: new RegExp(title, 'i') }, (err, docs) => {
+        HelpCenterSchema.find({
+            title: new RegExp(title, 'i')
+        }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
@@ -75,7 +80,6 @@ class HelpCenterDao {
             callback(null, docs);
         });
     }
-
     listLastHelp(callback) {
         HelpCenterSchema.paginate({}, {
             limit: lastLimit,

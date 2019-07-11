@@ -100,6 +100,7 @@ class DailyNoteController extends Controller {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar a daily favor olhar o log" }));
                 }
+
                 const userDao = new UserDao();
                 let docs = result.docs;
                 let response = new Array();
