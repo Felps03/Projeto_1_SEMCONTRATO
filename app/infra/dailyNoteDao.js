@@ -51,6 +51,7 @@ class DailyNoteDao {
             {
                 page: page,
                 limit: pageLimit
+                // limit: 1
             },
             (err, docs) => {
                 if (err) return callback(err, null)
@@ -58,6 +59,37 @@ class DailyNoteDao {
             }
         )
     }
+
+    listById(id, callback) {
+
+        DailyNoteSchema.findById(
+            id,
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            });
+
+
+
+
+
+
+        // const aggregrate = DailyNoteSchema.aggregate();
+        // aggregrate.lookup({
+        //     from: "users",
+        //     localField: "id_user",
+        //     foreignField: "_id",
+        //     as: "owner"
+        // })
+        // DailyNoteSchema.find(
+        //     aggregrate,
+        //     (err, docs) => {
+        //         if (err) return callback(err, null)
+        //         callback(null, docs);
+        //     }
+        // )
+    }
+
 
     listAll(page, callback) {
         DailyNoteSchema.paginate({}, {

@@ -13,8 +13,25 @@ class DailyNoteController extends Controller {
             listUser: '/dailys/daily/',
             // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
+            listDailyById: '/dailys/:id'
         }
     }
+
+    listDailyById() {
+        return (req, res) => {
+            // res.send('oi')
+            // res.send(req.params.id)
+            const dailyNoteDao = new DailyNoteDao();
+            dailyNoteDao.listById(req.params.id, (err, result) => {
+                if (err) {
+                    res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
+                }
+                res.send(result);
+            })
+
+        }
+    }
+
 
     add() {
         return (req, resp) => {
@@ -68,7 +85,7 @@ class DailyNoteController extends Controller {
                     console.log(err);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                 }
-                resp.send(result);
+                resp.status(200).send(result);
             });
         }
     }
