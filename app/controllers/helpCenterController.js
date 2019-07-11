@@ -13,8 +13,8 @@ class HelperCenterController extends Controller {
             listaPost: '/helps/list/post/:page',
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
-            findByTitle: '/helps/post/title/',
-            findByDesc: '/helps/post/desc/',
+            findByTitle: '/helps/post/title/:page',
+            findByDesc: '/helps/post/desc/:page',
             listLastHelp: '/helps/last/'
         }
     }
@@ -157,12 +157,36 @@ class HelperCenterController extends Controller {
     findByTitle() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
-            helpCenterDao.findByTitle(req.body, (error, result) => {
+
+            helpCenterDao.findByTitle(req.body, req.params.page, (error, result) => {
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
                 }
-                return resp.status(200).end(JSON.stringify(result));
+
+                let response = new Array();
+
+                let docs = result.docs;
+
+                docs.forEach(doc => {
+                    response.push({
+                        "_id": doc._id,
+                        "title": doc.title,
+                        "desc": doc.desc,
+                        "date": doc.date,
+                        "id_user": doc.id_user,
+                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+
+                response.push({
+                    totalDocs: result.totalDocs,
+                    limit: result.limit,
+                    page: result.page,
+                    totalPages: result.totalPages,
+                });
+
+                return resp.status(200).send(response);
             });
         }
     }
@@ -171,12 +195,38 @@ class HelperCenterController extends Controller {
     findByDesc() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
-            helpCenterDao.findByDesc(req.body, (error, result) => {
+
+            // console.log(req.body);
+            
+            helpCenterDao.findByDesc(req.body, req.params.page, (error, result) => {
+                
                 if (error) {
                     console.log(error);
                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscaar o usuario favor olhar o log' }));
                 }
-                return resp.status(200).end(JSON.stringify(result));
+                let response = new Array();
+
+                let docs = result.docs;
+
+                docs.forEach(doc => {
+                    response.push({
+                        "_id": doc._id,
+                        "title": doc.title,
+                        "desc": doc.desc,
+                        "date": doc.date,
+                        "id_user": doc.id_user,
+                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+
+                response.push({
+                    totalDocs: result.totalDocs,
+                    limit: result.limit,
+                    page: result.page,
+                    totalPages: result.totalPages,
+                });
+
+                return resp.status(200).send(response);
             });
         }
     }

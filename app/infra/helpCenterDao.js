@@ -61,24 +61,55 @@ class HelpCenterDao {
         });
     }
 
-    findByTitle(helpCenter, callback) {
+    findByTitle(helpCenter, page, callback) {
         const { title } = helpCenter;
-        HelpCenterSchema.find({
+        const aggregrate = HelpCenterSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        aggregrate.match({
             title: new RegExp(title, 'i')
-        }, (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+        })
+        HelpCenterSchema.aggregatePaginate(
+            aggregrate, {
+                page: page,
+                limit: pageLimit
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
     }
 
-    findByDesc(helpCenter, callback) {
+    findByDesc(helpCenter, page, callback) {
         const { desc } = helpCenter;
-        HelpCenterSchema.find({
+
+        // console.log(desc, page);
+
+        const aggregrate = HelpCenterSchema.aggregate();
+        aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        aggregrate.match({
             desc: new RegExp(desc, 'i')
-        }, (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+        })
+        HelpCenterSchema.aggregatePaginate(
+            aggregrate, {
+                page: page,
+                limit: pageLimit
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
     }
     listLastHelp(callback) {
         HelpCenterSchema.paginate({}, {
