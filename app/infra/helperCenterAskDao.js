@@ -1,22 +1,36 @@
 const HelpCenterAskSchema = require('../models/helpCenterAsk');
-const pageLimit = 10;
-const lastLimit = 3;
+const PAGELIMIT = 10;
+const LASTLIMIT = 3;
 
 class HelpCenterAskDao {
+
+    constructor() {
+        this.aggregrate = HelpCenterAskSchema.aggregate();
+        this.aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        })
+        this.aggregrate.lookup({
+            from: "helpcenters",
+            localField: "id_helpCenter",
+            foreignField: "_id",
+            as: "help"
+        })
+    }
+
     add(helpCenterAsk, callback) {
         const { id_user, id_helpCenter, desc } = helpCenterAsk;
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
         HelpCenterAskSchema.create({ id_user, id_helpCenter, desc, date }, (err, docs) => {
-            if (err) {
-                return callback(err, null);
-            }
+            if (err) return callback(err, null);
             callback(null, docs);
         });
     }
 
     update(helpCenterAsk, id, callback) {
         const { id_user, id_helpCenter, desc } = helpCenterAsk;
-
         HelpCenterAskSchema.findByIdAndUpdate(id, { id_user, id_helpCenter, desc }, { new: true }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
@@ -24,29 +38,14 @@ class HelpCenterAskDao {
     }
 
     list(page, callback) {
-        const aggregrate = HelpCenterAskSchema.aggregate();
-        aggregrate.lookup({
-            from: "users",
-            localField: "id_user",
-            foreignField: "_id",
-            as: "owner"
-        })
-        aggregrate.lookup({
-            from: "helpcenters",
-            localField: "id_helpCenter",
-            foreignField: "_id",
-            as: "help"
-        })
         HelpCenterAskSchema.aggregatePaginate(
-            aggregrate, {
+            this.aggregrate, {
                 page: page,
-                limit: pageLimit
-            },
-            (err, docs) => {
+                limit: PAGELIMIT
+            }, (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
-            }
-        )
+            });
     }
 
     remove(id, callback) {

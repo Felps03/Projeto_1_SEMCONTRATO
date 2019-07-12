@@ -1,18 +1,14 @@
 const RecoverDataSchema = require('../models/recoverData');
 
 class RecoverDataDao {
-
     add(email, randomString, expires, callback) {
-
         RecoverDataSchema.create({ email, randomString, expires },
             (err) => {
                 callback(err)
-            }
-        )
+            })
     }
 
     findExpires(randomString, email, callback) {
-
         RecoverDataSchema.findOne({
             randomString,
             email
@@ -21,4 +17,5 @@ class RecoverDataDao {
         });
     }
 }
+
 module.exports = RecoverDataDao;

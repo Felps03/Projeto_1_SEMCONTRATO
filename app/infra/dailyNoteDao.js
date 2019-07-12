@@ -1,7 +1,17 @@
 const DailyNoteSchema = require('../models/dailyNote');
-const pageLimit = 10;
-const lastLimit = 3;
+const PAGELIMIT = 10;
+const LASTLIMIT = 3;
+
 class DailyNoteDao {
+    constructor() {
+        this.aggregrate = DailyNoteSchema.aggregate();
+        this.aggregrate.lookup({
+            from: "users",
+            localField: "id_user",
+            foreignField: "_id",
+            as: "owner"
+        });
+    }
 
     add(dailyNote, id_user, callback) {
         const { yesterday, today, impediment } = dailyNote;
@@ -14,7 +24,6 @@ class DailyNoteDao {
 
     update(dailyNote, id, callback) {
         const { id_user, yesterday, today, impediment, date } = dailyNote;
-
         DailyNoteSchema.findByIdAndUpdate(id, { id_user, yesterday, today, impediment, date }, (err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
@@ -29,106 +38,44 @@ class DailyNoteDao {
     }
 
     listDate(date, page, callback) {
-        // const { date } = dailyNote;
         const dateBegin = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]));
         const dateEnd = new Date(Number(date.split('-')[0]), Number(date.split('-')[1]) - 1, Number(date.split('-')[2]) + 1);
-
-        const aggregrate = DailyNoteSchema.aggregate();
-        aggregrate.match({
+        this.aggregrate.match({
             date: {
                 $gte: dateBegin,
                 $lt: dateEnd
             }
         });
-        aggregrate.lookup({
-            from: "users",
-            localField: "id_user",
-            foreignField: "_id",
-            as: "owner"
-        })
         DailyNoteSchema.aggregatePaginate(
-            aggregrate,
-            {
+            this.aggregrate, {
                 page: page,
-                limit: pageLimit
-                // limit: 1
-            },
-            (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            }
-        )
-    }
-
-    listById(id, callback) {
-
-        DailyNoteSchema.findById(
-            id,
-            (err, docs) => {
+                limit: PAGELIMIT
+            }, (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs);
             });
-
-
-
-
-
-
-        // const aggregrate = DailyNoteSchema.aggregate();
-        // aggregrate.lookup({
-        //     from: "users",
-        //     localField: "id_user",
-        //     foreignField: "_id",
-        //     as: "owner"
-        // })
-        // DailyNoteSchema.find(
-        //     aggregrate,
-        //     (err, docs) => {
-        //         if (err) return callback(err, null)
-        //         callback(null, docs);
-        //     }
-        // )
     }
 
+    listById(id, callback) {
+        DailyNoteSchema.findById(id, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
 
     listAll(page, callback) {
         DailyNoteSchema.paginate({}, {
-            limit: pageLimit,
-            skyp: (page - 1) * pageLimit,
+            limit: PAGELIMIT,
+            skyp: (page - 1) * PAGELIMIT,
             page: page,
             sort: {
                 date: -1
             }
-        },
-            (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            });
-    }
-
-    /*listUser(dailyNote, callback) {
-        const { id_user } = dailyNote;
-
-        DailyNoteSchema.find({id_user}, (err, docs) => {
+        }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
-    }*/
-
-    // listLastDaily(callback) {
-
-    //     DailyNoteSchema.paginate({}, {
-    //         limit: lastLimit,
-    //         page: 1,
-    //         sort:{
-    //             date: -1
-    //         }
-    //     } ,(err, docs) => {
-    //         if (err) return callback(err, null)
-
-    //         callback(null, docs);
-    //     });
-    // }
+    }
 }
 
 module.exports = DailyNoteDao;

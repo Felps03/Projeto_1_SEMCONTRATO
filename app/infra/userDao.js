@@ -31,9 +31,7 @@ class UserDao {
 
     // taking off photo from users register
     add(user, callback) {
-
         const { name, lastName, userName, email, password, dateOfBirth } = user;
-
         UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
             if (err) {
                 //fs.unlinkSync(`./tmp/uploads/${file_photo}`);
@@ -65,18 +63,13 @@ class UserDao {
     // }
 
     // taking off photo
-    update(user, hash ,id, callback) {
-
-        
-
+    update(user, hash, id, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
-
             const password = hash;
-
             const { name, lastName, userName, email, dateOfBirth } = user;
             UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
                 if (err) {
@@ -88,7 +81,6 @@ class UserDao {
             });
         });
     }
-
 
     updatePassword(password, id, callback) {
         UserSchema.findByIdAndUpdate(id, { password }, { new: true }, (err, docs) => {
@@ -135,11 +127,7 @@ class UserDao {
 
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
-            // console.log(`erro é ${err}`);
-            // console.log(`docs é ${docs}`);
-
-            if (err) return callback(err, docs)
-
+            if (err) return callback(err, docs);
             return callback(null, docs);
         });
     }
