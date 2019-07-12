@@ -63,7 +63,6 @@ class HelpCenterDao {
 
     findByJoker(helpCenter, page, callback) {
         const { joker } = helpCenter;
-        console.log(joker);
         const aggregrate = HelpCenterSchema.aggregate();
         aggregrate.lookup({
             from: "users",
@@ -90,32 +89,6 @@ class HelpCenterDao {
         )
     }
 
-    findByDesc(helpCenter, page, callback) {
-        const { desc } = helpCenter;
-
-        // console.log(desc, page);
-
-        const aggregrate = HelpCenterSchema.aggregate();
-        aggregrate.lookup({
-            from: "users",
-            localField: "id_user",
-            foreignField: "_id",
-            as: "owner"
-        })
-        aggregrate.match({
-            desc: new RegExp(desc, 'i')
-        })
-        HelpCenterSchema.aggregatePaginate(
-            aggregrate, {
-                page: page,
-                limit: pageLimit
-            },
-            (err, docs) => {
-                if (err) return callback(err, null)
-                callback(null, docs);
-            }
-        )
-    }
     listLastHelp(callback) {
         HelpCenterSchema.paginate({}, {
             limit: lastLimit,
@@ -129,6 +102,6 @@ class HelpCenterDao {
             callback(null, docs);
         });
     }
-
 }
+
 module.exports = HelpCenterDao;

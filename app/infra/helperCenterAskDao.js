@@ -63,5 +63,12 @@ class HelpCenterAskDao {
         });
     }
 
+    findById_HelpCenter(id_helpCenter, callback) {
+        HelpCenterAskSchema.find({ id_helpCenter }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
 }
 module.exports = HelpCenterAskDao;
