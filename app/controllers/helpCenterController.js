@@ -62,14 +62,20 @@ class HelperCenterController extends Controller {
                     console.log(error)
                     return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
                 }
-
-                const helperCenterDao = new HelperCenterDao();
-                helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
-                    if (!resultHelper) {
-                        console.log(errorHelper)
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                    }
-                    return resp.status(201).send(resultHelper);
+                userDao.checkAdmin(email, (err, docs) => {
+                    // console.log(docs.isAdmin);
+                    if (err) {
+                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                    } 
+                
+                    const helperCenterDao = new HelperCenterDao();
+                    helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                        if (!resultHelper) {
+                            console.log(errorHelper)
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                        }
+                        return resp.status(201).send(resultHelper);
+                    });
                 });
             });
         }
