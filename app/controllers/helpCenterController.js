@@ -91,7 +91,7 @@ class HelperCenterController extends Controller {
                 }
 
                 let response = new Array();
-
+                console.log(result);
                 let docs = result.docs;
 
                 docs.forEach(doc => {
@@ -137,36 +137,47 @@ class HelperCenterController extends Controller {
             helpCenterDao.findById(req.params.id, (error, resultByID) => {
                 if (resultByID === null) return resp.status(400).send(JSON.stringify({ erro: 'HelpCenter não encontrada' }));
 
-                helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
-                    if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
-                    if (resultByHelp) {
-                        let response = new Array();
-                        resultByHelp.forEach(doc => {
-                            response.push({
-                                "_id": doc._id,
-                            })
-                        });
-                        response.forEach((helpASK) => {
-                            helperCenterAskDao.remove(helpASK._id, (errorByRemove, resultByRemove) => {
-                                if (errorByRemove) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro no REMOVE ASK' }));
+                const userDao = new UserDao();
+                userDao.checkAdmin(email, (err, docs) => {
+                    // console.log(docs.isAdmin);
+                    if (err) {
+                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                    } 
+                    if (!docs) {
+                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                    }
+
+                    helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
+                        if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
+                        if (resultByHelp) {
+                            let response = new Array();
+                            resultByHelp.forEach(doc => {
+                                response.push({
+                                    "_id": doc._id,
+                                })
+                            });
+                            response.forEach((helpASK) => {
+                                helperCenterAskDao.remove(helpASK._id, (errorByRemove, resultByRemove) => {
+                                    if (errorByRemove) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro no REMOVE ASK' }));
+
+                                });
 
                             });
-
-                        });
-                        helpCenterDao.remove(req.params.id, (error, result) => {
-                            if (error) {
-                                return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
-                            }
-                            return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
-                        });
-                    } else {
-                        helpCenterDao.remove(req.params.id, (error, result) => {
-                            if (error) {
-                                return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
-                            }
-                            return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
-                        });
-                    }
+                            helpCenterDao.remove(req.params.id, (error, result) => {
+                                if (error) {
+                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                }
+                                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                            });
+                        } else {
+                            helpCenterDao.remove(req.params.id, (error, result) => {
+                                if (error) {
+                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                }
+                                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                            });
+                        }
+                    });
                 });
             });
         }
