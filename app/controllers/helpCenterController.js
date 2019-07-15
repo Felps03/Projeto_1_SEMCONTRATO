@@ -15,8 +15,14 @@ class HelperCenterController extends Controller {
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByJoker: '/helps/post/joker/:page',
-            listLastHelp: '/helps/last/'
+            listLastHelp: '/helps/last/',
+            listAnswers: 'helps/list/answer/:id'
         }
+    }
+
+
+    listAnswers() {
+
     }
 
     add() {

@@ -14,5 +14,6 @@ module.exports = (app) => {
     app.delete(rotasHelpCenterAsk.deletarAsk, helperCenterAskController.remove());
 
     app.get(rotasHelpCenterAsk.findById, helperCenterAskController.findById());
+    app.get(rotasHelpCenterAsk.findById, helperCenterAskController.findById());
 
 }
