@@ -22,17 +22,17 @@ const UserSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     },
-    password: {
-        type: String,
-        required: true,
-        select: true
-    },
     // file_photo: {
     //     type: String
     // },
     dateOfBirth: {
         type: Date,
         required: true
+    },
+    password: {
+        type: String,
+        required: true,
+        select: true
     },
     createdAt: {
         type: Date,

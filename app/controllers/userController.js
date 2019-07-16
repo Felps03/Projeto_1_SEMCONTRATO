@@ -148,7 +148,7 @@ class UserController extends Controller {
             //
 
             */
-            const error = validationResult(req);
+            const error = validationResult(req.body);
             let errorList = [];
             //const { filename: file_photo } = req.file;
 
@@ -159,7 +159,7 @@ class UserController extends Controller {
             }
 
             const { email } = req.body;
-
+            
             const userDao = new UserDao();
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
