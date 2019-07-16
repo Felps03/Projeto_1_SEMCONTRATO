@@ -62,12 +62,37 @@ class HelpCenterAskDao {
         });
     }
 
+    // findById_HelpCenter(id_helpCenter, page, callback) {
     findById_HelpCenter(id_helpCenter, callback) {
-        HelpCenterAskSchema.find({ id_helpCenter }, (err, docs) => {
-            if (err) return callback(err, null)
-            callback(null, docs);
-        });
+
+        console.log(`id da questão: ${id_helpCenter}`);
+
+        const ag = HelpCenterAskSchema.aggregate([
+            {
+                $match: {
+                    id_helpCenter: id_helpCenter
+                }
+            }
+        ]);
+        console.log(ag);
+        HelpCenterAskSchema.aggregatePaginate(
+            ag, {
+                page: 1,
+                limit: 1
+            },
+            (err, docs) => {
+                console.log(docs)
+                if (err) return callback(err, null)
+                return callback(null, docs);
+            }
+        )
     }
+
+    // HelpCenterAskSchema.find({ id_helpCenter }, (err, docs) => {
+    //     if (err) return callback(err, null)
+    //     callback(null, docs);
+    // });
+    // }
 
 }
 module.exports = HelpCenterAskDao;

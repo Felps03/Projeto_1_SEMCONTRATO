@@ -12,9 +12,28 @@ class HelperCenterAskController extends Controller {
             editarAsk: '/helps/ask/:id',
             listaAsk: '/helps/list/ask/:page',
             deletarAsk: '/helps/ask/:id',
-            findById: '/helps/ask/:id'
+            findById: '/helps/ask/:id',
+            listAnswers: '/helps/list/answers/:idQuestion'
         }
     }
+
+    listAnswers() {
+        return (req, res) => {
+
+            const helperCenterAskDao = new HelpCenterAskDao();
+            const idQuestion = req.params.idQuestion;
+            // res.send(idQuestion)
+            // helperCenterAskDao.findById_HelpCenter(idQuestion, 1, (error, result) => {
+            helperCenterAskDao.findById_HelpCenter(idQuestion, (error, result) => {
+                if (error) return res.send(error)
+                console.log(result);
+                return res.send(result)
+            });
+
+
+        };
+    }
+
 
     add() {
         return (req, resp) => {
@@ -100,7 +119,7 @@ class HelperCenterAskController extends Controller {
                 let response = new Array();
 
                 let docs = result.docs;
-                        
+
                 docs.forEach(doc => {
                     response.push({
                         "_id": doc._id,
@@ -111,7 +130,7 @@ class HelperCenterAskController extends Controller {
                         "help": doc.help[0]['title'],
                         "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName']
                     })
-                });                
+                });
 
                 response.push({
                     totalDocs: result.totalDocs,

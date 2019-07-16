@@ -15,15 +15,11 @@ class HelperCenterController extends Controller {
             deletarPost: '/helps/post/:id',
             findById: '/helps/post/:id',
             findByJoker: '/helps/post/joker/:page',
-            listLastHelp: '/helps/last/',
-            listAnswers: 'helps/list/answer/:id'
+            listLastHelp: '/helps/last/'
         }
     }
 
 
-    listAnswers() {
-
-    }
 
     add() {
         return (req, resp) => {
