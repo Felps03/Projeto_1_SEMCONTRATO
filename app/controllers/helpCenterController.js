@@ -62,20 +62,40 @@ class HelperCenterController extends Controller {
                     console.log(error)
                     return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
                 }
-                userDao.checkAdmin(email, (err, docs) => {
-                    // console.log(docs.isAdmin);
+                const helperCenterDao = new HelperCenterDao();
+                helperCenterDao.findById(req.params.id, (err, resultHelperCenter) => {
                     if (err) {
-                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                    } 
-                
-                    const helperCenterDao = new HelperCenterDao();
-                    helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
-                        if (!resultHelper) {
-                            console.log(errorHelper)
-                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                        }
-                        return resp.status(201).send(resultHelper);
-                    });
+                        return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
+                    }
+                    if(resultHelperCenter.id_user == req.body.id_user){
+                        const helperCenterDao = new HelperCenterDao();
+                            helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                                if (!resultHelper) {
+                                    console.log(errorHelper)
+                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                                }
+                                return resp.status(201).send(resultHelper);
+                            });
+                    }else{
+                        userDao.checkAdmin(resultByID.email, (err, docs) => {
+                            // console.log(docs.isAdmin);
+                            if (err) {
+                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                            } 
+                            if (!docs) {
+                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                            } 
+                        
+                            const helperCenterDao = new HelperCenterDao();
+                            helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                                if (!resultHelper) {
+                                    console.log(errorHelper)
+                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                                }
+                                return resp.status(201).send(resultHelper);
+                            });
+                        });
+                    }
                 });
             });
         }
@@ -132,52 +152,92 @@ class HelperCenterController extends Controller {
 
     remove() {
         return (req, resp) => {
-            const helpCenterDao = new HelperCenterDao();
+            const helperCenterDao = new HelperCenterDao();
             const helperCenterAskDao = new HelpCenterAskDao();
-            helpCenterDao.findById(req.params.id, (error, resultByID) => {
+            helperCenterDao.findById(req.params.id, (error, resultByID) => {
                 if (resultByID === null) return resp.status(400).send(JSON.stringify({ erro: 'HelpCenter não encontrada' }));
 
                 const userDao = new UserDao();
-                userDao.checkAdmin(email, (err, docs) => {
-                    // console.log(docs.isAdmin);
+                helperCenterDao.findById(req.params.id, (err, resultHelperCenter) => {
                     if (err) {
-                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                    } 
-                    if (!docs) {
-                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                        return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
+                    if(resultHelperCenter.id_user == req.headers.id_user){
+                        helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
+                            if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
+                           
+                            if (resultByHelp) {
+                                let response = new Array();
+                                resultByHelp.forEach(doc => {
+                                    response.push({
+                                        "_id": doc._id,
+                                    })
+                                });
+                                response.forEach((helpASK) => {
+                                    helperCenterAskDao.remove(helpASK._id, (errorByRemove, resultByRemove) => {
+                                        if (errorByRemove) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro no REMOVE ASK' }));
 
-                    helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
-                        if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
-                        if (resultByHelp) {
-                            let response = new Array();
-                            resultByHelp.forEach(doc => {
-                                response.push({
-                                    "_id": doc._id,
-                                })
-                            });
-                            response.forEach((helpASK) => {
-                                helperCenterAskDao.remove(helpASK._id, (errorByRemove, resultByRemove) => {
-                                    if (errorByRemove) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro no REMOVE ASK' }));
+                                    });
 
                                 });
+                                helperCenterDao.remove(req.params.id, (error, result) => {
+                                    if (error) {
+                                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                    }
+                                    return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                                });
+                            } else {
+                                helperCenterDao.remove(req.params.id, (error, result) => {
+                                    if (error) {
+                                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                    }
+                                    return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                                });
+                            }
+                        });
+                    }else{
+                        userDao.checkAdmin(resultByID.email, (err, docs) => {
+                            // console.log(docs.isAdmin);
+                            if (err) {
+                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                            } 
+                            if (!docs) {
+                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                            }
+                            helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
+                                if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
+                                if (resultByHelp) {
+                                    let response = new Array();
+                                    resultByHelp.forEach(doc => {
+                                        response.push({
+                                            "_id": doc._id,
+                                        })
+                                    });
+                                    response.forEach((helpASK) => {
+                                        helperCenterAskDao.remove(helpASK._id, (errorByRemove, resultByRemove) => {
+                                            if (errorByRemove) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro no REMOVE ASK' }));
 
-                            });
-                            helpCenterDao.remove(req.params.id, (error, result) => {
-                                if (error) {
-                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                        });
+
+                                    });
+                                    helperCenterDao.remove(req.params.id, (error, result) => {
+                                        if (error) {
+                                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                        }
+                                        return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                                    });
+                                } else {
+                                    helperCenterDao.remove(req.params.id, (error, result) => {
+                                        if (error) {
+                                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
+                                        }
+                                        return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
+                                    });
                                 }
-                                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
                             });
-                        } else {
-                            helpCenterDao.remove(req.params.id, (error, result) => {
-                                if (error) {
-                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o HelpCenter' }));
-                                }
-                                return resp.status(200).end(JSON.stringify({ msg: 'HelpCenter removido' }));
-                            });
-                        }
-                    });
+                    
+                        });  
+                    }    
                 });
             });
         }
