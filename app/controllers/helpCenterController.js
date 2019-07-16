@@ -13,8 +13,10 @@ class HelperCenterController extends Controller {
             editarPost: '/helps/post/:id',
             listaPost: '/helps/list/post/:page',
             deletarPost: '/helps/post/:id',
-            findById: '/helps/post/:id',
-            findByJoker: '/helps/post/joker/:page',
+            findById: '/helps/list/:id',
+            findByJoker: '/helps/list/joker/:page',
+            // findById: '/helps/post/:id',
+            // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last/'
         }
     }
