@@ -216,7 +216,6 @@ class UserController extends Controller {
 
     // }
 
-    // takking off photo
     update() {
         return (req, resp) => {
             const error = validationResult(req);
