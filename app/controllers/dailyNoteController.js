@@ -95,10 +95,7 @@ class DailyNoteController extends Controller {
                     }else{
                         userDao.checkAdmin(req.body.email, (err, docs) => {
                             // console.log(docs.isAdmin);
-                            if (err) {
-                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                            if(!docs){
+                            if(!docs.isAdmin || err){
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             }
                             const dailyNoteDao = new DailyNoteDao();

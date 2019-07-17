@@ -79,13 +79,10 @@ class HelperCenterController extends Controller {
                     }else{
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
-                            if (err) {
+                            if (!docs.isAdmin || err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             } 
-                            if (!docs) {
-                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                        
+                            console.log(docs);
                             const helperCenterDao = new HelperCenterDao();
                             helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
                                 if (!resultHelper) {
@@ -198,10 +195,7 @@ class HelperCenterController extends Controller {
                     }else{
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
-                            if (err) {
-                                return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                            if (!docs) {
+                            if (!docs.isAdmin || err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             }
                             helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
