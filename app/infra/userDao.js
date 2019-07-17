@@ -31,8 +31,10 @@ class UserDao {
 
     // taking off photo from users register
     add(user, callback) {
-        const { name, lastName, userName, email, password, dateOfBirth } = user;
-        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
+
+        const { name, lastName, userName, email, dateOfBirth, password } = user;
+
+        UserSchema.create({ name, lastName, userName, email, dateOfBirth, password }, (err, docs) => {
             if (err) {
                 //fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
@@ -64,6 +66,9 @@ class UserDao {
 
     // taking off photo
     update(user, hash, id, callback) {
+
+
+
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
@@ -114,7 +119,6 @@ class UserDao {
         UserSchema.find({ email }).select(joker).exec((err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
-            // console.log(docs);
         });
     }
 
