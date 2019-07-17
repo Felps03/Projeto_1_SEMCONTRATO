@@ -13,7 +13,8 @@ class HelperCenterAskController extends Controller {
             listaAsk: '/helps/list/ask/:page',
             deletarAsk: '/helps/ask/:id',
             findById: '/helps/ask/:id',
-            listAnswers: '/helps/list/answers/:idQuestion'
+            // listAnswers: '/helps/list/answers/:idQuestion'
+            listAnswers: '/helps/list/answers/:idQuestion/:page'
         }
     }
 
@@ -22,16 +23,15 @@ class HelperCenterAskController extends Controller {
 
             const helperCenterAskDao = new HelpCenterAskDao();
             const idQuestion = req.params.idQuestion;
-            // res.send(idQuestion)
-            // helperCenterAskDao.findById_HelpCenter(idQuestion, 1, (error, result) => {
-            helperCenterAskDao.findById_HelpCenter(idQuestion, (error, result) => {
+            const page = req.params.page;
+
+            helperCenterAskDao.findByQuestionID(idQuestion, page, (error, result) => {
+                // helperCenterAskDao.findById_HelpCenter(idQuestion, (error, result) => {
                 if (error) return res.send(error)
                 console.log(result);
                 return res.send(result)
             });
-
-
-        };
+        }
     }
 
 
