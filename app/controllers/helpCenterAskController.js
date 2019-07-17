@@ -24,6 +24,7 @@ class HelperCenterAskController extends Controller {
             const helperCenterAskDao = new HelpCenterAskDao();
             const idQuestion = req.params.idQuestion;
             const page = req.params.page;
+            console.log(req.params.idQuestion);
 
             helperCenterAskDao.findByQuestionID(idQuestion, page, (error, result) => {
                 // helperCenterAskDao.findById_HelpCenter(idQuestion, (error, result) => {
