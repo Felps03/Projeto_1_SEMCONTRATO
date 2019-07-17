@@ -31,8 +31,15 @@ class UserDao {
 
     // taking off photo from users register
     add(user, callback) {
+<<<<<<< HEAD
         const { name, lastName, userName, email, password, dateOfBirth } = user;
         UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
+=======
+
+        const { name, lastName, userName, email, dateOfBirth, password } = user;
+
+        UserSchema.create({ name, lastName, userName, email, dateOfBirth, password }, (err, docs) => {
+>>>>>>> ba269fd0500934606971d03aa9276bb3087a1958
             if (err) {
                 //fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
@@ -64,6 +71,12 @@ class UserDao {
 
     // taking off photo
     update(user, hash, id, callback) {
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> ba269fd0500934606971d03aa9276bb3087a1958
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
@@ -114,7 +127,6 @@ class UserDao {
         UserSchema.find({ email }).select(joker).exec((err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
-            // console.log(docs);
         });
     }
 
@@ -127,7 +139,11 @@ class UserDao {
 
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
+<<<<<<< HEAD
             if (err) return callback(err, docs);
+=======
+            if (err) return callback(err, docs)
+>>>>>>> ba269fd0500934606971d03aa9276bb3087a1958
             return callback(null, docs);
         });
     }
