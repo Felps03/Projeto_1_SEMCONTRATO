@@ -71,11 +71,31 @@ class DailyNoteDao {
             sort: {
                 date: -1
             }
-        }, (err, docs) => {
+        },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            });
+    }
+
+    registeredDaily(id_user, date, callback) {
+        //console.log('registeredDaily', id_user);
+        DailyNoteSchema.findOne({ id_user, date }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
     }
+
+    /*
+    listUser(dailyNote, callback) {
+        const { id_user } = dailyNote;
+
+        DailyNoteSchema.find({id_user}, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+    */
 }
 
 module.exports = DailyNoteDao;
