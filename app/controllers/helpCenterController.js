@@ -21,6 +21,8 @@ class HelperCenterController extends Controller {
         }
     }
 
+
+
     add() {
         return (req, resp) => {
             const error = validationResult(req);

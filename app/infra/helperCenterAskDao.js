@@ -69,5 +69,24 @@ class HelpCenterAskDao {
         });
     }
 
+    findByQuestionID(id_helpCenter, page, callback) {
+
+        HelpCenterAskSchema.paginate(
+            {
+                id_helpCenter: id_helpCenter
+            },
+            {
+                page: page,
+                limit: PAGELIMIT
+            },
+            (err, docs) => {
+                // console.log(docs)
+                if (err) return callback(err, null)
+                return callback(null, docs);
+            }
+
+        )
+
+    }
 }
 module.exports = HelpCenterAskDao;
