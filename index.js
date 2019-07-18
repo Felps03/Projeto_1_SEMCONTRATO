@@ -21,7 +21,7 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-    
+
     let needToken = true;
 
     // console.log('path: ', path, 'routesType: ',routesType);
@@ -30,10 +30,12 @@ app.use("*", (req, res, next) => {
         needToken = false;
     }
     const userData = getTokenFromHeader(req);
+    // console.log(userData);
 
     if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'dailys') || ((routesType === 'helps') && (needToken))) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
+        // console.log('é admin:', userData.admin);
         if (!userData) {
             return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
         }
