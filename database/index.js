@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
  const MONGO_LOCAL = 'mongodb://localhost/noderest';
 //const MONGO_LOCAL = 'mongodb://localhost/teste';
 
- mongoose.connect(MONGO_DEV, {
+ mongoose.connect(MONGO_LOCAL, {
 //mongoose.connect(MONGO_LOCAL, {
     useNewUrlParser: true
 })
