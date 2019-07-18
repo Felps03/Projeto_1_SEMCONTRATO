@@ -159,11 +159,10 @@ class UserController extends Controller {
             }
 
             const { email } = req.body;
-            
+
             const userDao = new UserDao();
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
-                    // console.log(file_photo);
                     // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                     return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
                 }
