@@ -26,10 +26,11 @@ class GenerateEmail {
             });
             
             //url change password 
-            const url = "http://semcontrato.azurewebsites.net/user-recovery.html";
+            const url = "localhost:3000/user-recovery.html";
 
             // generating string to send via email
             const randomString = generateString();
+            console.log(randomString);
 
             /*
              the function sendMail returns a promise if a callback function is not set. So we check the 

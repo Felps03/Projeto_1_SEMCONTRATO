@@ -15,8 +15,6 @@ module.exports = (app) => {
 
     app.get(rotasHelpCenter.findById, helpCenterController.findById());
 
-    app.post(rotasHelpCenter.findByTitle, helpCenterController.findByTitle());
-
-    app.post(rotasHelpCenter.findByDesc, helpCenterController.findByDesc());
+    app.post(rotasHelpCenter.findByJoker, helpCenterController.findByJoker());
 
 }

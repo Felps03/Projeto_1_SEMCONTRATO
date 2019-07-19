@@ -59,11 +59,11 @@ class AuthController {
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
                 if (error) {
-                    resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
                 // console.log(result);
                 if (result.length == 0) {
-                    resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
                 } else {
                     //adicionar o token
 
@@ -77,6 +77,8 @@ class AuthController {
                         } else {
                             // resp.status(200).send(docs);
                             return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
+                            
+                            
                         }
                     });
                 }
@@ -105,10 +107,10 @@ class AuthController {
             userDao.validateEmailAvailable(userEmail, (error, answer) => {
 
                 if (error) {
-                    res.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                    return res.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
                 }
                 if (answer == null) { // if answer its null, userEmail doenst exist on DB
-                    res.status(400).send(JSON.stringify({ erro: 'Email não cadastrado' }));
+                    return res.status(400).send(JSON.stringify({ erro: 'Email não cadastrado' }));
                 } else { // userEmail exists on DB
                     const generateEmail = new GenerateEmail();
                     generateEmail.sendEmail(userEmail)
@@ -121,9 +123,9 @@ class AuthController {
                             recoverDataDao.add(userEmail, randomString, expires, (err) => {
                                 // console.log(err);
                                 if (err) {
-                                    res.status(500).send(err);
+                                    return res.status(500).send(err);
                                 }
-                                res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
+                                return res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
                             });
                         })
                         .catch(e => console.error(e));
@@ -139,17 +141,24 @@ class AuthController {
             const recoverDataDao = new RecoverDataDao();
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
+                if (err == null) {
+                   return  res.status(400).send(JSON.stringify({ erro: "link expirou" }));
+                }else{
 
-                console.log(`Retorno: ${docs.expires}`);
+                    console.log(`Retorno: ${docs.expires}`);
 
-                const exp = docs.expires;
-                const now = new Date();
+                    const exp = docs.expires;
+                    const now = new Date();
 
-                if (exp > now) {
-                    res.status(200).send(JSON.stringify({ erro: "código válido" }));
-                } else {
-                    res.status(400).send(JSON.stringify({ erro: "código inválido" }));
+                    if (exp > now) {
+                        return res.status(200).send(JSON.stringify({ erro: "código válido" }));
+                    } else {
+                        return res.status(400).send(JSON.stringify({ erro: "código inválido" }));
+                    }
+
                 }
+
+               
             });
         }
     }

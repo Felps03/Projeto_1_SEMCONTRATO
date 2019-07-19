@@ -32,9 +32,9 @@ class UserDao {
     // taking off photo from users register
     add(user, callback) {
 
-        const { name, lastName, userName, email, password, dateOfBirth } = user;
+        const { name, lastName, userName, email, dateOfBirth, password } = user;
 
-        UserSchema.create({ name, lastName, userName, email, password, dateOfBirth }, (err, docs) => {
+        UserSchema.create({ name, lastName, userName, email, dateOfBirth, password }, (err, docs) => {
             if (err) {
                 //fs.unlinkSync(`./tmp/uploads/${file_photo}`);
                 return callback(err, null);
@@ -65,18 +65,13 @@ class UserDao {
     // }
 
     // taking off photo
-    update(user, hash ,id, callback) {
-
-        
-
+    update(user, hash, id, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
-
             const password = hash;
-
             const { name, lastName, userName, email, dateOfBirth } = user;
             UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
                 if (err) {
@@ -89,6 +84,23 @@ class UserDao {
         });
     }
 
+    updateWithoutPassword(user, id, callback) {
+        this.findById(id, (error, result) => {
+            if (error) {
+                console.log(error);
+                resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+            }
+            const { name, lastName, userName, email, dateOfBirth } = user;
+            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, dateOfBirth }, { new: true }, (err, docs) => {
+                if (err) {
+                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    return callback(err, null)
+                }
+                // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                callback(null, docs);
+            });
+        });
+    }
 
     updatePassword(password, id, callback) {
         UserSchema.findByIdAndUpdate(id, { password }, { new: true }, (err, docs) => {
@@ -122,7 +134,6 @@ class UserDao {
         UserSchema.find({ email }).select(joker).exec((err, docs) => {
             if (err) return callback(err, null);
             callback(null, docs);
-            // console.log(docs);
         });
     }
 
@@ -135,11 +146,7 @@ class UserDao {
 
     checkAdmin(email, callback) {
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
-            // console.log(`erro é ${err}`);
-            // console.log(`docs é ${docs}`);
-
-            if (err) return callback(err, docs)
-
+            if (err) return callback(err, docs);
             return callback(null, docs);
         });
     }
