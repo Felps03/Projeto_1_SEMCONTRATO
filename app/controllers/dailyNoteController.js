@@ -3,6 +3,7 @@ const { Controller } = require('./Controller');
 
 const DailyNoteDao = require('../infra/dailyNoteDao');
 const UserDao = require('../infra/userDao');
+const getTokenFromHeader = require('../utils/getTokenFromHeader');
 
 class DailyNoteController extends Controller {
     static rotas() {
@@ -80,11 +81,18 @@ class DailyNoteController extends Controller {
             }
             const userDao = new UserDao();
             const dailyNoteDao = new DailyNoteDao();
+
+
+            const userData = getTokenFromHeader(req);
+            // console.log(userData);
+
+
             dailyNoteDao.listById(req.params.id, (err, resultDaily) => {
                 if (err) {
                     return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                 }
                 if (resultDaily.id_user == req.body.id_user) {
+                    console.log("chegou aqui");
                     dailyNoteDao.update(req.body, req.params.id, (err, resultUp) => {
                         if (err) {
                             console.log(err);
@@ -93,22 +101,17 @@ class DailyNoteController extends Controller {
                         return resp.status(200).send(resultUp);
                     });
                 } else {
-                    userDao.checkAdmin(req.body.email, (err, docs) => {
-                        // console.log(docs.isAdmin);
+
+                    if (!userData.admin) {
+                        return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                    }
+                    const dailyNoteDao = new DailyNoteDao();
+                    dailyNoteDao.update(req.body, req.params.id, (err, resultUp) => {
                         if (err) {
-                            return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
+                            console.log(err);
+                            return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
                         }
-                        if (!docs) {
-                            return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                        }
-                        const dailyNoteDao = new DailyNoteDao();
-                        dailyNoteDao.update(req.body, req.params.id, (err, resultUp) => {
-                            if (err) {
-                                console.log(err);
-                                return resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de atualizar a daily favor olhar o log" }));
-                            }
-                            return resp.status(200).send(resultUp);
-                        });
+                        return resp.status(200).send(resultUp);
                     });
                 }
             });

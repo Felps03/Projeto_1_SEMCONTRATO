@@ -29,13 +29,12 @@ app.use("*", (req, res, next) => {
     if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path == 'list')) {
         needToken = false;
     }
-    const userData = getTokenFromHeader(req);
-    // console.log(userData);
+    // const userData = getTokenFromHeader(req);
+
 
     if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'dailys') || ((routesType === 'helps') && (needToken))) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
-        // console.log('é admin:', userData.admin);
         if (!userData) {
             return res.status(401).send(JSON.stringify({ erro: 'Token Inválido' }));
         }
@@ -57,4 +56,4 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const routes = require('./app/routes/routes');
 routes(app);
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3005);

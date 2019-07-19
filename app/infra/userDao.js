@@ -130,6 +130,7 @@ class UserDao {
     }
 
     checkAdmin(email, callback) {
+        console.log("email:", email);
         UserSchema.findOne({ email }, { _id: 0, isAdmin: 1 }, (err, docs) => {
             if (err) return callback(err, docs);
             return callback(null, docs);
