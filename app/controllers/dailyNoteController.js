@@ -9,7 +9,8 @@ class DailyNoteController extends Controller {
         return {
             cadastro: '/dailys/daily/',
             edicao: '/dailys/daily/:id',
-            listDate: '/dailys/daily/:date/:page',
+            // listDate: '/dailys/daily/:date/:page',
+            listDate: '/dailys/list/:date/:page',
             listUser: '/dailys/daily/',
             // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
