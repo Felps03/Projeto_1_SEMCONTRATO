@@ -159,7 +159,7 @@ class UserController extends Controller {
             }
 
             const { email } = req.body;
-            
+
             const userDao = new UserDao();
             userDao.validateEmailAvailable(email, (error, resultValidate) => {
                 if (resultValidate) {
@@ -229,15 +229,24 @@ class UserController extends Controller {
 
             const { password } = req.body;
 
-            const hash = sha256(password + salt);
+            if (password) {
+                const hash = sha256(password + salt);
+                userDao.update(req.body, hash, req.params.id, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                    }
+                });
+            } else {
+                userDao.updateWithoutPassword(req.body, req.params.id, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                    }
+                });
+            }
 
-            userDao.update(req.body, hash, req.params.id, (error, result) => {
-                if (error) {
-                    console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
-                }
-                return resp.status(201).send(result);
-            });
+            return resp.status(201).send(result);
         }
 
     }

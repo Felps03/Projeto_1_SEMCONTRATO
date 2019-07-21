@@ -21,7 +21,7 @@ app.use("*", (req, res, next) => {
     const routesType = url.split('/')[1].toLocaleLowerCase();
     let path = "";
     if (url.split('/').length > 2) path = url.split('/')[2].toLocaleLowerCase()
-    
+
     let needToken = true;
 
     // console.log('path: ', path, 'routesType: ',routesType);
@@ -31,7 +31,7 @@ app.use("*", (req, res, next) => {
     }
     const userData = getTokenFromHeader(req);
 
-    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'dailys') || ((routesType === 'helps') && (needToken))) {
+    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || ((routesType === 'dailys') && (needToken)) || ((routesType === 'helps') && (needToken))) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {
@@ -55,4 +55,4 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const routes = require('./app/routes/routes');
 routes(app);
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3005);

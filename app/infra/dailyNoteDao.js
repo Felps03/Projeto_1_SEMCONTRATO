@@ -1,3 +1,4 @@
+const moment = require('moment');
 const DailyNoteSchema = require('../models/dailyNote');
 const PAGELIMIT = 10;
 const LASTLIMIT = 3;
@@ -78,9 +79,16 @@ class DailyNoteDao {
             });
     }
 
-    registeredDaily(id_user, date, callback) {
-        //console.log('registeredDaily', id_user);
-        DailyNoteSchema.findOne({ id_user, date }, (err, docs) => {
+    registeredDaily(id_user, callback) {
+        const today = moment().startOf('day');
+
+        DailyNoteSchema.findOne({
+            id_user,
+            date: {
+                $gte: today.toDate(),
+                $lte: today.clone().endOf('day')
+            }
+        }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
