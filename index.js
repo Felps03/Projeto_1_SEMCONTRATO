@@ -29,9 +29,10 @@ app.use("*", (req, res, next) => {
     if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path == 'list')) {
         needToken = false;
     }
-    const userData = getTokenFromHeader(req);
+    // const userData = getTokenFromHeader(req);
 
-    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || (routesType === 'dailys') || ((routesType === 'helps') && (needToken))) {
+
+    if ((routesType === 'admin') || ((routesType === 'users') && (needToken)) || ((routesType === 'dailys') && (needToken)) || ((routesType === 'helps') && (needToken))) {
         // console.log("entrou no if");
         const userData = getTokenFromHeader(req);
         if (!userData) {
