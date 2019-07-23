@@ -263,18 +263,20 @@ class HelperCenterController extends Controller {
     findByJoker() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
+            const helpCenterDao2 = new HelperCenterDao();
 
-            helpCenterDao.findByJoker(req.body, req.params.page, (error, result) => {
+            helpCenterDao.findByTitle(req.body, req.params.page, (error, resultTitle) => {
                 if (error) {
                     console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
                 }
+                console.log(resultTitle);
 
                 let response = new Array();
 
-                let docs = result.docs;
+                let docsTitle = resultTitle.docs;
 
-                docs.forEach(doc => {
+                docsTitle.forEach(doc => {
                     response.push({
                         "_id": doc._id,
                         "title": doc.title,
@@ -285,14 +287,52 @@ class HelperCenterController extends Controller {
                     })
                 });
 
-                response.push({
-                    totalDocs: result.totalDocs,
-                    limit: result.limit,
-                    page: result.page,
-                    totalPages: result.totalPages,
-                });
+                let totalDocs = resultTitle.totalDocs;
+                let limit = resultTitle.limit;
+                
+                
+                helpCenterDao2.findByDesc(req.body, req.params.page, (error, resultDesc) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pela descrição favor olhar o log' }));
+                    }
+                    console.log(resultDesc);
+                    let docsDesc = resultDesc.docs;
 
-                return resp.status(200).send(response);
+                    docsDesc.forEach(doc => {
+                        let add = true;
+                        for(let i = 0; i < docsTitle.length; i++){
+                            if(doc._id == docsTitle[i]._id){  
+                                add = false;
+                                break;
+                            }
+                        }
+                        if(add == true){
+                            response.push({
+                                "_id": doc._id,
+                                "title": doc.title,
+                                "desc": doc.desc,
+                                "date": doc.date,
+                                "id_user": doc.id_user,
+                                "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                            });
+                        }
+                    });
+                    totalDocs = totalDocs + resultDesc.totalDocs;
+                    let totalPages = totalDocs/limit;
+                    let page = req.params.page;
+
+                    response.push({
+                        "totalDocs" : totalDocs + resultDesc.totalDocs,
+                        "limit" : limit,
+                        "page" : page,
+                        "totalPages" : totalPages + resultDesc.totalPages
+                    });
+
+                    return resp.status(200).send(response);
+                })
+
+                
             });
         }
     }
