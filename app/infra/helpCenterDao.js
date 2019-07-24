@@ -62,15 +62,27 @@ class HelpCenterDao {
         });
     }
 
-    findByJoker(helpCenter, page, callback) {
+    findByTitle(helpCenter, page, callback) {
         const { joker } = helpCenter;
         this.aggregrate.match({
-            $or: [{ title: new RegExp(joker, 'i') }, { desc: new RegExp(joker, 'i') }]
+            $or: [{ title: new RegExp(joker, 'i') }]
         });
-        this.aggregrate.sort({
-            title: -1,
-            desc: 1
-        })
+        HelpCenterSchema.aggregatePaginate(
+            this.aggregrate, {
+                page: page,
+                limit: PAGELIMIT
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
+    }
+    findByDesc(helpCenter, page, callback) {
+        const { joker } = helpCenter;
+        this.aggregrate.match({
+            $or: [{ desc: new RegExp(joker, 'i') }]
+        });
         HelpCenterSchema.aggregatePaginate(
             this.aggregrate, {
                 page: page,
