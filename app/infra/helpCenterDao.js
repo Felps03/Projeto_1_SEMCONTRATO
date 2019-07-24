@@ -96,6 +96,7 @@ class HelpCenterDao {
             callback(null, docs);
         });
     }
+
 }
 
 module.exports = HelpCenterDao;
