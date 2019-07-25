@@ -24,8 +24,6 @@ class AuthController {
     authenticate() {
         return (req, resp) => {
 
-            // recaptcha
-            /*
             if (!req.body['g-recaptcha-response']) {
                 return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
             }
@@ -38,18 +36,18 @@ class AuthController {
                 })
                 .then(res => res.json())
                 .then(res => {
+                    console.log(res)
                     if (!res.success) {
                         recaptchaError = true;
                         console.log(res['error-codes']);
                     }
+                    return resp.status(200).send(res);
                 });
 
             if (recaptchaError) {
                 return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
             }
-            //
 
-            */
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
@@ -77,12 +75,13 @@ class AuthController {
                         } else {
                             // resp.status(200).send(docs);
                             return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
-                            
-                            
+
+
                         }
                     });
                 }
             });
+
         }
     }
 
@@ -142,8 +141,8 @@ class AuthController {
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
                 if (err == null) {
-                   return  res.status(400).send(JSON.stringify({ erro: "link expirou" }));
-                }else{
+                    return res.status(400).send(JSON.stringify({ erro: "link expirou" }));
+                } else {
 
                     console.log(`Retorno: ${docs.expires}`);
 
@@ -158,7 +157,7 @@ class AuthController {
 
                 }
 
-               
+
             });
         }
     }

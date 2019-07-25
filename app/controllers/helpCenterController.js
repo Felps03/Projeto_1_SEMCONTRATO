@@ -21,8 +21,6 @@ class HelperCenterController extends Controller {
         }
     }
 
-
-
     add() {
         return (req, resp) => {
             const error = validationResult(req);
@@ -71,25 +69,25 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.body.id_user){
+                    if (resultHelperCenter.id_user == req.body.id_user) {
                         const helperCenterDao = new HelperCenterDao();
-                            helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
-                                if (!resultHelper) {
-                                    console.log(errorHelper)
-                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                                }
-                                return resp.status(201).send(resultHelper);
-                            });
-                    }else{
+                        helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                            if (!resultHelper) {
+                                console.log(errorHelper)
+                                return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                            }
+                            return resp.status(201).send(resultHelper);
+                        });
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                        
+                            }
+
                             const helperCenterDao = new HelperCenterDao();
                             helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
                                 if (!resultHelper) {
@@ -166,10 +164,10 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.headers.id_user){
+                    if (resultHelperCenter.id_user == req.headers.id_user) {
                         helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
                             if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
-                           
+
                             if (resultByHelp) {
                                 let response = new Array();
                                 resultByHelp.forEach(doc => {
@@ -199,12 +197,12 @@ class HelperCenterController extends Controller {
                                 });
                             }
                         });
-                    }else{
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             }
@@ -239,9 +237,9 @@ class HelperCenterController extends Controller {
                                     });
                                 }
                             });
-                    
-                        });  
-                    }    
+
+                        });
+                    }
                 });
             });
         }
@@ -289,8 +287,8 @@ class HelperCenterController extends Controller {
 
                 let totalDocs = resultTitle.totalDocs;
                 let limit = resultTitle.limit;
-                
-                
+
+
                 helpCenterDao2.findByDesc(req.body, req.params.page, (error, resultDesc) => {
                     if (error) {
                         console.log(error);
@@ -301,13 +299,13 @@ class HelperCenterController extends Controller {
 
                     docsDesc.forEach(doc => {
                         let add = true;
-                        for(let i = 0; i < docsTitle.length; i++){
-                            if(doc._id == docsTitle[i]._id){  
+                        for (let i = 0; i < docsTitle.length; i++) {
+                            if (doc._id == docsTitle[i]._id) {
                                 add = false;
                                 break;
                             }
                         }
-                        if(add == true){
+                        if (add == true) {
                             response.push({
                                 "_id": doc._id,
                                 "title": doc.title,
@@ -319,20 +317,20 @@ class HelperCenterController extends Controller {
                         }
                     });
                     totalDocs = totalDocs + resultDesc.totalDocs;
-                    let totalPages = totalDocs/limit;
+                    let totalPages = totalDocs / limit;
                     let page = req.params.page;
 
                     response.push({
-                        "totalDocs" : totalDocs + resultDesc.totalDocs,
-                        "limit" : limit,
-                        "page" : page,
-                        "totalPages" : totalPages + resultDesc.totalPages
+                        "totalDocs": totalDocs + resultDesc.totalDocs,
+                        "limit": limit,
+                        "page": page,
+                        "totalPages": totalPages + resultDesc.totalPages
                     });
 
                     return resp.status(200).send(response);
                 })
 
-                
+
             });
         }
     }

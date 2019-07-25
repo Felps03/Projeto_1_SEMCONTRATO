@@ -4,6 +4,7 @@ const dailyNoteRoutes = require('./dailyNoteRoutes');
 const helpCenter = require('./helpCenterRoutes');
 const helpCenterAskRoutes = require('./helpCenterAskRoutes');
 const homeRoutes = require('./homeRoutes')
+const configurationRoutes = require('./configurationRoutes')
 
 module.exports = (app) => {
     authRoutes(app);
@@ -12,4 +13,5 @@ module.exports = (app) => {
     helpCenter(app);
     helpCenterAskRoutes(app);
     homeRoutes(app);
+    configurationRoutes(app);
 };

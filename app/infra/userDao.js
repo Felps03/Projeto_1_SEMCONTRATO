@@ -1,4 +1,5 @@
 const UserSchema = require('../models/user');
+const ConfiguracaoSchema = require('../models/configuration');
 const crypto = require("crypto");
 let fs = require('fs');
 
@@ -73,6 +74,25 @@ class UserDao {
             }
             const password = hash;
             const { name, lastName, userName, email, dateOfBirth } = user;
+
+            const { isAdmin } = result;
+            if (isAdmin) {
+                let recaptcha = false;
+                ConfiguracaoSchema.findByIdAndUpdate("5d3a07b931b2d929a846b69b", { recaptcha }, (err, docsConfiguracao) => {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docsUser) => {
+                        if (err) {
+                            // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                            return callback(err, null)
+                        }
+                        // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                        callback(null, docsUser);
+                    });
+                });
+            }
+
             UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
                 if (err) {
                     // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
