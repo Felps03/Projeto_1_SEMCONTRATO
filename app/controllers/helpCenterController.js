@@ -18,37 +18,21 @@ class HelperCenterController extends Controller {
             // findById: '/helps/post/:id',
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last/',
-            listQA: '/help/answer/:id'
+            listQA: '/helps/answer/:id/'
         }
     }
 
     listQA() {
         return (req, resp) => {
-            const helperCenterDao = new HelperCenterDao();
-            const helpCenterAskDao = new HelpCenterAskDao();
+            const helpCenterDao = new HelperCenterDao();
 
-            helperCenterDao.findById(req.params.id, (error, result) => {
-                const id = result.id;
-                let object = {
-                    id: result.id,
-                    author: result.id_user,
-                    title: result.title,
-                    desc: result.desc,
-                    answers: []
+            helpCenterDao.listQA(req.params.id, (error, result) => {
+                if (error) {
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
                 }
-                helpCenterAskDao.findByQuestionID(id, 1, (err, res) => {
-                    let answer = {
-                        id_user: res.docs.id_user,
-                        resp: res.docs.desc,
-                        date: res.docs.date
-                    }
-                    return resp.send(res)
-                    object.answers.push(answer);
-                    console.log(object)
-                })
-                // return resp.send(object)
+                return resp.status(200).end(JSON.stringify(result));
             })
-        }
+        };
     }
 
     add() {

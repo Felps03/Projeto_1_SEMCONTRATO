@@ -1,4 +1,6 @@
+const HelpCenterAskDao = require('../infra/helperCenterAskDao');
 const HelpCenterSchema = require('../models/helpCenter');
+const HelpCenterAskSchema = require('../models/helpCenterAsk');
 const PAGELIMIT = 10;
 const LASTLIMIT = 3;
 
@@ -11,7 +13,36 @@ class HelpCenterDao {
             localField: "id_user",
             foreignField: "_id",
             as: "owner"
-        });
+        })
+
+    }
+
+    listQA(id, callback) {
+
+        HelpCenterSchema.findOne({ _id: id }, (err, docs) => {
+            const allData = {};
+
+            if (err) return callback(err, null)
+
+            else {
+                const askdao = new HelpCenterAskDao();
+
+                allData.docs = docs
+
+                askdao.findByQuestionID(id, 1, (error, result) => {
+
+                    if (error) {
+                        callback(error, null)
+                    }
+
+                    allData.answers = result;
+
+                    callback(null, allData)
+                });
+
+            }
+
+        })
     }
 
     add(helpCenter, callback) {
@@ -19,9 +50,9 @@ class HelpCenterDao {
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
         HelpCenterSchema.create({ id_user, title, desc, date }, (err, docs) => {
             if (err) {
-                return callback(err, null);
             }
             callback(null, docs);
+            return callback(err, null);
         });
     }
 
@@ -30,9 +61,9 @@ class HelpCenterDao {
         HelpCenterSchema.findByIdAndUpdate(id, { id_user, title, desc }, {
             new: true
         }, (err, docs) => {
-            if (err) return callback(err, null)
             callback(null, docs);
         });
+        if (err) return callback(err, null)
     }
 
     list(page, callback) {
