@@ -236,6 +236,8 @@ class UserController extends Controller {
                         console.log(error);
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
                     }
+
+                    return resp.status(201).send(result);
                 });
             } else {
                 userDao.updateWithoutPassword(req.body, req.params.id, (error, result) => {
@@ -243,12 +245,11 @@ class UserController extends Controller {
                         console.log(error);
                         return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
                     }
+
+                    return resp.status(201).send(result);
                 });
             }
-
-            return resp.status(201).send(result);
         }
-
     }
 
     remove() {
