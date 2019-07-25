@@ -14,6 +14,14 @@ class DailyNoteDao {
         })
     }
 
+
+    listAllDaylies(callback) {
+        DailyNoteSchema.find({}, (err, result) => {
+            if (err) return callback(err, null)
+            callback(null, result);
+        })
+    }
+
     add(dailyNote, id_user, callback) {
         const { yesterday, today, impediment } = dailyNote
         let date = new Date().toLocaleDateString('pt-BR').slice(0, 10)

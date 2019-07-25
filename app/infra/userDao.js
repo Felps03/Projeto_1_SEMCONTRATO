@@ -4,6 +4,15 @@ let fs = require('fs');
 
 class UserDao {
 
+
+    listAll(callback) {
+        UserSchema.find({}, (err, result) => {
+            if (err) return callback(err, null)
+            callback(null, result);
+        })
+    }
+
+
     list(callback) {
         UserSchema.find({}).exec((err, docs) => {
             if (err) return callback(err, null)

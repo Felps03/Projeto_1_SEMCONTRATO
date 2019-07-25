@@ -16,10 +16,26 @@ class DailyNoteController extends Controller {
             // listLastDaily: '/dailys/daily/last',
             listAll: '/dailys',
             listDailyById: '/dailys/:id',
-            registered: '/dailys/user/:id'
+            registered: '/dailys/user/:id',
+            exportaData: '/admin/export/daylies'
         }
     }
 
+
+    exportData() {
+
+        return (req, res) => {
+
+            const dailyNoteDao = new DailyNoteDao();
+
+            dailyNoteDao.listAllDaylies((err, result) => {
+                if (err) {
+                    return res.send(err)
+                }
+                res.send(result)
+            })
+        }
+    }
     listDailyById() {
         return (req, res) => {
             // res.send('oi')

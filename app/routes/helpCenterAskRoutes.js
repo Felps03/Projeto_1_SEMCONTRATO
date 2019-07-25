@@ -19,4 +19,6 @@ module.exports = (app) => {
 
     app.get(rotasHelpCenterAsk.listAnswers, helperCenterAskController.listAnswers());
 
+    app.get(rotasHelpCenterAsk.exportaData, helperCenterAskController.exportData());
+
 }

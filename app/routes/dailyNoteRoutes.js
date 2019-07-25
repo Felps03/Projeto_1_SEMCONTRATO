@@ -25,6 +25,9 @@ module.exports = app => {
 
     app.get(rotasDailyNote.registered, dailyNoteController.registered())
 
+
+    app.get(rotasDailyNote.exportaData, dailyNoteController.exportData());
+
     //app.get(rotasDailyNote.listLastDaily, dailyNoteController.listLastDaily());
 
     app.get(rotasDailyNote.listUser, dailyNoteController.listUser())

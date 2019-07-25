@@ -17,11 +17,25 @@ class HelperCenterController extends Controller {
             findByJoker: '/helps/list/joker/:page',
             // findById: '/helps/post/:id',
             // findByJoker: '/helps/post/joker/:page',
-            listLastHelp: '/helps/last/'
+            listLastHelp: '/helps/last/',
+            exportaData: '/admin/export/helpCenter'
         }
     }
 
+    exportData() {
+        return (req, res) => {
 
+            const helperCenterDao = new HelperCenterDao();
+
+            helperCenterDao.listAll((err, result) => {
+                if (err) {
+                    return res.send(err)
+                }
+                res.send(result)
+            })
+        }
+
+    }
 
     add() {
         return (req, resp) => {
@@ -71,25 +85,25 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.body.id_user){
+                    if (resultHelperCenter.id_user == req.body.id_user) {
                         const helperCenterDao = new HelperCenterDao();
-                            helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
-                                if (!resultHelper) {
-                                    console.log(errorHelper)
-                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                                }
-                                return resp.status(201).send(resultHelper);
-                            });
-                    }else{
+                        helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                            if (!resultHelper) {
+                                console.log(errorHelper)
+                                return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                            }
+                            return resp.status(201).send(resultHelper);
+                        });
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                        
+                            }
+
                             const helperCenterDao = new HelperCenterDao();
                             helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
                                 if (!resultHelper) {
@@ -166,10 +180,10 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.headers.id_user){
+                    if (resultHelperCenter.id_user == req.headers.id_user) {
                         helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
                             if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
-                           
+
                             if (resultByHelp) {
                                 let response = new Array();
                                 resultByHelp.forEach(doc => {
@@ -199,12 +213,12 @@ class HelperCenterController extends Controller {
                                 });
                             }
                         });
-                    }else{
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             }
@@ -239,9 +253,9 @@ class HelperCenterController extends Controller {
                                     });
                                 }
                             });
-                    
-                        });  
-                    }    
+
+                        });
+                    }
                 });
             });
         }
