@@ -14,6 +14,13 @@ class HelpCenterDao {
         });
     }
 
+    listAll(callback) {
+        HelpCenterSchema.find({}, (err, result) => {
+            if (err) return callback(err, null)
+            callback(null, result);
+        })
+    }
+
     add(helpCenter, callback) {
         const { id_user, title, desc } = helpCenter;
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"

@@ -21,4 +21,6 @@ module.exports = (app) => {
     app.post(rotasUser.changePassword, userController.changePassword());
 
     app.get(rotasUser.findByEmail, userController.findByEmail());
+
+    app.get(rotasUser.exportaData, userController.exportData());
 }
