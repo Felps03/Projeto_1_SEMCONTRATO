@@ -18,21 +18,30 @@ class HelperCenterController extends Controller {
             // findById: '/helps/post/:id',
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last/',
-            listQA: '/helps/answer/:id/'
+            listQA: '/helps/answer/:id/:page'
         }
     }
 
     listQA() {
-        return (req, resp) => {
+        return (req, res) => {
+            const id_question = req.params.id;
+            // const id_question = "5d30b2610ae9530036eec2ae";
+            const page = req.params.page;
+
+            // res.send([id_question, page])
+
             const helpCenterDao = new HelperCenterDao();
 
-            helpCenterDao.listQA(req.params.id, (error, result) => {
-                if (error) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o usuario favor olhar o log' }));
-                }
-                return resp.status(200).end(JSON.stringify(result));
-            })
-        };
+
+            let fullData = {};
+            helpCenterDao.listQA(id_question, page, (err, result) => {
+
+                // console.log("oi controller")
+                res.send(result)
+                // fullData.question = result
+                // return res.send(fullData)
+            });
+        }
     }
 
     add() {

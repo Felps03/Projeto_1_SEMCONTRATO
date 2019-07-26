@@ -1,4 +1,5 @@
-const HelpCenterAskDao = require('../infra/helperCenterAskDao');
+const HelperCenterAskDao = require('../infra/helperCenterAskDao');
+const mongoose = require('../../database/index');
 const HelpCenterSchema = require('../models/helpCenter');
 const HelpCenterAskSchema = require('../models/helpCenterAsk');
 const PAGELIMIT = 10;
@@ -17,32 +18,105 @@ class HelpCenterDao {
 
     }
 
-    listQA(id, callback) {
+    listQA(id, page, callback) {
 
-        HelpCenterSchema.findOne({ _id: id }, (err, docs) => {
-            const allData = {};
+        // HelpCenterSchema.findOne({ _id: id }, (err, docs) => {
+        //     const allData = {};
 
-            if (err) return callback(err, null)
+        //     if (err) return callback(err, null)
 
-            else {
-                const askdao = new HelpCenterAskDao();
+        //     else {
+        //         const askdao = new HelpCenterAskDao();
 
-                allData.docs = docs
+        //         allData.docs = docs
 
-                askdao.findByQuestionID(id, 1, (error, result) => {
+        //         askdao.findByQuestionID(id, 1, (error, result) => {
 
-                    if (error) {
-                        callback(error, null)
-                    }
+        //             if (error) {
+        //                 callback(error, null)
+        //             }
 
-                    allData.answers = result;
+        //             allData.answers = result;
 
-                    callback(null, allData)
-                });
+        //             callback(null, allData)
+        //         });
 
-            }
+        //     }
 
+        // })
+        let fullData = {}
+        this.aggregrate.match({
+            _id: mongoose.Types.ObjectId(id)
         })
+        HelpCenterSchema.aggregatePaginate(
+            this.aggregrate,
+            {
+                page: 1,
+                limit: PAGELIMIT
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+
+
+                //fullData.question = docs
+                // console.log('docs', docs);
+                let questionInfo = {
+                    ask: docs.docs[0].title,
+                    text: docs.docs[0].desc,
+                    date: docs.docs[0].date,
+                    owner: docs.docs[0].owner[0]['name'] + " " + docs.docs[0].owner[0]['lastName']
+                }
+
+                fullData.question = questionInfo
+
+                // console.log(fullData.question.docs[0].title);
+                const helpCenterAskDao = new HelperCenterAskDao();
+
+                helpCenterAskDao.aggregrate.match({
+                    id_helpCenter: mongoose.Types.ObjectId(id)
+                })
+                HelpCenterAskSchema.aggregatePaginate(
+                    helpCenterAskDao.aggregrate,
+                    {
+                        page: page,
+                        limit: PAGELIMIT
+                    },
+                    (err, answers) => {
+                        //console.log(answers)
+                        // console.log("oi")
+                        // fullData.answers = answers;
+                        // return callback(null, fullData)
+                        // console.log(answers);
+
+                        // console.log(answers['totalDocs']);
+                        // console.log(answers['limit']);
+                        // console.log(answers['page']);
+                        // console.log(answers['totalPages']);
+                        let pagination = {
+                            totalDocs: answers['totalDocs'],
+                            limit: answers['limit'],
+                            page: answers['page'],
+                            totalPages: answers['totalPages']
+                        }
+                        let allAnswers = [];
+                        answers.docs.forEach((doc) => {
+                            // console.log(doc);
+                            let answer = {
+                                text: doc.desc,
+                                date: doc.date,
+                                owner: doc.owner[0]['name'] + " " + doc.owner[0]['lastName']
+                            }
+                            allAnswers.push(answer)
+                            fullData.answerData = allAnswers
+
+                        })
+
+                        fullData.pagination = pagination;
+                        return callback(null, fullData)
+                    }
+                )
+            }
+        )
     }
 
     add(helpCenter, callback) {
