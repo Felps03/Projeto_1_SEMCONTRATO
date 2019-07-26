@@ -228,9 +228,9 @@ class DailyNoteController extends Controller {
                         response.push({
                             id_daily: doc._id,
                             id_user: doc.id_user,
-                            yesterday: doc.yesterday,
-                            today: doc.today,
-                            impediment: doc.impediment,
+                            yesterday: doc.yesterday.replace('<', '&lt;').replace('>', '&gt;'),
+                            today: doc.today.replace('<', '&lt;').replace('>', '&gt;'),
+                            impediment: doc.impediment.replace('<', '&lt;').replace('>', '&gt;'),
                             date: doc.date,
                             owner:
                                 doc.owner[0]['name'] +
@@ -272,9 +272,9 @@ class DailyNoteController extends Controller {
                             response.push({
                                 id_daily: doc._id,
                                 id_user: doc.id_user,
-                                yesterday: doc.yesterday,
-                                today: doc.today,
-                                impediment: doc.impediment,
+                                yesterday: doc.yesterday.replace('<', '&lt;').replace('>', '&gt;'),
+                                today: doc.today.replace('<', '&lt;').replace('>', '&gt;'),
+                                impediment: doc.impediment.replace('<', '&lt;').replace('>', '&gt;'),
                                 date: doc.date,
                                 owner:
                                     doc.owner[0]['name'] +
