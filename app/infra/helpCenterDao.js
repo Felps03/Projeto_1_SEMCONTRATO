@@ -40,6 +40,27 @@ class HelpCenterDao {
             this.aggregrate, {
                 page: page,
                 limit: PAGELIMIT
+                // ,
+                // sort: {
+                //     date: 1
+                //     //date: -1
+                // }
+            },
+            (err, docs) => {
+                if (err) return callback(err, null)
+                callback(null, docs);
+            }
+        )
+    }
+
+    listLastHelp(callback) {
+        HelpCenterSchema.aggregatePaginate(
+            this.aggregrate, {
+                limit: PAGELIMIT,
+                sort: {
+                    date: 1
+                    //date: -1
+                }
             },
             (err, docs) => {
                 if (err) return callback(err, null)
@@ -83,19 +104,7 @@ class HelpCenterDao {
         )
     }
 
-    listLastHelp(callback) {
-        HelpCenterSchema.paginate({}, {
-            limit: LASTLIMIT,
-            page: 1,
-            sort: {
-                date: -1
-            }
-        }, (err, docs) => {
-            if (err) return callback(err, null)
 
-            callback(null, docs);
-        });
-    }
 }
 
 module.exports = HelpCenterDao;

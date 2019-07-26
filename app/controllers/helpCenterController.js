@@ -71,25 +71,25 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.body.id_user){
+                    if (resultHelperCenter.id_user == req.body.id_user) {
                         const helperCenterDao = new HelperCenterDao();
-                            helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
-                                if (!resultHelper) {
-                                    console.log(errorHelper)
-                                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                                }
-                                return resp.status(201).send(resultHelper);
-                            });
-                    }else{
+                        helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
+                            if (!resultHelper) {
+                                console.log(errorHelper)
+                                return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                            }
+                            return resp.status(201).send(resultHelper);
+                        });
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
-                        
+                            }
+
                             const helperCenterDao = new HelperCenterDao();
                             helperCenterDao.update(req.body, req.params.id, (errorHelper, resultHelper) => {
                                 if (!resultHelper) {
@@ -115,7 +115,6 @@ class HelperCenterController extends Controller {
                 }
 
                 let response = new Array();
-                console.log(result);
                 let docs = result.docs;
 
                 docs.forEach(doc => {
@@ -149,7 +148,29 @@ class HelperCenterController extends Controller {
                     console.log(error);
                     resp.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de listar o usuario favor olhar o log" }));
                 }
-                resp.send(result);
+
+                let response = new Array();
+                let docs = result.docs;
+
+                docs.forEach(doc => {
+                    response.push({
+                        "_id": doc._id,
+                        "title": doc.title,
+                        "desc": doc.desc,
+                        "date": doc.date,
+                        "id_user": doc.id_user,
+                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                    })
+                });
+
+                response.push({
+                    totalDocs: result.totalDocs,
+                    limit: result.limit,
+                    page: result.page,
+                    totalPages: result.totalPages,
+                });
+
+                resp.send(response);
             });
         }
     }
@@ -166,10 +187,10 @@ class HelperCenterController extends Controller {
                     if (err) {
                         return res.status(400).send(JSON.stringify({ erro: "Houve Algum problema na hora de mostrar os dados da daily favor olhar o log" }));
                     }
-                    if(resultHelperCenter.id_user == req.headers.id_user){
+                    if (resultHelperCenter.id_user == req.headers.id_user) {
                         helperCenterAskDao.findById_HelpCenter(req.params.id, (errorByHelp, resultByHelp) => {
                             if (errorByHelp) return resp.status(400).send(JSON.stringify({ erro: 'Ocorreu um erro ao encontrar as ASK' }));
-                           
+
                             if (resultByHelp) {
                                 let response = new Array();
                                 resultByHelp.forEach(doc => {
@@ -199,12 +220,12 @@ class HelperCenterController extends Controller {
                                 });
                             }
                         });
-                    }else{
+                    } else {
                         userDao.checkAdmin(resultByID.email, (err, docs) => {
                             // console.log(docs.isAdmin);
                             if (err) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
-                            } 
+                            }
                             if (!docs) {
                                 return resp.status(500).send(JSON.stringify({ error: 'Não é ADMIN' }));
                             }
@@ -239,9 +260,9 @@ class HelperCenterController extends Controller {
                                     });
                                 }
                             });
-                    
-                        });  
-                    }    
+
+                        });
+                    }
                 });
             });
         }
