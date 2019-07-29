@@ -5,6 +5,7 @@ const helpCenter = require('./helpCenterRoutes');
 const helpCenterAskRoutes = require('./helpCenterAskRoutes');
 const homeRoutes = require('./homeRoutes');
 const accessRoutes = require('./accessRoutes');
+const useChatBotRoutes = require('./useChatBotRoutes');
 
 module.exports = (app) => {
     authRoutes(app);
@@ -14,4 +15,5 @@ module.exports = (app) => {
     helpCenterAskRoutes(app);
     homeRoutes(app);
     accessRoutes(app);
+    useChatBotRoutes(app);
 };
