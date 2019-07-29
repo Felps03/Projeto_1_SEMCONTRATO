@@ -57,13 +57,13 @@ class HelpCenterDao {
             (err, docs) => {
                 if (err) return callback(err, null)
 
-
-                //fullData.question = docs
-                // console.log('docs', docs);
+                //console.log('docs', docs);
                 let questionInfo = {
                     ask: docs.docs[0].title,
                     text: docs.docs[0].desc,
                     date: docs.docs[0].date,
+                    id_user: docs.docs[0].id_user,
+                    id_helpCenter: docs.docs[0]._id,
                     owner: docs.docs[0].owner[0]['name'] + " " + docs.docs[0].owner[0]['lastName']
                 }
 
@@ -100,10 +100,13 @@ class HelpCenterDao {
                         }
                         let allAnswers = [];
                         answers.docs.forEach((doc) => {
-                            // console.log(doc);
+                            //console.log(doc);
                             let answer = {
                                 text: doc.desc,
                                 date: doc.date,
+                                id_user: doc.id_user,
+                                id_helpCenter: doc.id_helpCenter,
+                                id_answer: doc._id,
                                 owner: doc.owner[0]['name'] + " " + doc.owner[0]['lastName']
                             }
                             allAnswers.push(answer)
