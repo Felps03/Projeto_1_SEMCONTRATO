@@ -24,9 +24,7 @@ class AuthController {
     authenticate() {
         return (req, resp) => {
 
-            if (!req.body['g-recaptcha-response']) {
-                return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
-            }
+            if (!req.body['g-recaptcha-response']) return resp.status(400).send({ error: "Teste reCAPTCHA não realizado" })
 
             const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
             let recaptchaError = false;
@@ -36,52 +34,32 @@ class AuthController {
                 })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
                     if (!res.success) {
                         recaptchaError = true;
-                        console.log(res['error-codes']);
+                        return resp.status(400).send(res['error-codes']);
                     }
                     return resp.status(200).send(res);
                 });
+            if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
 
-            if (recaptchaError) {
-                return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
-            }
+
 
             const { email, password } = req.body;
 
             const hash = sha256(password + salt);
 
-            // console.log("Email: ", email, "Senha: ", hash);
-
             const userDao = new UserDao();
             userDao.authenticate(email, hash, (error, result) => {
-                if (error) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
-                }
-                // console.log(result);
-                if (result.length == 0) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
-                } else {
-                    //adicionar o token
-
-                    // const email = "oleiro87teste@gmail.com";
+                if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                if (result.length == 0) return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                else {
                     const tokenHandler = new TokenHandler();
-                    // console.log("oi");
                     userDao.checkAdmin(email, (err, docs) => {
-                        // console.log(docs.isAdmin);
-                        if (err) {
-                            return resp.status(500).send('erro no servidor');
-                        } else {
-                            // resp.status(200).send(docs);
-                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
-
-
-                        }
+                        if (err) return resp.status(500).send('erro no servidor');
+                        else return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
                     });
                 }
             });
-
         }
     }
 

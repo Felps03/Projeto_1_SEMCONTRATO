@@ -4,5 +4,7 @@ const configurationController = new ConfigurationController();
 module.exports = (app) => {
     const rotasConfiguration = ConfigurationController.rotas();
 
-    app.get(rotasConfiguration.findById, configurationController.findById());
+    app.get(rotasConfiguration.find, configurationController.find());
+
+    app.post(rotasConfiguration.update, configurationController.update());
 }

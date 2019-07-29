@@ -3,20 +3,25 @@ const ConfigurationDAO = require('../infra/configurationDAO');
 class ConfigurationController {
     static rotas() {
         return {
-            findById: '/configuration'
+            find: '/configuration',
+            update: '/configuration/:id'
         }
     }
 
-    findById() {
-        return (req, resp) => {
+    find() {
+        return async(req, resp) => {
             const configurationDAO = new ConfigurationDAO();
-            configurationDAO.findByID((error, result) => {
-                if (error) {
-                    console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de remover o configuration favor olhar o log' }));
-                }
-                return resp.status(200).end(JSON.stringify(result));
-            });
+            let recaptchaActive = await configurationDAO.findOne();
+            return resp.status(200).end(JSON.stringify(recaptchaActive));
+        }
+    }
+
+
+    update() {
+        return async(req, resp) => {
+            const configurationDAO = new ConfigurationDAO();
+            let recaptchaActive = await configurationDAO.update(req.body, req.params.id);
+            return resp.status(200).end(JSON.stringify(recaptchaActive));
         }
     }
 }
