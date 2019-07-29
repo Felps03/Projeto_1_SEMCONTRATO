@@ -4,6 +4,8 @@ const fs = require('fs');
 const { validationResult } = require('express-validator/check');
 const secretJWT = require('../config/secretJWT');
 
+const ConfigurationDAO = require('../infra/configurationDAO');
+
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
 const TokenHandler = require('../utils/TokenHandler');
@@ -229,26 +231,30 @@ class UserController extends Controller {
 
             const { password } = req.body;
 
-            if (password) {
-                const hash = sha256(password + salt);
-                userDao.update(req.body, hash, req.params.id, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
-                    }
+            const configDao = new ConfigurationDAO();
+            configDao.findOne((errorConfig, resultConfig) => {
 
-                    return resp.status(201).send(result);
-                });
-            } else {
-                userDao.updateWithoutPassword(req.body, req.params.id, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
-                    }
+                if (password) {
+                    const hash = sha256(password + salt);
+                    userDao.update(req.body, hash, req.params.id, resultConfig._id, (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                        }
 
-                    return resp.status(201).send(result);
-                });
-            }
+                        return resp.status(201).send(result);
+                    });
+                } else {
+                    userDao.updateWithoutPassword(req.body, req.params.id, resultConfig._id, (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                        }
+
+                        return resp.status(201).send(result);
+                    });
+                }
+            })
         }
     }
 

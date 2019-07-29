@@ -66,7 +66,7 @@ class UserDao {
     // }
 
     // taking off photo
-    update(user, hash, id, callback) {
+    update(user, hash, id, idConfig, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
@@ -78,7 +78,7 @@ class UserDao {
             const { isAdmin } = result;
             if (isAdmin) {
                 let recaptcha = false;
-                ConfiguracaoSchema.findByIdAndUpdate("5d3a07b931b2d929a846b69b", { recaptcha }, (err, docsConfiguracao) => {
+                ConfiguracaoSchema.findByIdAndUpdate(idConfig, { recaptcha }, (err, docsConfiguracao) => {
                     if (err) {
                         return callback(err, null);
                     }
@@ -104,7 +104,7 @@ class UserDao {
         });
     }
 
-    updateWithoutPassword(user, id, callback) {
+    updateWithoutPassword(user, id, idConfig, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);

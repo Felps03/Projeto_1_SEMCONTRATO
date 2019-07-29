@@ -3,19 +3,17 @@ const ConfiguracaoSchema = require('../models/configuration')
 class configurationDAO {
 
     findOne(callback) {
-        ConfiguracaoSchema.findOne({}, function(err, docs) {
-            if (err) callback(err)
-            callback(docs)
+        ConfiguracaoSchema.findOne({}, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
         });
     }
 
-    update(config, id) {
+    update(config, id, callback) {
         const { recaptcha } = config;
-        return new Promise((resolve, reject) => {
-            ConfiguracaoSchema.findByIdAndUpdate(id, { recaptcha }, function(err, docs) {
-                if (err) reject(err)
-                resolve(docs)
-            });
+        ConfiguracaoSchema.findByIdAndUpdate(id, { recaptcha }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
         });
     }
 }

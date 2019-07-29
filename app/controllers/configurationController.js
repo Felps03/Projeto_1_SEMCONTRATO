@@ -9,19 +9,20 @@ class ConfigurationController {
     }
 
     find() {
-        return async(req, resp) => {
+        return (req, resp) => {
             const configurationDAO = new ConfigurationDAO();
-            let recaptchaActive = await configurationDAO.findOne();
-            return resp.status(200).end(JSON.stringify(recaptchaActive));
+            configurationDAO.findOne((error, result) => {
+                resp.send(result);
+            });
         }
     }
-
 
     update() {
         return async(req, resp) => {
             const configurationDAO = new ConfigurationDAO();
-            let recaptchaActive = await configurationDAO.update(req.body, req.params.id);
-            return resp.status(200).end(JSON.stringify(recaptchaActive));
+            configurationDAO.update(req.body, req.params.id, (error, result) => {
+                resp.send(result);
+            });
         }
     }
 }
