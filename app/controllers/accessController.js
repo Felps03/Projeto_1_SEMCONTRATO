@@ -33,14 +33,14 @@ class AccessController {
 
             accessDao.add(req.body,
                 (err, result) => {
-                    if(err){
+                    if (err) {
                         return res.status(400).send(
                             JSON.stringify(
-                                {erro: 'Erro na contagem de acesso á página.'}
+                                { erro: 'Erro na contagem de acesso á página.' }
                             )
                         );
                     }
-                    return res.status(200).send(result);
+                    return res.status(201).send(result);
                 }
             );
         }
@@ -51,11 +51,11 @@ class AccessController {
             const accessDao = new AccessDao();
 
             accessDao.update(req.body, req.params.id,
-                (err, result) =>{
-                    if(err){
+                (err, result) => {
+                    if (err) {
                         return res.status(400).send(
                             JSON.stringify(
-                                {erro: 'Erro no upload de registro de acesso á página.'}
+                                { erro: 'Erro no upload de registro de acesso á página.' }
                             )
                         );
                     }
@@ -72,10 +72,10 @@ class AccessController {
 
             accessDao.remove(req.params.id,
                 (err, result) => {
-                    if(err){
+                    if (err) {
                         return res.status(400).send(
                             JSON.stringify(
-                                {erro: 'Erro ao remover redistro de acesso á página.'}
+                                { erro: 'Erro ao remover redistro de acesso á página.' }
                             )
                         )
                     }
