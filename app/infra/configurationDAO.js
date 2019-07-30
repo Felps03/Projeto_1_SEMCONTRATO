@@ -16,6 +16,15 @@ class configurationDAO {
             callback(null, docs);
         });
     }
+
+
+    add(callback) {
+        let recaptcha = false;
+        ConfiguracaoSchema.create({ recaptcha }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs)
+        })
+    }
 }
 
 module.exports = configurationDAO;

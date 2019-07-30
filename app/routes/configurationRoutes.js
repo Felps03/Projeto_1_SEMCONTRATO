@@ -7,4 +7,6 @@ module.exports = (app) => {
     app.get(rotasConfiguration.find, configurationController.find());
 
     app.post(rotasConfiguration.update, configurationController.update());
+
+    app.post(rotasConfiguration.find, configurationController.create());
 }

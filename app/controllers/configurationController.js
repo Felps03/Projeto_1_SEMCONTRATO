@@ -18,9 +18,19 @@ class ConfigurationController {
     }
 
     update() {
-        return async(req, resp) => {
+        return async (req, resp) => {
             const configurationDAO = new ConfigurationDAO();
             configurationDAO.update(req.body, req.params.id, (error, result) => {
+                resp.send(result);
+            });
+        }
+    }
+
+
+    create() {
+        return async (req, resp) => {
+            const configurationDAO = new ConfigurationDAO();
+            configurationDAO.add((error, result) => {
                 resp.send(result);
             });
         }
