@@ -303,8 +303,8 @@ class HelperCenterController extends Controller {
 
                 let totalDocs = resultTitle.totalDocs;
                 let limit = resultTitle.limit;
-                
-                
+
+
                 helpCenterDao2.findByDesc(req.body, req.params.page, (error, resultDesc) => {
                     if (error) {
                         console.log(error);
@@ -315,13 +315,13 @@ class HelperCenterController extends Controller {
 
                     docsDesc.forEach(doc => {
                         let add = true;
-                        for(let i = 0; i < docsTitle.length; i++){
-                            if(String(doc._id) == String(docsTitle[i]._id)){  
+                        for (let i = 0; i < docsTitle.length; i++) {
+                            if (doc._id == docsTitle[i]._id) {
                                 add = false;
                                 break;
                             }
                         }
-                        if(add == true){
+                        if (add == true) {
                             response.push({
                                 "_id": doc._id,
                                 "title": doc.title,
@@ -333,20 +333,20 @@ class HelperCenterController extends Controller {
                         }
                     });
                     totalDocs = totalDocs + resultDesc.totalDocs;
-                    let totalPages = totalDocs/limit;
+                    let totalPages = totalDocs / limit;
                     let page = req.params.page;
 
                     response.push({
-                        "totalDocs" : totalDocs + resultDesc.totalDocs,
-                        "limit" : limit,
-                        "page" : page,
-                        "totalPages" : totalPages + resultDesc.totalPages
+                        "totalDocs": totalDocs + resultDesc.totalDocs,
+                        "limit": limit,
+                        "page": page,
+                        "totalPages": totalPages + resultDesc.totalPages
                     });
 
                     return resp.status(200).send(response);
                 })
 
-                
+
             });
         }
     }

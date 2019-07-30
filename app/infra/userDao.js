@@ -1,4 +1,5 @@
 const UserSchema = require('../models/user');
+const ConfiguracaoSchema = require('../models/configuration');
 const crypto = require("crypto");
 let fs = require('fs');
 
@@ -74,7 +75,7 @@ class UserDao {
     // }
 
     // taking off photo
-    update(user, hash, id, callback) {
+    update(user, hash, id, idConfig, recaptcha, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
@@ -82,6 +83,23 @@ class UserDao {
             }
             const password = hash;
             const { name, lastName, userName, email, dateOfBirth } = user;
+
+            const { isAdmin } = result;
+            if (isAdmin) {
+                ConfiguracaoSchema.findByIdAndUpdate(idConfig, { recaptcha }, (err, docsConfiguracao) => {
+                    if (err) return callback(err, null);
+
+                    UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docsUser) => {
+                        if (err) {
+                            // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                            return callback(err, null)
+                        }
+                        // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                        callback(null, docsUser);
+                    });
+                });
+            }
+
             UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, password, dateOfBirth }, { new: true }, (err, docs) => {
                 if (err) {
                     // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
@@ -93,21 +111,28 @@ class UserDao {
         });
     }
 
-    updateWithoutPassword(user, id, callback) {
+    updateWithoutPassword(user, id, idConfig, recaptcha, callback) {
         this.findById(id, (error, result) => {
             if (error) {
                 console.log(error);
                 resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
             }
-            const { name, lastName, userName, email, dateOfBirth } = user;
-            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, dateOfBirth }, { new: true }, (err, docs) => {
-                if (err) {
-                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
-                    return callback(err, null)
-                }
-                // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
-                callback(null, docs);
-            });
+            const { isAdmin } = result;
+            if (isAdmin) {
+                ConfiguracaoSchema.findByIdAndUpdate(idConfig, { recaptcha }, (err, docsConfiguracao) => {
+                    if (err) return callback(err, null);
+
+                    const { name, lastName, userName, email, dateOfBirth } = user;
+                    UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, dateOfBirth }, { new: true }, (err, docs) => {
+                        if (err) {
+                            // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                            return callback(err, null)
+                        }
+                        // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                        callback(null, docs);
+                    });
+                })
+            }
         });
     }
 

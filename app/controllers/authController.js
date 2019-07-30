@@ -1,16 +1,18 @@
 const sha256 = require('js-sha256').sha256;
-const salt = require('../config/salt');
+const fetch = require('node-fetch');
 
-const UserDao = require('../infra/userDao');
-const GenerateEmail = require('../utils/generateEmail');
-const RecoverDataDao = require('../infra/RecoverDataDao');
-const TokenHandler = require('../utils/TokenHandler');
 const secretJWT = require('../config/secretJWT');
+const salt = require('../config/salt');
+const recaptchaConfig = require('../../config/recaptcha');
+
+const GenerateEmail = require('../utils/generateEmail');
+const TokenHandler = require('../utils/TokenHandler');
 const getTokenFromHeader = require('../utils/getTokenFromHeader');
 
-// recaptcha
-const recaptchaConfig = require('../../config/recaptcha');
-const fetch = require('node-fetch');
+const UserDao = require('../infra/userDao');
+const RecoverDataDao = require('../infra/RecoverDataDao');
+const ConfigurationDAO = require('../infra/configurationDAO');
+
 class AuthController {
     static rotas() {
         return {
@@ -24,61 +26,51 @@ class AuthController {
     authenticate() {
         return (req, resp) => {
 
-            // recaptcha
-            /*
-            if (!req.body['g-recaptcha-response']) {
-                return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
-            }
+            const configDao = new ConfigurationDAO();
+            configDao.findOne((errorConfig, resultConfig) => {
 
-            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
-            let recaptchaError = false;
+                const { email, password } = req.body;
+                const hash = sha256(password + salt);
+                const userDao = new UserDao();
 
-            fetch(recaptchaConfig.url + reqParams, {
-                    method: 'POST',
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (!res.success) {
-                        recaptchaError = true;
-                        console.log(res['error-codes']);
-                    }
-                });
+                if (resultConfig.recaptcha) {
+                    if (!req.body['g-recaptcha-response']) return resp.status(400).send({ error: "Teste reCAPTCHA não realizado" })
 
-            if (recaptchaError) {
-                return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
-            }
-            //
-
-            */
-            const { email, password } = req.body;
-
-            const hash = sha256(password + salt);
-
-            // console.log("Email: ", email, "Senha: ", hash);
-
-            const userDao = new UserDao();
-            userDao.authenticate(email, hash, (error, result) => {
-                if (error) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
-                }
-                // console.log(result);
-                if (result.length == 0) {
-                    return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                    const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
+                    let recaptchaError = false;
+                    fetch(recaptchaConfig.url + reqParams, {
+                            method: 'POST',
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.success) {
+                                recaptchaError = true;
+                                return resp.status(400).send(res['error-codes']);
+                            }
+                            return resp.status(200).send(res);
+                        });
+                    if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
+                    userDao.authenticate(email, hash, (error, result) => {
+                        if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                        if (result.length == 0) return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                        else {
+                            const tokenHandler = new TokenHandler();
+                            userDao.checkAdmin(email, (err, docs) => {
+                                if (err) return resp.status(500).send('erro no servidor');
+                                else return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
+                            });
+                        }
+                    });
                 } else {
-                    //adicionar o token
-
-                    // const email = "oleiro87teste@gmail.com";
-                    const tokenHandler = new TokenHandler();
-                    // console.log("oi");
-                    userDao.checkAdmin(email, (err, docs) => {
-                        // console.log(docs.isAdmin);
-                        if (err) {
-                            return resp.status(500).send('erro no servidor');
-                        } else {
-                            // resp.status(200).send(docs);
-                            return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
-                            
-                            
+                    userDao.authenticate(email, hash, (error, result) => {
+                        if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                        if (result.length == 0) return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                        else {
+                            const tokenHandler = new TokenHandler();
+                            userDao.checkAdmin(email, (err, docs) => {
+                                if (err) return resp.status(500).send('erro no servidor');
+                                else return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
+                            });
                         }
                     });
                 }
@@ -142,8 +134,8 @@ class AuthController {
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
                 if (err == null) {
-                   return  res.status(400).send(JSON.stringify({ erro: "link expirou" }));
-                }else{
+                    return res.status(400).send(JSON.stringify({ erro: "link expirou" }));
+                } else {
 
                     console.log(`Retorno: ${docs.expires}`);
 
@@ -158,7 +150,7 @@ class AuthController {
 
                 }
 
-               
+
             });
         }
     }

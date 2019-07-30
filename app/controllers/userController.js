@@ -4,6 +4,8 @@ const fs = require('fs');
 const { validationResult } = require('express-validator/check');
 const secretJWT = require('../config/secretJWT');
 
+const ConfigurationDAO = require('../infra/configurationDAO');
+
 const { Controller } = require('./Controller');
 const UserDao = require('../infra/userDao');
 const TokenHandler = require('../utils/TokenHandler');
@@ -137,37 +139,8 @@ class UserController extends Controller {
 
     add() {
         return (req, resp) => {
-
-            /*
-            // recaptcha
-            if (!req.body['g-recaptcha-response']) {
-                return resp.status(400).send('{"error": "Teste reCAPTCHA não realizado"}')
-            }
-
-            const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
-            let recaptchaError = false;
-
-            fetch(recaptchaConfig.url + reqParams, {
-                method: 'POST',
-            })
-                .then(res => res.json())
-                .then(res => {
-                    if (!res.success) {
-                        recaptchaError = true;
-                        console.log(res['error-codes']);
-                    }
-                });
-
-            if (recaptchaError) {
-                return resp.status(409).send('{"erro": "Teste reCAPTCHA falhou"}');
-            }
-            //
-
-            */
             const error = validationResult(req.body);
             let errorList = [];
-            //const { filename: file_photo } = req.file;
-
             if (!error.isEmpty()) {
                 error.array().forEach((valor, chave) => errorList.push(valor['msg']));
                 // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
@@ -175,34 +148,60 @@ class UserController extends Controller {
             }
 
             const { email } = req.body;
-
             const userDao = new UserDao();
-            userDao.validateEmailAvailable(email, (error, resultValidate) => {
-                if (resultValidate) {
-                    // console.log(file_photo);
-                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
-                    return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
-                }
-                userDao.add(req.body, (error, resultADD) => {
-                    if (error) {
-                        // console.log("Erro :", error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
-                    }
 
-                    const tokenHandler = new TokenHandler();
-                    userDao.checkAdmin(email, (err, docs) => {
-                        // console.log(docs.isAdmin);
-                        if (err) {
-                            return resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
-                        } else {
-                            // resp.status(200).send(docs);
-                            return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(resultADD);
-                        }
+            const { recaptcha } = req.body;
+
+            const configDao = new ConfigurationDAO();
+            configDao.findOne((errorConfig, resultConfig) => {
+                if (resultConfig.recaptcha) {
+                    if (!req.body['g-recaptcha-response']) return resp.status(400).send({ error: "Teste reCAPTCHA não realizado" })
+
+                    const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
+                    let recaptchaError = false;
+                    fetch(recaptchaConfig.url + reqParams, {
+                            method: 'POST',
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.success) {
+                                recaptchaError = true;
+                                return resp.status(400).send(res['error-codes']);
+                            }
+                            return resp.status(200).send(res);
+                        });
+                    if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
+                    userDao.validateEmailAvailable(email, (error, resultValidate) => {
+                        if (resultValidate) return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
+
+                        userDao.add(req.body, (error, resultADD) => {
+                            if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
+
+                            const tokenHandler = new TokenHandler();
+                            userDao.checkAdmin(email, (err, docs) => {
+                                if (err) return resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
+                                else return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(resultADD);
+
+                            });
+                        });
                     });
-                });
+                } else {
+                    userDao.validateEmailAvailable(email, (error, resultValidate) => {
+                        if (resultValidate) return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
 
-            });
+                        userDao.add(req.body, (error, resultADD) => {
+                            if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
 
+                            const tokenHandler = new TokenHandler();
+                            userDao.checkAdmin(email, (err, docs) => {
+                                if (err) return resp.status(500).send(JSON.stringify({ error: 'erro no servidor' }));
+                                else return resp.set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').status(200).send(resultADD);
+
+                            });
+                        });
+                    });
+                }
+            })
         };
     }
 
@@ -244,27 +243,32 @@ class UserController extends Controller {
             const userDao = new UserDao();
 
             const { password } = req.body;
+            const { recaptcha } = req.body;
 
-            if (password) {
-                const hash = sha256(password + salt);
-                userDao.update(req.body, hash, req.params.id, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
-                    }
+            const configDao = new ConfigurationDAO();
+            configDao.findOne((errorConfig, resultConfig) => {
 
-                    return resp.status(201).send(result);
-                });
-            } else {
-                userDao.updateWithoutPassword(req.body, req.params.id, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
-                    }
+                if (password) {
+                    const hash = sha256(password + salt);
+                    userDao.update(req.body, hash, req.params.id, resultConfig._id, recaptcha, (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                        }
 
-                    return resp.status(201).send(result);
-                });
-            }
+                        return resp.status(201).send(result);
+                    });
+                } else {
+                    userDao.updateWithoutPassword(req.body, req.params.id, resultConfig._id, recaptcha, (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de atualizar o usuario favor olhar o log' }));
+                        }
+
+                        return resp.status(201).send(result);
+                    });
+                }
+            })
         }
     }
 
