@@ -135,7 +135,7 @@ class AuthController {
             const recoverDataDao = new RecoverDataDao();
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
-                if (err == null) {
+                if (err != null) {
                     return res.status(400).send(JSON.stringify({ erro: "link expirou" }));
                 } else {
 
