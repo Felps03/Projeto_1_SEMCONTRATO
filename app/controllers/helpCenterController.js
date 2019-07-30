@@ -53,22 +53,26 @@ class HelperCenterController extends Controller {
                 return resp.status(400).send(errorList);
             }
 
-            const userDao = new UserDao();
-            userDao.findById(req.body.id_user, (error, resultByID) => {
-                if (!resultByID) {
-                    console.log(error)
-                    return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
-                }
+            // const userDao = new UserDao();
+            // userDao.findById(req.body.id_user, (error, resultByID) => {
+            // if (!resultByID) {
+            //     console.log(error)
+            //     return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
+            // }
+            // console.log(resultByID)
 
-                const helperCenterDao = new HelperCenterDao();
-                helperCenterDao.add(req.body, (errorHelper, resultHelper) => {
-                    if (!resultHelper) {
-                        console.log(errorHelper)
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                    }
-                    return resp.status(201).send(resultHelper);
-                });
+            const helperCenterDao = new HelperCenterDao();
+
+            helperCenterDao.add(req.body, (errorHelper, resultHelper) => {
+                console.log(resultHelper);
+                if (!resultHelper) {
+                    //console.log(errorHelper)
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                }
+                return resp.status(201).send(resultHelper);
             });
+            // return resp.status(201).send('ok');
+            //});
         };
     }
 

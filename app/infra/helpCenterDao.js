@@ -93,9 +93,10 @@ class HelpCenterDao {
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
         HelpCenterSchema.create({ id_user, title, desc, date }, (err, docs) => {
             if (err) {
+                callback(err, null);
             }
-            callback(null, docs);
-            return callback(err, null);
+
+            return callback(null, docs);
         });
     }
 
