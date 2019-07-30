@@ -8,6 +8,7 @@ const accessRoutes = require('./accessRoutes');
 const useChatBotRoutes = require('./useChatBotRoutes');
 // const homeRoutes = require('./homeRoutes')
 const configurationRoutes = require('./configurationRoutes')
+const ratingRoutes = require('./ratingRoutes');
 
 module.exports = (app) => {
     authRoutes(app);
@@ -19,4 +20,5 @@ module.exports = (app) => {
     accessRoutes(app);
     useChatBotRoutes(app);
     configurationRoutes(app);
+    ratingRoutes(app);
 };
