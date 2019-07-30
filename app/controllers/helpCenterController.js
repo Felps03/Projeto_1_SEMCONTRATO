@@ -316,7 +316,7 @@ class HelperCenterController extends Controller {
                     docsDesc.forEach(doc => {
                         let add = true;
                         for (let i = 0; i < docsTitle.length; i++) {
-                            if (doc._id == docsTitle[i]._id) {
+                            if (String(doc._id) == String(docsTitle[i]._id)) {
                                 add = false;
                                 break;
                             }
