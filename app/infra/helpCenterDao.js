@@ -19,31 +19,6 @@ class HelpCenterDao {
     }
 
     listQA(id, page, callback) {
-
-        // HelpCenterSchema.findOne({ _id: id }, (err, docs) => {
-        //     const allData = {};
-
-        //     if (err) return callback(err, null)
-
-        //     else {
-        //         const askdao = new HelpCenterAskDao();
-
-        //         allData.docs = docs
-
-        //         askdao.findByQuestionID(id, 1, (error, result) => {
-
-        //             if (error) {
-        //                 callback(error, null)
-        //             }
-
-        //             allData.answers = result;
-
-        //             callback(null, allData)
-        //         });
-
-        //     }
-
-        // })
         let fullData = {}
         this.aggregrate.match({
             _id: mongoose.Types.ObjectId(id)
@@ -82,16 +57,7 @@ class HelpCenterDao {
                         limit: PAGELIMIT
                     },
                     (err, answers) => {
-                        //console.log(answers)
-                        // console.log("oi")
-                        // fullData.answers = answers;
-                        // return callback(null, fullData)
-                        // console.log(answers);
 
-                        // console.log(answers['totalDocs']);
-                        // console.log(answers['limit']);
-                        // console.log(answers['page']);
-                        // console.log(answers['totalPages']);
                         let pagination = {
                             totalDocs: answers['totalDocs'],
                             limit: answers['limit'],
