@@ -56,4 +56,5 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const routes = require('./app/routes/routes');
 routes(app);
 
-app.listen(process.env.PORT || 3005);
+// app.listen(process.env.PORT || 3005);
+app.listen(process.env.PORT || 3000);
