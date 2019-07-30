@@ -5,6 +5,7 @@ class GenerateEmail {
 
     sendEmail(userEmail) {
 
+
         return new Promise((resolve, reject) => {
 
             //  email credentials
@@ -24,13 +25,16 @@ class GenerateEmail {
                     rejectUnauthorized: false
                 }
             });
-            
+
             //url change password 
-            const url = "localhost:3000/user-recovery.html";
+            // const url = "localhost:3000/user-recovery.html";
+            const url = "https://rebornsemcontrato.azurewebsites.net/user-recovery.html";
+
+            // console.log('url: ', url);
 
             // generating string to send via email
             const randomString = generateString();
-            console.log(randomString);
+            // console.log(randomString);
 
             /*
              the function sendMail returns a promise if a callback function is not set. So we check the 
@@ -38,26 +42,21 @@ class GenerateEmail {
              use this to set our promise to the function's return
             */
 
-
-
             // sending email
             sender.sendMail({
-                    from: `"Equipe Sem Contrato" <${email}>`, // sender address
-                    to: `${userEmail}`, // list of receivers
-                    subject: "Recuperação de senha!", // Subject line
-                    text: `
+                from: `"Equipe Sem Contrato" <${email}>`, // sender address
+                to: `${userEmail}`, // list of receivers
+                subject: "Recuperação de senha!", // Subject line
+                text: `
                     Você solicitou a recuperação de senha, acesse o link abaixo e insira o código no campo solicitado.
 
                     Click no link, abaixo.
                     
                     ${url}?key=${randomString}
 
-                    Código: ${randomString}
-                    
-                    
                     Equipe Sem Contrato!
                     `,
-                })
+            })
                 .then(() => {
                     resolve(randomString);
                 })
