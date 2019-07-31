@@ -18,7 +18,8 @@ class HelperCenterController extends Controller {
             // findById: '/helps/post/:id',
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last/',
-            exportaData: '/admin/export/helpCenter'
+            exportaData: '/admin/export/helpCenter',
+            listQA: '/helps/answer/:id/:page'
         }
     }
 
@@ -35,6 +36,30 @@ class HelperCenterController extends Controller {
             })
         }
 
+        listQA: '/helps/answer/:id/:page'
+    }
+
+
+    listQA() {
+        return (req, res) => {
+            const id_question = req.params.id;
+            // const id_question = "5d30b2610ae9530036eec2ae";
+            const page = req.params.page;
+
+            // res.send([id_question, page])
+
+            const helpCenterDao = new HelperCenterDao();
+
+
+            let fullData = {};
+            helpCenterDao.listQA(id_question, page, (err, result) => {
+
+                // console.log("oi controller")
+                res.send(result)
+                // fullData.question = result
+                // return res.send(fullData)
+            });
+        }
     }
 
     add() {
@@ -46,22 +71,26 @@ class HelperCenterController extends Controller {
                 return resp.status(400).send(errorList);
             }
 
-            const userDao = new UserDao();
-            userDao.findById(req.body.id_user, (error, resultByID) => {
-                if (!resultByID) {
-                    console.log(error)
-                    return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
-                }
+            // const userDao = new UserDao();
+            // userDao.findById(req.body.id_user, (error, resultByID) => {
+            // if (!resultByID) {
+            //     console.log(error)
+            //     return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
+            // }
+            // console.log(resultByID)
 
-                const helperCenterDao = new HelperCenterDao();
-                helperCenterDao.add(req.body, (errorHelper, resultHelper) => {
-                    if (!resultHelper) {
-                        console.log(errorHelper)
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
-                    }
-                    return resp.status(201).send(resultHelper);
-                });
+            const helperCenterDao = new HelperCenterDao();
+
+            helperCenterDao.add(req.body, (errorHelper, resultHelper) => {
+                console.log(resultHelper);
+                if (!resultHelper) {
+                    //console.log(errorHelper)
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar a daily favor olhar o log' }));
+                }
+                return resp.status(201).send(resultHelper);
             });
+            // return resp.status(201).send('ok');
+            //});
         };
     }
 

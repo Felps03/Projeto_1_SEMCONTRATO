@@ -18,7 +18,9 @@ module.exports = (app) => {
     app.post(rotasHelpCenter.findByJoker, helpCenterController.findByJoker());
 
     app.get(rotasHelpCenter.exportaData, helpCenterController.exportData());
-    
+
     app.get(rotasHelpCenter.listLastHelp, helpCenterController.listLastHelp());
+
+    app.get(rotasHelpCenter.listQA, helpCenterController.listQA());
 
 }
