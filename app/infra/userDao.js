@@ -86,6 +86,7 @@ class UserDao {
 
             const { isAdmin } = result;
             if (isAdmin) {
+
                 ConfiguracaoSchema.findByIdAndUpdate(idConfig, { recaptcha }, (err, docsConfiguracao) => {
                     if (err) return callback(err, null);
 
@@ -121,18 +122,18 @@ class UserDao {
             if (isAdmin) {
                 ConfiguracaoSchema.findByIdAndUpdate(idConfig, { recaptcha }, (err, docsConfiguracao) => {
                     if (err) return callback(err, null);
-
-                    const { name, lastName, userName, email, dateOfBirth } = user;
-                    UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, dateOfBirth }, { new: true }, (err, docs) => {
-                        if (err) {
-                            // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
-                            return callback(err, null)
-                        }
-                        // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
-                        callback(null, docs);
-                    });
                 })
             }
+
+            const { name, lastName, userName, email, dateOfBirth } = user;
+            UserSchema.findByIdAndUpdate(id, { name, lastName, userName, email, dateOfBirth }, { new: true }, (err, docs) => {
+                if (err) {
+                    // fs.unlinkSync(`./tmp/uploads/${file_photo}`);
+                    return callback(err, null)
+                }
+                // fs.unlinkSync(`./tmp/uploads/${result.file_photo}`);
+                callback(null, docs);
+            });
         });
     }
 
