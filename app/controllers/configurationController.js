@@ -4,7 +4,7 @@ class ConfigurationController {
     static rotas() {
         return {
             find: '/configuration',
-            update: '/configuration/:id'
+            update: '/admin/configuration/:id'
         }
     }
 
