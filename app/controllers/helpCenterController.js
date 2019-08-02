@@ -9,7 +9,7 @@ class HelperCenterController extends Controller {
 
     static rotas() {
         return {
-            cadastroPost: '/helps/post/',
+            cadastroPost: '/helps/post',
             editarPost: '/helps/post/:id',
             listaPost: '/helps/list/post/:page',
             deletarPost: '/helps/post/:id',
@@ -17,7 +17,7 @@ class HelperCenterController extends Controller {
             findByJoker: '/helps/list/joker/:page',
             // findById: '/helps/post/:id',
             // findByJoker: '/helps/post/joker/:page',
-            listLastHelp: '/helps/last/',
+            listLastHelp: '/helps/last',
             exportaData: '/admin/export/helpCenter',
             listQA: '/helps/answer/:id/:page'
         }

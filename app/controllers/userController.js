@@ -160,8 +160,8 @@ class UserController extends Controller {
                     const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
                     let recaptchaError = false;
                     fetch(recaptchaConfig.url + reqParams, {
-                            method: 'POST',
-                        })
+                        method: 'POST',
+                    })
                         .then(res => res.json())
                         .then(res => {
                             if (!res.success) {
