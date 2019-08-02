@@ -37,14 +37,9 @@ class HelpCenterDao {
 
     list(page, callback) {
         HelpCenterSchema.aggregatePaginate(
-            this.aggregrate, {
+            this.aggregrate.sort({ date: -1 }), {
                 page: page,
                 limit: PAGELIMIT
-                // ,
-                // sort: {
-                //     date: 1
-                //     //date: -1
-                // }
             },
             (err, docs) => {
                 if (err) return callback(err, null)
@@ -55,16 +50,10 @@ class HelpCenterDao {
 
     listLastHelp(callback) {
         HelpCenterSchema.aggregatePaginate(
-            this.aggregrate, {
-                limit: 7,
-                sort: {
-                    date: 1
-                    //date: -1
-                }
+            this.aggregrate.sort({ date: -1 }), {
             },
             (err, docs) => {
                 if (err) return callback(err, null)
-                console.log(docs);
                 callback(null, docs);
             }
         )
