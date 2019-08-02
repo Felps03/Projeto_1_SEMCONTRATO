@@ -177,7 +177,7 @@ class DailyNoteController extends Controller {
                 } else {
                     if (!userData.admin) {
                         return resp
-                            .status(500)
+                            .status(401)
                             .send(JSON.stringify({ error: 'Não é ADMIN' }))
                     }
                     const dailyNoteDao = new DailyNoteDao()
