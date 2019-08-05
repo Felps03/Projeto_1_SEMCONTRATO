@@ -11,4 +11,6 @@ module.exports = (app) => {
     app.post(rotasAuth.verifyCode, authController.verifyCode());
 
     app.post(rotasAuth.logout, authController.logout());
+
+    app.get(rotasAuth.checkAdmin, authController.checkAdmin());
 }
