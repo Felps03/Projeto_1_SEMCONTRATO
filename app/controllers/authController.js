@@ -34,15 +34,17 @@ class AuthController {
                 const userDao = new UserDao();
 
                 if (resultConfig.recaptcha) {
-                    if (!req.body['g-recaptcha-response']) return resp.status(400).send({ error: "Teste reCAPTCHA não realizado" })
+                    if (!req.body['g-recaptcha-response']) return resp.status(406).send({ error: "Teste reCAPTCHA não realizado" })
 
                     const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
                     let recaptchaError = false;
                     fetch(recaptchaConfig.url + reqParams, {
-                            method: 'POST',
-                        })
+                        method: 'POST',
+                    })
                         .then(res => res.json())
                         .then(res => {
+
+                            
                             if (!res.success) {
                                 recaptchaError = true;
                                 return resp.status(400).send(res['error-codes']);
