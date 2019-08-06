@@ -26,7 +26,7 @@ app.use("*", (req, res, next) => {
 
     // console.log('path: ', path, 'routesType: ',routesType);
 
-    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path == 'list')) {
+    if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path == 'list') || (path == 'last') || (path == 'answer')) {
         needToken = false;
     }
     // const userData = getTokenFromHeader(req);
