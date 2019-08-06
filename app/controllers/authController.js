@@ -19,7 +19,22 @@ class AuthController {
             authenticate: '/users/authenticate',
             resetPassword: '/users/user/recover',
             verifyCode: '/users/code/verify',
-            logout: '/users/logout'
+            logout: '/users/logout',
+            checkAdmin: '/users/user/check'
+        }
+    }
+
+    checkAdmin() {
+        return (req, res) => {
+            const userData = getTokenFromHeader(req);
+
+            if (userData.admin) {
+                return res.status(200).send()
+            } else {
+                return res.status(401).send()
+                // res.status(401)
+            }
+
         }
     }
 
@@ -39,8 +54,8 @@ class AuthController {
                     const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
                     let recaptchaError = false;
                     fetch(recaptchaConfig.url + reqParams, {
-                            method: 'POST',
-                        })
+                        method: 'POST',
+                    })
                         .then(res => res.json())
                         .then(res => {
                             if (!res.success) {
