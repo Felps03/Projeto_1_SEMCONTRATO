@@ -134,7 +134,7 @@ class HelpCenterDao {
         HelpCenterSchema.aggregatePaginate(
             this.aggregrate.sort({ _id: -1 }), { limit: 3 },
             (err, docs) => {
-                console.log(docs);
+                //console.log(docs);
                 if (err) return callback(err, null)
                 callback(null, docs);
             }

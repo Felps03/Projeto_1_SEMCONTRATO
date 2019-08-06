@@ -44,12 +44,12 @@ class AuthController {
                         .then(res => res.json())
                         .then(res => {
 
-                            
                             if (!res.success) {
                                 recaptchaError = true;
                                 return resp.status(400).send(res['error-codes']);
                             }
-                            return resp.status(200).send(res);
+                            return;
+
                         });
                     if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
                     userDao.authenticate(email, hash, (error, result) => {
@@ -93,10 +93,10 @@ class AuthController {
 
     resetPassword() {
         return (req, res) => {
-            console.log(req.body);
+            //console.log(req.body);
             const userEmail = req.body.email;
             const userDao = new UserDao();
-            console.log(userEmail);
+            //console.log(userEmail);
 
             userDao.validateEmailAvailable(userEmail, (error, answer) => {
 
