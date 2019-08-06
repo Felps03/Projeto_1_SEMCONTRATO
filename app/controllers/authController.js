@@ -43,23 +43,32 @@ class AuthController {
                     })
                         .then(res => res.json())
                         .then(res => {
-
                             if (!res.success) {
                                 recaptchaError = true;
-                                return resp.status(400).send(res['error-codes']);
+                                return resp.status(406).send(res['error-codes']);
                             }
                             return;
-
                         });
-                    if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
+
+                    if (recaptchaError) {
+                        return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
+                    }
+
                     userDao.authenticate(email, hash, (error, result) => {
-                        if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
-                        if (result.length == 0) return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
-                        else {
+                        if (error) {
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+                        }
+
+                        if (result.length == 0) {
+                            return resp.status(400).send(JSON.stringify({ erro: 'Email ou senha inválidos' }));
+                        } else {
                             const tokenHandler = new TokenHandler();
                             userDao.checkAdmin(email, (err, docs) => {
-                                if (err) return resp.status(500).send('erro no servidor');
-                                else return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
+                                if (err) {
+                                    return resp.status(500).send('erro no servidor');
+                                } else {
+                                    return resp.status(200).set("Token", tokenHandler.generateToken(email, docs.isAdmin, secretJWT)).set('Access-Control-Expose-Headers', 'Token').send(result);
+                                }
                             });
                         }
                     });
