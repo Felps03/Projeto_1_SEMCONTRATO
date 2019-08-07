@@ -155,7 +155,7 @@ class UserController extends Controller {
             const configDao = new ConfigurationDAO();
             configDao.findOne((errorConfig, resultConfig) => {
                 if (resultConfig.recaptcha) {
-                    if (!req.body['g-recaptcha-response']) return resp.status(400).send({ error: "Teste reCAPTCHA não realizado" })
+                    if (!req.body['g-recaptcha-response']) return resp.status(406).send({ error: "Teste reCAPTCHA não realizado" })
 
                     const reqParams = `?secret=${encodeURI(recaptchaConfig.secret)}&response=${encodeURI(req.body['g-recaptcha-response'])}`;
                     let recaptchaError = false;
@@ -166,16 +166,18 @@ class UserController extends Controller {
                         .then(res => {
                             if (!res.success) {
                                 recaptchaError = true;
-                                return resp.status(400).send(res['error-codes']);
+                                return resp.status(406).send(res['error-codes']);
                             }
-                            return resp.status(200).send(res);
+                            return;
                         });
+
                     if (recaptchaError) return resp.status(409).send({ erro: "Teste reCAPTCHA falhou" });
+
                     userDao.validateEmailAvailable(email, (error, resultValidate) => {
                         if (resultValidate) return resp.status(400).send(JSON.stringify({ erro: "Email já cadastrado" }));
 
                         userDao.add(req.body, (error, resultADD) => {
-                            if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
+                            //if (error) return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de cadastrar o usuario favor olhar o log' }));
 
                             const tokenHandler = new TokenHandler();
                             userDao.checkAdmin(email, (err, docs) => {
