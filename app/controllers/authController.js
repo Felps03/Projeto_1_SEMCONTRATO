@@ -6,6 +6,7 @@ const salt = require('../config/salt');
 const recaptchaConfig = require('../../config/recaptcha');
 
 const GenerateEmail = require('../utils/generateEmail');
+const generateString = require('../utils/generateString');
 const TokenHandler = require('../utils/TokenHandler');
 const getTokenFromHeader = require('../utils/getTokenFromHeader');
 
@@ -130,27 +131,32 @@ class AuthController {
                 if (answer == null) { // if answer its null, userEmail doenst exist on DB
                     return res.status(400).send(JSON.stringify({ erro: 'Email não cadastrado' }));
                 } else { // userEmail exists on DB
+                    const randomString = generateString();
                     const generateEmail = new GenerateEmail();
-                    generateEmail.sendEmail(userEmail)
-                        .then(randomString => {
+                    generateEmail.sendEmail(userEmail, randomString)
+                        .then(result => {
+                            // return res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
                             const now = new Date();
                             const expires = new Date(now);
                             expires.setMinutes(expires.getMinutes() + 10);
                             // console.log("email enviado")
                             const recoverDataDao = new RecoverDataDao();
                             recoverDataDao.add(userEmail, randomString, expires, (err) => {
-                                // console.log(err);
+                                console.log(expires);
                                 if (err) {
                                     return res.status(500).send(err);
                                 }
                                 return res.status(200).send(JSON.stringify({ msg: 'Email enviado' }));
-                            });
+                            })
                         })
-                        .catch(e => console.error(e));
+                        .catch(err => {
+                            return res.status(500).send(JSON.stringify({ msg: 'Erro no servidor' }));
+                        })
                 }
-            });
+            })
         }
     }
+
 
     verifyCode() {
         return (req, res) => {
@@ -159,7 +165,7 @@ class AuthController {
             const recoverDataDao = new RecoverDataDao();
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
-                if (err == null) {
+                if (err !== null) {
                     return res.status(400).send(JSON.stringify({ erro: "link expirou" }));
                 } else {
 

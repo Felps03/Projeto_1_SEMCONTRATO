@@ -1,73 +1,50 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+// const nodemailer = require('nodemailer');
 const generateString = require('./generateString');
 
 class GenerateEmail {
 
-    sendEmail(userEmail) {
+    sendEmail(userEmail, randomString) {
 
-        return new Promise((resolve, reject) => {
+        //url change password 
+        // const url = "localhost:3000/user-recovery.html";
+        const url = "https://rebornsemcontrato.azurewebsites.net/user-recovery.html";
 
-            //  email credentials
-            const email = "projeto.sem.contrato@gmail.com";
-            const passwd = "C0nnect123";
-
-            // setting email sender service
-            const sender = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 587,
-                secure: false, // true for 465, false for other ports
-                auth: {
-                    user: email, // email account
-                    pass: passwd // email password
-                },
-                tls: {
-                    rejectUnauthorized: false
-                }
-            });
-            
-            //url change password 
-            const url = "localhost:3000/user-recovery.html";
-
-            // generating string to send via email
-            const randomString = generateString();
-            console.log(randomString);
-
-            /*
-             the function sendMail returns a promise if a callback function is not set. So we check the 
-             promise with then/catch and
-             use this to set our promise to the function's return
-            */
+        // generating string to send via email
+        // const randomString = generateString();
+        console.log(randomString);
 
 
+        sgMail.setApiKey('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');
+        // sgMail.setApiKey('SG.OJRExlvvSeqgups0vtivHQ.wyvvEbiAkYds9fYjEZi8gr4UAT8MNhTV-QnZLsjk6Agaaaaaaaaa');
 
-            // sending email
-            sender.sendMail({
-                    from: `"Equipe Sem Contrato" <${email}>`, // sender address
-                    to: `${userEmail}`, // list of receivers
-                    subject: "Recuperação de senha!", // Subject line
-                    text: `
+        const msg = {
+            to: `${userEmail}`,
+            from: 'projeto.sem.contrato@gmail.com',
+            subject: 'Recuperação de senha!',
+            text: `
                     Você solicitou a recuperação de senha, acesse o link abaixo e insira o código no campo solicitado.
 
-                    Click no link, abaixo.
-                    
                     ${url}?key=${randomString}
 
                     Código: ${randomString}
                     
-                    
                     Equipe Sem Contrato!
                     `,
-                })
-                .then(() => {
-                    resolve(randomString);
-                })
-                .catch(e => {
-                    // console.log('erro');
-                    // console.error(e);
-                    reject(e);
-                });
+            html: `
+                    <p>Você solicitou a recuperação de senha, acesse o link abaixo e insira o código no campo solicitado.</p>
 
-        })
+                    <a href='${url}?key=${randomString}'>Recuperar Senha</a> <br><br>
+
+                    Código: ${randomString}<br><br>
+                    
+                    <strong>Equipe Sem Contrato!</strong>
+                `
+        };
+        return sgMail.send(msg);
     }
 }
 module.exports = GenerateEmail;
+
+// const a = new GenerateEmail();
+// a.sendEmail('felipe.031293@gmail.com')
