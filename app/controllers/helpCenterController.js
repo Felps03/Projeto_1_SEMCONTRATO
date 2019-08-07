@@ -56,8 +56,8 @@ class HelperCenterController extends Controller {
 
                 // console.log("oi controller")
                 res.send(result)
-                // fullData.question = result
-                // return res.send(fullData)
+                    // fullData.question = result
+                    // return res.send(fullData)
             });
         }
     }
@@ -106,7 +106,7 @@ class HelperCenterController extends Controller {
             const userDao = new UserDao();
             userDao.findById(req.body.id_user, (error, resultByID) => {
                 if (!resultByID) {
-                    console.log(error)
+                    console.log(resultByID)
                     return resp.status(400).send(JSON.stringify({ erro: 'USUARIO não existente' }));
                 }
                 const helperCenterDao = new HelperCenterDao();

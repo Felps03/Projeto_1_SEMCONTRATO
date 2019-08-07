@@ -160,6 +160,8 @@ class UserDao {
 
     findById(_id, callback) {
         UserSchema.findOne({ _id }, (err, docs) => {
+            console.log(err);
+            console.log(docs);
             if (err) return callback(err, null)
             callback(null, docs);
         });

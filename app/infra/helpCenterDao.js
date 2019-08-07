@@ -24,8 +24,7 @@ class HelpCenterDao {
             _id: mongoose.Types.ObjectId(id)
         })
         HelpCenterSchema.aggregatePaginate(
-            this.aggregrate,
-            {
+            this.aggregrate, {
                 page: 1,
                 limit: PAGELIMIT
             },
@@ -51,8 +50,7 @@ class HelpCenterDao {
                     id_helpCenter: mongoose.Types.ObjectId(id)
                 })
                 HelpCenterAskSchema.aggregatePaginate(
-                    helpCenterAskDao.aggregrate,
-                    {
+                    helpCenterAskDao.aggregrate, {
                         page: page,
                         limit: PAGELIMIT
                     },
@@ -112,9 +110,10 @@ class HelpCenterDao {
         HelpCenterSchema.findByIdAndUpdate(id, { id_user, title, desc }, {
             new: true
         }, (err, docs) => {
+            if (err) return callback(err, null)
             callback(null, docs);
         });
-        if (err) return callback(err, null)
+
     }
 
     list(page, callback) {
