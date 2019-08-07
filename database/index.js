@@ -6,9 +6,9 @@ const MONGO_LOCAL = 'mongodb://localhost/noderest';
 
 
 mongoose.connect(MONGO_DEV, {
-        // mongoose.connect(MONGO_LOCAL, {
-        useNewUrlParser: true
-    })
+    // mongoose.connect(MONGO_LOCAL, {
+    useNewUrlParser: true
+})
     // .then(() => console.log('mongoose ok...'))
     .catch(err => console.log(err));
 

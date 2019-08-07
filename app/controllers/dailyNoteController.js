@@ -157,7 +157,6 @@ class DailyNoteController extends Controller {
                     )
                 }
                 if (resultDaily.id_user == req.body.id_user) {
-                    console.log('chegou aqui')
                     dailyNoteDao.update(
                         req.body,
                         req.params.id,
