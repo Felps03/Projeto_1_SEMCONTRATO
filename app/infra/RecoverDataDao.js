@@ -9,11 +9,14 @@ class RecoverDataDao {
     }
 
     findExpires(randomString, email, callback) {
+        // console.log(randomString);
+        // console.log(email);
         RecoverDataSchema.findOne({
             randomString,
             email
         }, { _id: 0, expires: 1 }, (err, docs) => {
-            callback(err, docs);
+            if (err) return callback(err, null)
+            callback(null, docs);
         });
     }
 }

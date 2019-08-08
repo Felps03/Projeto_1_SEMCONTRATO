@@ -165,20 +165,25 @@ class AuthController {
             const recoverDataDao = new RecoverDataDao();
 
             recoverDataDao.findExpires(emailCode, email, (err, docs) => {
-                if (err !== null) {
-                    return res.status(400).send(JSON.stringify({ erro: "link expirou" }));
-                } else {
-
+                console.log('erro', err);
+                // console.log('erro', err == null);
+                console.log('docs', docs);
+                if (docs == null) {
+                    return res.status(400).send(JSON.stringify({ erro: "Código Incorreto" }));
+                }
+                if (err == null) {
                     console.log(`Retorno: ${docs.expires}`);
 
                     const exp = docs.expires;
                     const now = new Date();
 
                     if (exp > now) {
-                        return res.status(200).send(JSON.stringify({ erro: "código válido" }));
+                        return res.status(200).send(JSON.stringify({ erro: "Código válido" }));
                     } else {
-                        return res.status(400).send(JSON.stringify({ erro: "código inválido" }));
+                        return res.status(400).send(JSON.stringify({ erro: "Código inválido" }));
                     }
+                } else {
+                    return res.status(400).send(JSON.stringify({ erro: "Link Expirou" }));
 
                 }
 
