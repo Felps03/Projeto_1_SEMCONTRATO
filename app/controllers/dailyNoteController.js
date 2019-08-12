@@ -282,6 +282,12 @@ class DailyNoteController extends Controller {
                                     doc.owner[0]['lastName']
                             })
                         })
+                        response.push({
+                            totalDocs: result.totalDocs,
+                            totalPages: result.totalPages,
+                            limit: result.limit,
+                            page: result.page
+                        })
                         resp.send(response)
                     }
                 }
