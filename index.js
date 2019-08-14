@@ -24,6 +24,8 @@ app.use("*", (req, res, next) => {
 
     let needToken = true;
 
+    res.header("Access-Control-Allow-Origin", "*");
+
     // console.log('path: ', path, 'routesType: ',routesType);
 
     if ((path === 'authenticate') || (path === 'user') || (path === 'code') || (path === 'changepassword') || (path == 'list') || (path == 'last') || (path == 'answer')) {
