@@ -189,6 +189,13 @@ class UserDao {
         });
     }
 
+    checkAdminId(id, callback) {
+        UserSchema.findOne({ _id: id, isAdmin: true }, (err, docs) => {
+            if (err) return callback(err, docs);
+            return callback(null, docs);
+        });
+    }
+
 }
 
 module.exports = UserDao;
