@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const MONGO_DEV = 'mongodb+srv://deploy:semcontrato@cluster0-xmagn.mongodb.net/test?retryWrites=true&w=majority';
-// const MONGO_LOCAL = 'mongodb://localhost/noderest';
+const MONGO_LOCAL = 'mongodb://localhost/noderest';
 //const MONGO_LOCAL = 'mongodb://localhost/teste';
 
 
