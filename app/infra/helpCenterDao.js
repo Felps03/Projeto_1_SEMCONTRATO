@@ -107,7 +107,7 @@ class HelpCenterDao {
 
     update(helpCenter, id, callback) {
         const { id_user, title, desc } = helpCenter;
-        HelpCenterSchema.findByIdAndUpdate(id, { id_user, title, desc }, {
+        HelpCenterSchema.findByIdAndUpdate(id, { title, desc }, {
             new: true
         }, (err, docs) => {
             if (err) return callback(err, null)
