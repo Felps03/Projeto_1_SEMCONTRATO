@@ -28,7 +28,8 @@ class UserController extends Controller {
             deletar: '/users/user/:id',
             changePassword: '/users/changePassword',
             findByEmail: '/users/:email',
-            exportaData: '/admin/export/users'
+            exportaData: '/admin/export/users',
+            exists: '/user/exists/:userName'
         }
     }
 
@@ -329,6 +330,24 @@ class UserController extends Controller {
                     else resp.status(200).send(answerUpd);
                 });
             });
+        }
+    }
+
+    userExists() {
+        return (req, resp) => {
+            const userDao = new UserDao();
+            const { userName } = req.params;
+
+            userDao.findByUserName(userName, (err, answer) => {
+                if (err) resp.status(500).send(JSON.stringify({ erro: 'Houve Algum problema na hora de encontrar o usuario favor olhar o log' }));
+
+                if (answer) {
+                    return resp.status(200).send('')
+                } else {
+                    // no content
+                    return resp.status(204).send('')
+                }
+            })
         }
     }
 

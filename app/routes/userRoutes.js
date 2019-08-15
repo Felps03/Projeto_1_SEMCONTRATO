@@ -23,4 +23,6 @@ module.exports = (app) => {
     app.get(rotasUser.findByEmail, userController.findByEmail());
 
     app.get(rotasUser.exportaData, userController.exportData());
+
+    app.get(rotasUser.exists, userController.userExists());
 }

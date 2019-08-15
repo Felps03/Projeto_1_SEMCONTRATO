@@ -72,6 +72,9 @@ class DailyNoteDao {
             Number(date.split('-')[1]) - 1,
             Number(date.split('-')[2]) + 1
         )
+        dateBegin.setHours(-3)
+        dateEnd.setHours(-3)
+        console.log(dateBegin, dateEnd)
         this.aggregrate.match({
             date: {
                 $gte: dateBegin,
