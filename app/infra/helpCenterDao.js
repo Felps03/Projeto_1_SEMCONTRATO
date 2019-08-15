@@ -93,6 +93,19 @@ class HelpCenterDao {
         })
     }
 
+    listAllWithOwner(callback) {
+        HelpCenterSchema.aggregate()
+            .lookup({
+                from: "users",
+                localField: "id_user",
+                foreignField: "_id",
+                as: "owner"
+            }).exec((err, result) => {
+                if (err) return callback(err, null)
+                callback(null, result);
+            });
+    }
+
     add(helpCenter, callback) {
         const { id_user, title, desc } = helpCenter;
         const date = new Date().toLocaleDateString('pt-BR').slice(0, 10); // DateFormat "yyyy-mm-dd"
@@ -186,6 +199,8 @@ class HelpCenterDao {
             }
         )
     }
+
+
 }
 
 module.exports = HelpCenterDao;
