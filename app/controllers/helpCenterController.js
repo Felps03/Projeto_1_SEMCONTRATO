@@ -167,7 +167,7 @@ class HelperCenterController extends Controller {
                         "desc": doc.desc,
                         "date": doc.date,
                         "id_user": doc.id_user,
-                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                        "owner": doc.owner[0] ? doc.owner[0]['name'] + " " + doc.owner[0]['lastName'] : "",
                     })
                 });
 
@@ -323,79 +323,145 @@ class HelperCenterController extends Controller {
         }
     }
 
+    // findByJoker() {
+    //     return (req, resp) => {
+    //         const helpCenterDao = new HelperCenterDao();
+    //         const helpCenterDao2 = new HelperCenterDao();
+
+    //         helpCenterDao.findByTitle(req.body, req.params.page, (error, resultTitle) => {
+    //             if (error) {
+    //                 console.log(error);
+    //                 return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
+    //             }
+    //             console.log(resultTitle);
+
+    //             let response = new Array();
+
+    //             let docsTitle = resultTitle.docs;
+
+    //             docsTitle.forEach(doc => {
+    //                 response.push({
+    //                     "_id": doc._id,
+    //                     "title": doc.title,
+    //                     "desc": doc.desc,
+    //                     "date": doc.date,
+    //                     "id_user": doc.id_user,
+    //                     "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+    //                 })
+    //             });
+
+    //             let totalDocs = resultTitle.totalDocs;
+    //             let limit = resultTitle.limit;
+
+
+    //             helpCenterDao2.findByDesc(req.body, req.params.page, (error, resultDesc) => {
+    //                 if (error) {
+    //                     console.log(error);
+    //                     return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pela descrição favor olhar o log' }));
+    //                 }
+    //                 console.log(resultDesc);
+    //                 let docsDesc = resultDesc.docs;
+
+    //                 docsDesc.forEach(doc => {
+    //                     let add = true;
+    //                     for (let i = 0; i < docsTitle.length; i++) {
+    //                         if (String(doc._id) == String(docsTitle[i]._id)) {
+    //                             add = false;
+    //                             break;
+    //                         }
+    //                     }
+    //                     if (add == true) {
+    //                         response.push({
+    //                             "_id": doc._id,
+    //                             "title": doc.title,
+    //                             "desc": doc.desc,
+    //                             "date": doc.date,
+    //                             "id_user": doc.id_user,
+    //                             "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+    //                         });
+    //                     }
+    //                 });
+    //                 totalDocs = totalDocs + resultDesc.totalDocs;
+    //                 let totalPages = totalDocs / limit;
+    //                 let page = req.params.page;
+
+    //                 response.push({
+    //                     "totalDocs": totalDocs + resultDesc.totalDocs,
+    //                     "limit": limit,
+    //                     "page": page,
+    //                     "totalPages": totalPages + resultDesc.totalPages
+    //                 });
+
+    //                 return resp.status(200).send(response);
+    //             })
+
+
+    //         });
+    //     }
+    // }
+
     findByJoker() {
         return (req, resp) => {
             const helpCenterDao = new HelperCenterDao();
-            const helpCenterDao2 = new HelperCenterDao();
+            // the original should be accessible but whatever
+            const helpCenterDaoPageLimit = 10;
 
-            helpCenterDao.findByTitle(req.body, req.params.page, (error, resultTitle) => {
-                if (error) {
-                    console.log(error);
-                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
-                }
-                console.log(resultTitle);
+            const { joker } = req.body;
+            const { page } = req.params;
 
-                let response = new Array();
+            helpCenterDao.listAllWithOwner((err, docs) => {
 
-                let docsTitle = resultTitle.docs;
+                if (err) return resp.status(500).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
 
-                docsTitle.forEach(doc => {
-                    response.push({
-                        "_id": doc._id,
-                        "title": doc.title,
-                        "desc": doc.desc,
-                        "date": doc.date,
-                        "id_user": doc.id_user,
-                        "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
+                let total = 0;
+
+                let response = docs
+                    .reduce((previous, current) => {
+                        let score = 0;
+
+                        if (current.title.indexOf(joker) !== -1) {
+                            score += 2;
+                        }
+                        if (current.desc.indexOf(joker) !== -1) {
+                            score += 1;
+                        }
+
+                        previous.push(
+                            {
+                                ...current,
+                                score
+                            }
+                        )
+                        return previous;
+                    }, [])
+                    .filter(item => item.score > 0)
+                    .map(item => {
+                        // side effects whatever
+                        total++;
+
+                        return item;
                     })
+                    .sort((a, b) => b.score - a.score)
+                    .splice((page - 1) * helpCenterDaoPageLimit, helpCenterDaoPageLimit)
+                    .map(item => {
+                        return {
+                            "_id": item._id,
+                            "title": item.title,
+                            "desc": item.desc,
+                            "date": item.date,
+                            "id_user": item.id_user,
+                            "owner": item.owner[0]['name'] + " " + item.owner[0]['lastName'],
+                        };
+                    });
+
+                response.push({
+                    "totalDocs": total,
+                    "limit": helpCenterDaoPageLimit,
+                    "page": page,
+                    "totalPages": Math.ceil(total / helpCenterDaoPageLimit)
                 });
 
-                let totalDocs = resultTitle.totalDocs;
-                let limit = resultTitle.limit;
-
-
-                helpCenterDao2.findByDesc(req.body, req.params.page, (error, resultDesc) => {
-                    if (error) {
-                        console.log(error);
-                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pela descrição favor olhar o log' }));
-                    }
-                    console.log(resultDesc);
-                    let docsDesc = resultDesc.docs;
-
-                    docsDesc.forEach(doc => {
-                        let add = true;
-                        for (let i = 0; i < docsTitle.length; i++) {
-                            if (String(doc._id) == String(docsTitle[i]._id)) {
-                                add = false;
-                                break;
-                            }
-                        }
-                        if (add == true) {
-                            response.push({
-                                "_id": doc._id,
-                                "title": doc.title,
-                                "desc": doc.desc,
-                                "date": doc.date,
-                                "id_user": doc.id_user,
-                                "owner": doc.owner[0]['name'] + " " + doc.owner[0]['lastName'],
-                            });
-                        }
-                    });
-                    totalDocs = totalDocs + resultDesc.totalDocs;
-                    let totalPages = totalDocs / limit;
-                    let page = req.params.page;
-
-                    response.push({
-                        "totalDocs": totalDocs + resultDesc.totalDocs,
-                        "limit": limit,
-                        "page": page,
-                        "totalPages": totalPages + resultDesc.totalPages
-                    });
-
-                    return resp.status(200).send(response);
-                })
-
-
+                return resp.status(200).send(response);
             });
         }
     }
