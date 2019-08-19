@@ -431,7 +431,7 @@ class HelperCenterController extends Controller {
                         }
 
                         return {
-                            ...item,
+                            //...item,
                             score
                         }
                     }, [])
