@@ -8,7 +8,7 @@ const RatingSchema = new mongoose.Schema({
         required: true
     },
     evaluation: {
-        type: Boolean,
+        type: mongoose.Schema.Types.Boolean,
         required: true
     }
 });

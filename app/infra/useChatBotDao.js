@@ -19,11 +19,15 @@ class UseChatBotDao {
         })
     }
 
-    listByAccess(id_access,callback) {
+    listByAccess(id_access, callback) {
         UseChatBotSchema.find({ id_access }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
         });
+    }
+
+    getLatestByIp(ip, callback) {
+        UseChatBotSchema.find({ id_access: ip }).sort({ _id: -1 }).limit(1).exec(callback);
     }
 
     add(id_access, callback) {
