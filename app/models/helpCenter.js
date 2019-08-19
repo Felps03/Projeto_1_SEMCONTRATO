@@ -18,6 +18,10 @@ const HelpCenterSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
+    },
+    resolved: {
+        type: Boolean,
+        default: false
     }
 });
 

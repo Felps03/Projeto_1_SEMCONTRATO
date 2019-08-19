@@ -19,7 +19,8 @@ class HelperCenterController extends Controller {
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last',
             exportaData: '/admin/export/helpCenter',
-            listQA: '/helps/answer/:id/:page'
+            listQA: '/helps/answer/:id/:page',
+            resolved: '/helps/resolved/:id'
         }
     }
 
@@ -92,6 +93,38 @@ class HelperCenterController extends Controller {
             // return resp.status(201).send('ok');
             //});
         };
+    }
+
+    resolved() {
+        return (req, req) => {
+
+            const helperCenterDao = new HelperCenterDao();
+
+            helpCenterDao.findById(req.params.id, (error, resultByID => {
+                if (resultByID === null) {
+                    console.log(resultByID);
+                    return resp.status(400).send(JSON.stringify({ erro: "Pergunta não encontrada" }));
+                }
+            }))
+      
+            helperCenterDao.find(req.body.id.user, (err, resultUser) => {
+                if (resultByID === null) {
+                    console.log(resultUser);
+                    return resp.status(400).send(JSON.stringify({ erro: "Houve um erro ao encontrar o dono da pergunta" }));
+                }
+            })
+
+            helperCenterDao.resolved(req.params.id), (err, docs) => {
+                // console.log(docs.isAdmin);
+                if (err) {
+                    return resp.status(500).send(JSON.stringify({ error: 'Não é dono da pergunta' }));
+                }
+                if (!docs) {
+                    return resp.status(500).send(JSON.stringify({ error: 'Não é dono da pergunta' }));
+                }
+            return resp.status(201).send(docs);
+            }
+        }
     }
 
     update() {

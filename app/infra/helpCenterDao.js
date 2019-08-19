@@ -117,6 +117,15 @@ class HelpCenterDao {
         if (err) return callback(err, null)
     }
 
+    resolved( _id, callback) {
+        HelpCenterSchema.findByIdAndUpdate(id, { resolved }, {
+            new: true
+        }, (err, docs) => {
+            callback(null, docs);
+        });
+        if (err) return callback(err, null)
+    }
+    
     list(page, callback) {
         HelpCenterSchema.aggregatePaginate(
             this.aggregrate.sort({ _id: -1 }), {
@@ -187,6 +196,7 @@ class HelpCenterDao {
             }
         )
     }
+
 }
 
 module.exports = HelpCenterDao;
