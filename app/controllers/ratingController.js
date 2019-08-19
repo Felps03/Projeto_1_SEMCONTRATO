@@ -50,7 +50,7 @@ class RatingController {
             const useChatBotDao = new UseChatBotDao();
 
             const { ip } = req;
-            const { evaluation } = req.body;
+            const { evaluation, action } = req.body;
 
             useChatBotDao.getLatestByIp(ip, (err, docs) => {
 
@@ -66,7 +66,8 @@ class RatingController {
 
                 ratingDao.add({
                     id_useChatBot: useId,
-                    evaluation
+                    evaluation,
+                    action
                 },
                     (err, result) => {
                         if (err) {

@@ -10,6 +10,10 @@ const RatingSchema = new mongoose.Schema({
     evaluation: {
         type: mongoose.Schema.Types.Boolean,
         required: true
+    },
+    action: {
+        type: mongoose.Schema.Types.String,
+        required: false
     }
 });
 
