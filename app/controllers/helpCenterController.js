@@ -432,10 +432,10 @@ class HelperCenterController extends Controller {
                             score += 1;
                         }
 
-                        return {
-                            ...item,
-                            score
-                        };
+                        // ugly but necessary
+                        item.score = score
+
+                        return item;
                     }, [])
                     .filter(item => item.score > 0)
                     .map(item => {
