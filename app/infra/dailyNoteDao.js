@@ -137,14 +137,14 @@ class DailyNoteDao {
     }
 
     registeredDaily(id_user, callback) {
-        const today = moment().startOf('day')
+        const today = moment().startOf('day').hours(-3)
 
         DailyNoteSchema.findOne(
             {
                 id_user,
                 date: {
                     $gte: today.toDate(),
-                    $lte: today.clone().endOf('day')
+                    $lte: moment().endOf('day').toDate()
                 }
             },
             (err, docs) => {
