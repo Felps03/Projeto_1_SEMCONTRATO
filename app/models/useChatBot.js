@@ -4,7 +4,7 @@ const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const UseChatBotSchema = new mongoose.Schema({
     id_access: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.String,
         required: true
     }
 });

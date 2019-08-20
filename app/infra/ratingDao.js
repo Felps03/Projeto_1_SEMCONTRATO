@@ -19,7 +19,7 @@ class RatingDao {
         })
     }
 
-    listByUseChatBot(id_useChatBot,callback) {
+    listByUseChatBot(id_useChatBot, callback) {
         RatingSchema.find({ id_useChatBot }, (err, docs) => {
             if (err) return callback(err, null)
             callback(null, docs);
@@ -27,8 +27,8 @@ class RatingDao {
     }
 
     add(rating, callback) {
-        const {id_useChatBot, evaluation} = rating;
-        RatingSchema.create({ id_useChatBot, evaluation },
+        const { id_useChatBot, evaluation, action } = rating;
+        RatingSchema.create({ id_useChatBot, evaluation, action },
             (err, docs) => {
                 if (err) return callback(err, null)
                 callback(null, docs)
