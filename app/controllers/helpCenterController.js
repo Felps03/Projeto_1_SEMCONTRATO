@@ -413,26 +413,27 @@ class HelperCenterController extends Controller {
 
                 if (err) return resp.status(500).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
 
+                const normalizedJoker = joker.toLocaleLowerCase()
                 let total = 0;
 
                 let response = docs
-                    .reduce((previous, current) => {
+                    .map(item => {
                         let score = 0;
 
-                        if (current.title.indexOf(joker) !== -1) {
+                        const normalizedTitle = item.title.toLocaleLowerCase()
+                        const normalizedDesc = item.desc.toLocaleLowerCase()
+
+                        if (normalizedTitle.indexOf(normalizedJoker) >= 0) {
                             score += 2;
                         }
-                        if (current.desc.indexOf(joker) !== -1) {
+                        if (normalizedDesc.indexOf(normalizedJoker) >= 0) {
                             score += 1;
                         }
 
-                        previous.push(
-                            {
-                                ...current,
-                                score
-                            }
-                        )
-                        return previous;
+                        return {
+                            //...item,
+                            score
+                        }
                     }, [])
                     .filter(item => item.score > 0)
                     .map(item => {
