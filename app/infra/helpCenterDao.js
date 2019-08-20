@@ -124,6 +124,7 @@ class HelpCenterDao {
             callback(null, docs);
         });
         if (err) return callback(err, null)
+        callback(null, docs);
     }
     
     list(page, callback) {
