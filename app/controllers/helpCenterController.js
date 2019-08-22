@@ -19,7 +19,8 @@ class HelperCenterController extends Controller {
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last',
             exportaData: '/admin/export/helpCenter',
-            listQA: '/helps/answer/:id/:page'
+            listQA: '/helps/answer/:id/:page',
+            resolved: '/helps/resolved/:id'
         }
     }
 
@@ -465,6 +466,36 @@ class HelperCenterController extends Controller {
                 });
 
                 return resp.status(200).send(response);
+            });
+        }
+    }
+
+    resolved() {
+        return (req, resp) => {
+
+            const error = validationResult(req);
+            let errorList = [];
+            if (!error.isEmpty()) {
+                error.array().forEach((valor, chave) => errorList.push(valor['msg']));
+                return resp.status(400).send(errorList);
+            }
+
+            const helpCenterDao = new HelperCenterDao();
+            helpCenterDao.findById(req.params.id, (error, result) => {
+                let status = result.resolved
+                status = !status;
+
+                if (error) {
+                    console.log(error);
+                    return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o helpcenter favor olhar o log' }));
+                }
+                helpCenterDao.resolved(req.params.id, status, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o helpcenter favor olhar o log' }));
+                    }
+                    return resp.send(result);
+                })
             });
         }
     }

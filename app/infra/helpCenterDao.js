@@ -200,6 +200,14 @@ class HelpCenterDao {
         )
     }
 
+    resolved(id, status, callback) {
+        HelpCenterSchema.findByIdAndUpdate(id, { resolved: status }, {
+            new: true
+        }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
 
 }
 
