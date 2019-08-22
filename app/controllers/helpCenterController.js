@@ -96,34 +96,28 @@ class HelperCenterController extends Controller {
     }
 
     resolved() {
-        return (req, req) => {
+        return (req, resp) => {
+            const err = validationResult(req);
+            let errorList = [];
+            if (!err.isEmpty()) {
+                err.array().forEach((valor, chave) => errList.push(valor['msg']));
+                return resp.status(400).send(errList);
+            }
 
             const helperCenterDao = new HelperCenterDao();
-
-            helpCenterDao.findById(req.params.id, (error, resultByID => {
-                if (resultByID === null) {
-                    console.log(resultByID);
-                    return resp.status(400).send(JSON.stringify({ erro: "Pergunta não encontrada" }));
+            
+            helperCenterDao.findByIdAndUserId(req.params.id, req.body.id, (err, result) => {
+                
+                console.log(result);
+                if(!result) {
+                    return res.status(400).send(JSON.stringify({ erro: "Não foi possível encontrar a pergunta" }));
                 }
-            }))
-      
-            helperCenterDao.find(req.body.id.user, (err, resultUser) => {
-                if (resultByID === null) {
-                    console.log(resultUser);
-                    return resp.status(400).send(JSON.stringify({ erro: "Houve um erro ao encontrar o dono da pergunta" }));
+                if(result) {
+                    helperCenterDao.resolved(req.params.id);
                 }
+                return resp.send(result);
             })
-
-            helperCenterDao.resolved(req.params.id), (err, docs) => {
-                // console.log(docs.isAdmin);
-                if (err) {
-                    return resp.status(500).send(JSON.stringify({ error: 'Não é dono da pergunta' }));
-                }
-                if (!docs) {
-                    return resp.status(500).send(JSON.stringify({ error: 'Não é dono da pergunta' }));
-                }
-            return resp.status(201).send(docs);
-            }
+            
         }
     }
 

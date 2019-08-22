@@ -116,16 +116,6 @@ class HelpCenterDao {
         });
         if (err) return callback(err, null)
     }
-
-    resolved( _id, callback) {
-        HelpCenterSchema.findByIdAndUpdate(id, { resolved }, {
-            new: true
-        }, (err, docs) => {
-            callback(null, docs);
-        });
-        if (err) return callback(err, null)
-        callback(null, docs);
-    }
     
     list(page, callback) {
         HelpCenterSchema.aggregatePaginate(
@@ -165,6 +155,22 @@ class HelpCenterDao {
         });
     }
 
+    findByIdAndUserId(_id, id_user, callback) {
+        HelpCenterSchema.findOne( {_id} , {id_user} , (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+    resolved(id, status, callback) {
+        HelpCenterSchema.findByIdAndUpdate(id, { resolved: true }, {
+            new: true
+        }, (err, docs) => {
+            if (err) return callback(err, null)
+           
+        });
+    }
+    
     findByTitle(helpCenter, page, callback) {
         const { joker } = helpCenter;
         this.aggregrate.match({
