@@ -450,17 +450,19 @@ class HelperCenterController extends Controller {
 
             helpCenterDao.listAllWithOwner((err, docs) => {
 
+                console.log(err);
+
                 if (err) return resp.status(500).send(JSON.stringify({ erro: 'Houve Algum problema na hora de fazer a busca pelo titulo favor olhar o log' }));
 
-                const normalizedJoker = joker.toLocaleLowerCase()
+                const normalizedJoker = joker.toLocaleLowerCase();
                 let total = 0;
 
                 let response = docs
                     .map(item => {
                         let score = 0;
 
-                        const normalizedTitle = item.title.toLocaleLowerCase()
-                        const normalizedDesc = item.desc.toLocaleLowerCase()
+                        const normalizedTitle = item.title.toLocaleLowerCase();
+                        const normalizedDesc = item.desc.toLocaleLowerCase();
 
                         if (normalizedTitle.indexOf(normalizedJoker) >= 0) {
                             score += 2;
@@ -469,10 +471,10 @@ class HelperCenterController extends Controller {
                             score += 1;
                         }
 
-                        return {
-                            //...item,
-                            score
-                        }
+                        // ugly but necessary
+                        item.score = score
+
+                        return item;
                     }, [])
                     .filter(item => item.score > 0)
                     .map(item => {
@@ -490,7 +492,7 @@ class HelperCenterController extends Controller {
                             "desc": item.desc,
                             "date": item.date,
                             "id_user": item.id_user,
-                            "owner": item.owner[0]['name'] + " " + item.owner[0]['lastName'],
+                            "owner": item.owner ? item.owner[0]['name'] + " " + item.owner[0]['lastName'] : '',
                         };
                     });
 

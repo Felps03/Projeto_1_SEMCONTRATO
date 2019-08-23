@@ -13,6 +13,8 @@ var corsOption = {
 
 const app = express();
 
+app.set('trust proxy', true);
+
 app.use(cors(corsOption));
 
 app.use("*", (req, res, next) => {

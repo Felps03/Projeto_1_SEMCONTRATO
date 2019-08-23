@@ -8,7 +8,7 @@ class GenerateEmail {
 
         //url change password 
         // const url = "localhost:3000/user-recovery.html";
-        const url = "https://rebornsemcontrato.azurewebsites.net/user-recovery.html";
+        const url = "https://semcontratoo.azurewebsites.net/user-recovery.html";
 
         // generating string to send via email
         // const randomString = generateString();
