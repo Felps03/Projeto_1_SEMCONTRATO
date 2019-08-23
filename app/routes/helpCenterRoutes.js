@@ -23,4 +23,6 @@ module.exports = (app) => {
 
     app.get(rotasHelpCenter.listQA, helpCenterController.listQA());
 
+    app.post(rotasHelpCenter.resolved, helpCenterController.resolved());
+
 }

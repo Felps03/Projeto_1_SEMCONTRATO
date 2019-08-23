@@ -19,7 +19,8 @@ class HelperCenterController extends Controller {
             // findByJoker: '/helps/post/joker/:page',
             listLastHelp: '/helps/last',
             exportaData: '/admin/export/helpCenter',
-            listQA: '/helps/answer/:id/:page'
+            listQA: '/helps/answer/:id/:page',
+            resolved: '/helps/resolved/:id'
         }
     }
 
@@ -92,6 +93,44 @@ class HelperCenterController extends Controller {
             // return resp.status(201).send('ok');
             //});
         };
+    }
+
+    resolved() {
+        return (req, resp) => {
+            const err = validationResult(req);
+            let errorList = [];
+            if (!err.isEmpty()) {
+                err.array().forEach((valor, chave) => errList.push(valor['msg']));
+                return resp.status(400).send(errList);
+            }
+
+            const helperCenterDao = new HelperCenterDao();
+
+            console.log('params ID: ', req.params.id); 
+            console.log('BODY ID: ', req.body.id); 
+            helperCenterDao.findByIdAndUserId(req.params.id, req.body.id, (err, result) => {
+                
+                console.log(result); 
+                if(!result) {
+                   
+                    return resp.status(400).send(JSON.stringify({ erro: "Não foi possível encontrar a pergunta" }));
+                }
+                if(result) {
+                    let status = result.resolved
+                    status = !status;
+                    helperCenterDao.resolved(req.params.id, status, (error, result) => {
+
+                        if(error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o helpcenter favor olhar o log' }));
+                        }
+                    });
+                }
+
+                return resp.send(result);
+            })
+            
+        }
     }
 
     update() {

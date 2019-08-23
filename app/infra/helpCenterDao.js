@@ -167,6 +167,22 @@ class HelpCenterDao {
         });
     }
 
+    findByIdAndUserId(_id, id_user, callback) {
+        HelpCenterSchema.findOne({ _id, id_user }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
+    resolved(id, status, callback) {
+        HelpCenterSchema.findByIdAndUpdate(id, { resolved: status }, {
+            new: true
+        }, (err, docs) => {
+            if (err) return callback(err, null)
+            callback(null, docs);
+        });
+    }
+
     findByTitle(helpCenter, page, callback) {
         const { joker } = helpCenter;
         this.aggregrate.match({
@@ -199,7 +215,6 @@ class HelpCenterDao {
             }
         )
     }
-
 
 }
 
