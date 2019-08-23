@@ -49,7 +49,7 @@ class RatingController {
             const ratingDao = new RatingDao();
             const useChatBotDao = new UseChatBotDao();
 
-            const { ip } = req;
+            const ip = req.ip.split(':')[0];
             const { evaluation, action } = req.body;
 
             useChatBotDao.getLatestByIp(ip, (err, docs) => {
