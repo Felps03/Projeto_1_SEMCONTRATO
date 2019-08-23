@@ -105,16 +105,28 @@ class HelperCenterController extends Controller {
             }
 
             const helperCenterDao = new HelperCenterDao();
-            
+
+            console.log('params ID: ', req.params.id); 
+            console.log('BODY ID: ', req.body.id); 
             helperCenterDao.findByIdAndUserId(req.params.id, req.body.id, (err, result) => {
                 
-                console.log(result);
+                console.log(result); 
                 if(!result) {
-                    return res.status(400).send(JSON.stringify({ erro: "Não foi possível encontrar a pergunta" }));
+                   
+                    return resp.status(400).send(JSON.stringify({ erro: "Não foi possível encontrar a pergunta" }));
                 }
                 if(result) {
-                    helperCenterDao.resolved(req.params.id);
+                    let status = result.resolved
+                    status = !status;
+                    helperCenterDao.resolved(req.params.id, status, (error, result) => {
+
+                        if(error) {
+                            console.log(error);
+                            return resp.status(400).send(JSON.stringify({ erro: 'Houve Algum problema na hora de buscar o helpcenter favor olhar o log' }));
+                        }
+                    });
                 }
+
                 return resp.send(result);
             })
             
