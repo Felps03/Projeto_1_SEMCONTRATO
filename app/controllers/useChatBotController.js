@@ -59,7 +59,7 @@ class UseChatBotController {
         return (req, res) => {
             const useChatBotDao = new UseChatBotDao();
 
-            const { ip } = req;
+            const ip = req.ip.split(':')[0];
             const exists = this.uniqueIPManager.verify(ip);
 
             // console.log(ip);
