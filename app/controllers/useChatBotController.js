@@ -68,7 +68,9 @@ class UseChatBotController {
 
             if (exists) {
                 // do nothing
-                return res.sendStatus(202);
+                return res.status(202).send({
+                    headers: req.headers
+                });
             } else {
                 useChatBotDao.add(ip,
                     (err, result) => {
@@ -79,7 +81,10 @@ class UseChatBotController {
                                 )
                             );
                         }
-                        return res.status(200).send(result);
+                        return res.status(200).send({
+                            result,
+                            headers: req.headers
+                        });
                     }
                 );
             }
